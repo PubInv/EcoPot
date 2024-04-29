@@ -12,14 +12,15 @@ outer_rad =5;
 inner_rad = 4;
 base_scale_factor = 2;
 height_scale_factor = 0.5;
+extra_height = 3;
 
 finWidth = 0.5;
 finLength = outer_rad;
 finHeight = 5;
 
 
-// ptype = "flatbottom";
-ptype = "roundbottom";
+ptype = "flatbottom";
+// ptype = "roundbottom";
 
 // set resolution here
 $fn=40;
@@ -29,6 +30,7 @@ module radialFin(angle) {
     translate([0,finLength/2,-finHeight/2])
     cube([finWidth,finLength,finHeight],center=true);
 }
+
 
 module radialFins(num) {
     delta = 360 / num;
@@ -57,18 +59,42 @@ module roundBottomPot() {
 module roundBottomPotWithFins() {
     roundBottomPot();
     difference() {
-        radialFins(16);
+        radialFins(3);
         roundBottomOutside();
+    }
+}
+
+
+module flatBottomPot () {
+    echo("flatBottomPot Called!");
+    difference () {
+        cylinder (h=    pot_height, r=outer_rad, center = true);
+        translate ([0,0,(wall_thickness+(extra_height/2))])
+        cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
+    }
+}
+
+module flatBottomPotOutside () {
+    difference () {
+        cylinder (h=    pot_height, r=outer_rad, center = true);
+    }
+}
+module flatBottomPotWithFins() {
+    flatBottomPot();
+    difference() {
+        radialFins(16);
+        flatBottomPotOutside();
     }
 }
 
 module renderPotType(ptype) {
     if (ptype == "flatbottom") {
-        translate([0,20,0])
-        union () {
-            sphere (r = inner_rad);  
-            cylinder (h=pot_height+2,r1 =inner_rad, r2 =inner_rad);
-        }
+        flatBottomPot();
+//        translate([0,20,0])
+//        union () {
+//            sphere (r = inner_rad);  
+//            cylinder (h=pot_height+2,r1 =inner_rad, r2 =inner_rad);
+ //       }
     } else if (ptype == "roundbottom") {
         roundBottomPotWithFins();
     } 
