@@ -7,59 +7,34 @@
 
 
 pot_height = 5;
-wall_thickness =0.5;
+wall_thickness =1;
 outer_rad =5;
-inner_rad = outer_rad-wall_thickness;
+inner_rad = 4;
 base_scale_factor = 2;
 height_scale_factor = 0.5;
 extra_height = 3;
 
-finWidth = 0.2;
-finLength = outer_rad/2;
+finWidth = 0.5;
+finLength = outer_rad;
 finHeight = 5;
 
-legWidth = 0.5;
-legLength = outer_rad/2;
-legHeight = 5;
-legBallRadius = 0.4;
 
-
-// ptype = "flatbottom";
-// ptype = "flatbottom_with_fins";
-// ptype = "roundbottom";
-ptype = "roundbottom_with_fins";
+ptype = "flatbottom";
+//ptype = "roundbottom";
 
 // set resolution here
 $fn=40;
 
 module radialFin(angle) {
     rotate([0,0,angle])
-    translate([0,outer_rad-finLength/2,-finHeight/2])
+    translate([0,finLength/2,-finHeight/2])
     cube([finWidth,finLength,finHeight],center=true);
 }
-
-
-module legFin(angle) {
-    rotate([0,0,angle])
-    translate([0,outer_rad-legLength/2,-outer_rad/2])
-    union() {
-        cube([legWidth,legLength,legHeight],center=true);
-        translate([0,legLength/2,-legHeight/2])
-        sphere(legBallRadius);
-    }
-}
-
 
 module radialFins(num) {
     delta = 360 / num;
     for ( i = [0:1:num-1]) {
        radialFin(delta*i);
-    }
-}
-module legFins(num) {
-    delta = 360 / num;
-    for ( i = [0:1:num-1]) {
-       legFin(delta*i);
     }
 }
 module roundBottomOutside() {
@@ -83,14 +58,10 @@ module roundBottomPot() {
 module roundBottomPotWithFins() {
     roundBottomPot();
     difference() {
-        union() {
-            legFins(3);
-            radialFins(12);
-        }
+        radialFins(16);
         roundBottomOutside();
     }
 }
-
 
 module flatBottomPot () {
     echo("flatBottomPot Called!");
@@ -116,19 +87,15 @@ module flatBottomPotWithFins() {
 
 module renderPotType(ptype) {
     if (ptype == "flatbottom") {
-        flatBottomPot();
-    } else  if (ptype == "flatbottom_with_fins") {
-        flatBottomPotWithFins();
+     flatBottomPot ();
     } else if (ptype == "roundbottom") {
-        roundBottomPot();
-    } if (ptype == "roundbottom_with_fins") {
         roundBottomPotWithFins();
     } 
 }
 
 difference () {
     renderPotType(ptype);
-    translate([200,0,0])
+   translate([200,0,0])
     cube(100,center=true);
 }
 
