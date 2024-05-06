@@ -14,9 +14,6 @@ base_scale_factor = 2;
 height_scale_factor = 0.5;
 extra_height = 3;
 
-lid_thickness = 0.2;
-lid_handle_height = 1;
-
 finWidth = 0.2;
 finLength = outer_rad/2;
 finHeight = 5;
@@ -117,22 +114,6 @@ module flatBottomPotWithFins() {
     }
 }
 
-module flatLid () {
-    translate ([0,0,pot_height+1])
-    rotate ([180,0,0])
-    union () {
-        cylinder (h= lid_thickness, r=outer_rad, center = true);
-        rotate ([180,0,0])
-        translate ([0,0,lid_thickness/2])
-        cylinder (h= lid_handle_height, r1=lid_thickness,r2=lid_thickness*5);
-    translate ([0,0,lid_thickness]);
-        difference () {
-         cylinder (h=lid_thickness*2, r1=(inner_rad), r2 =(inner_rad));    
-        cylinder (h=(lid_thickness+extra_height), r1=(inner_rad-lid_thickness), r2 =(inner_rad-lid_thickness));
-                }
-            } 
-}
-
 module renderPotType(ptype) {
     if (ptype == "flatbottom") {
         flatBottomPot();
@@ -141,7 +122,6 @@ module renderPotType(ptype) {
     } else if (ptype == "roundbottom") {
         roundBottomPot();
     } if (ptype == "roundbottom_with_fins") {
-        flatLid ();  
         roundBottomPotWithFins();
     } 
 }
