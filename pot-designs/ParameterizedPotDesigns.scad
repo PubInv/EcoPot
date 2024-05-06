@@ -26,6 +26,22 @@ legLength = outer_rad/2;
 legHeight = 5;
 legBallRadius = 0.4;
 
+PI = 3.141592;
+
+A = 2; // aspect ratio (pure number)
+V = 1000*1000; // cubic millimeters
+
+// H = heigh will be a computed value
+// S = height of the side 
+// H = R + S
+// R =  radius of the pot (mm)
+
+function radius(A,V) = pow(V / (PI *(A + 2/3)),1/3);
+
+function height(A,V) = A * radius(A,V);
+
+echo(radius(A,V));
+echo(height(A,V));
 
 // ptype = "flatbottom";
 // ptype = "flatbottom_with_fins";
