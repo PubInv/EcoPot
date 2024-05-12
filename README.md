@@ -13,4 +13,11 @@ They are:
 1. Sana A. Mohamed
 1. Samuel Robedee
 
+# Research Papers (WIP)
+
+
+"Revisiting the optimal shape of cooling fins: A one-dimensional analytical study using optimality conditions" by
+Joe Alexandersen and Ole Sigmund.
+
+[https://arxiv.org/pdf/2012.04310](https://arxiv.org/pdf/2012.04310)
 
