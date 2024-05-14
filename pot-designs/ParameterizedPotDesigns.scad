@@ -17,17 +17,17 @@ lid_handle_height = 10;
 
 finWidth = wall_thickness;
 // finLength = outer_rad/2;
-finHeight = 5;
+// finHeight = 5;
 
 legWidth = wall_thickness;
 // legLength = outer_rad/2;
-legHeight = 5;
-legBallRadius = 5;
+// legHeight = 5;
+legBallRadius = 10;
 
 PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
-A = 1.5; // aspect ratio (pure number)
+A = 2; // aspect ratio (pure number)
 V = 8*1000*1000; // cubic millimeters
 // This math done by Cledden...
 // H = heigh will be a computed value
@@ -55,8 +55,20 @@ function height(A,V) = A * radius(A,V);
 
 function side(A,V) = height(A,V) - radius(A,V);
 
+// In this case, A = H / (2R)
+// V = H * PI * R^2 
+// V = (A * 2R ) PI * R^2 =  2 * PI * AR^3
+// R = pow(V / ( 2 * PI * A), 1/3);
+
+function cyl_radius(A,V) = pow(V / ( 2 * PI * A), 1/3);
+function cyl_height(A,V) = A*(2*cyl_radius(A,V));
+
 echo(radius(A,V));
 echo(height(A,V));
+
+echo(cyl_radius(A,V));
+echo(cyl_height(A,V));
+
 
 
 // ptype = "flatbottom";
@@ -66,6 +78,7 @@ ptype = "roundbottom_with_fins";
 
 // ltype = "none";
 ltype = "flat_lid";
+// ltype = "conical";
 
 // set resolution here
 $fn=40;
@@ -88,7 +101,7 @@ module legFin(r,angle) {
     translate([0,ro-legLength/2,-ro/2])
     union() {
         cube([legWidth,legLength,legHeight],center=true);
-        translate([0,legLength/2,-legHeight/2])
+        translate([0,legLength/2 - legBallRadius,-legHeight/2])
         sphere(legBallRadius);
     }
 }
@@ -148,8 +161,11 @@ module roundBottomPotWithFins(A,V) {
 }
 
 
-module flatBottomPot () {
-    echo("flatBottomPot Called!");
+module flatBottomPot (A,V) {
+    outer_rad = cyl_radius(A,V) + wall_thickness;
+    echo("outer_rad");
+    echo(outer_rad);
+    pot_height = cyl_height(A,V);
     difference () {
         cylinder (h=    pot_height, r=outer_rad, center = true);
         translate ([0,0,(wall_thickness+(extra_height/2))])
@@ -170,38 +186,52 @@ module flatBottomPotWithFins() {
     }
 }
 
-module flatLid (A,V) {
-    radius_mm = radius(A,V);
-    inner_rad = radius_mm;
-    outer_rad = radius_mm+wall_thickness;
+module conicalHandle() {
+    rotate ([180,0,0])
+    translate ([0,0,lid_thickness/2])
+    cylinder (h= lid_handle_height, r1=lid_thickness,r2=lid_thickness*5);
+}
+module flatLid (inner_rad) {
+    outer_rad = inner_rad+wall_thickness;
     union () {
         cylinder (h= lid_thickness, r=outer_rad, center = true);
-        rotate ([180,0,0])
-        translate ([0,0,lid_thickness/2])
-        cylinder (h= lid_handle_height, r1=lid_thickness,r2=lid_thickness*5);
-    translate ([0,0,lid_thickness]);
+        conicalHandle();
         difference () {
-         cylinder (h=lid_thickness*2, r1=(inner_rad), r2 =(inner_rad));    
-        cylinder (h=(lid_thickness+extra_height), r1=(inner_rad-lid_thickness), r2 =(inner_rad-lid_thickness));
-                }
-            } 
+            cylinder (h=lid_thickness*2, r1=(inner_rad), r2 =(inner_rad));    
+            cylinder (h=(lid_thickness+extra_height), r1=(inner_rad-lid_thickness), r2 =(inner_rad-lid_thickness));
+        }
+     } 
+}
+
+module renderLid(ltype,r) {
+    if (ltype == "flat_lid") {
+
+        translate ([0,0,cyl_height(A,V)/2+20])
+        rotate ([180,0,0])
+        flatLid(r);  
+    } else  if (ltype == "conical") {
+    }
 }
 
 module renderPotType(ptype) {
     if (ptype == "flatbottom") {
-        flatBottomPot();
+        r = cyl_radius(A,V);
+        renderLid(ltype,r);
+        flatBottomPot(A,V);
     } else  if (ptype == "flatbottom_with_fins") {
-        flatBottomPotWithFins();
+        r = cyl_radius(A,V);
+        renderLid(ltype,r);
+        flatBottomPotWithFins(A,V);
     } else if (ptype == "roundbottom") {
+        r = radius(A,V);
+        renderLid(ltype,r);
         roundBottomPot(A,V);
     } if (ptype == "roundbottom_with_fins") {
+        r = radius(A,V);
+        renderLid(ltype,r);
         roundBottomPotWithFins(A,V);
     } 
-    if (ltype == "flat_lid") {
-        translate ([0,0,height(A,V)/2+20])
-        rotate ([180,0,0])
-        flatLid(A,V);  
-    }
+
 }
 
 difference () {

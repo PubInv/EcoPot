@@ -142,7 +142,8 @@ module roundBottomPotWithFins() {
            legFins(3);
 //           radialFins(12);
             roundBottomPot();
-            fishFoilFins (12);
+ //           fishFoilFins (12);
+            f
        }
         
         roundBottomOutside();
