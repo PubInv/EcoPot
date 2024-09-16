@@ -27,7 +27,7 @@ legBallRadius = 10;
 PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
-A = 2; // aspect ratio (pure number)
+A = 1.3; // aspect ratio (pure number)
 V = 8*1000*1000; // cubic millimeters
 // This math done by Cledden...
 // H = heigh will be a computed value
@@ -202,6 +202,7 @@ module flatLid (inner_rad) {
         }
      } 
 }
+
 
 module renderLid(ltype,r) {
     if (ltype == "flat_lid") {

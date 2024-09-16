@@ -40,6 +40,7 @@ V = 1000*1000; // cubic millimeters
 // R =  radius of the pot (mm)
 
 function radius(A,V) = pow(V / (PI *(A + 2/3)),1/3);
+// function radius(A,V) = pow(V / (PI *(A - 1/3)),1/3);
 
 function height(A,V) = A * radius(A,V);
 
@@ -142,8 +143,7 @@ module roundBottomPotWithFins() {
            legFins(3);
 //           radialFins(12);
             roundBottomPot();
- //           fishFoilFins (12);
-            f
+            fishFoilFins (12);
        }
         
         roundBottomOutside();
