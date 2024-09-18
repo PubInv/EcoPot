@@ -8,10 +8,10 @@
 Build  : _7bdb509494-20201222 OPENFOAM=2012
 Arch   : "LSB;label=32;scalar=64"
 Exec   : topoSet
-Date   : Sep 17 2024
-Time   : 12:22:19
+Date   : Sep 18 2024
+Time   : 16:22:29
 Host   : DESKTOP-KOC0FTN
-PID    : 958
+PID    : 710
 I/O    : uncollated
 Case   : /home/cledito/OpenFOAM/cledito-v2012/run/multiRegionHeater
 nProcs : 1

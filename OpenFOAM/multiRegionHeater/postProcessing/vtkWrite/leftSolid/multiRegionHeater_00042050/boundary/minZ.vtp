@@ -1,0 +1,78 @@
+<?xml version='1.0'?>
+<!-- patch='minZ' time='600' index='42050' -->
+<VTKFile type='PolyData' version='0.1' byte_order='LittleEndian' header_type='UInt64'>
+  <PolyData>
+    <FieldData>
+      <DataArray type='Float32' Name='TimeValue' NumberOfTuples='1' format='binary'>
+BAAAAAAAAAAAABZE
+      </DataArray>
+    </FieldData>
+    <Piece NumberOfPoints='28' NumberOfPolys='13'>
+      <Points>
+        <DataArray type='Float32' Name='Points' NumberOfComponents='3' format='binary'>
+UAEAAAAAAADNzMy9AAAAAM3MTL3NzMy9bxIDPM3MTL2MJb+9bxIDPM3MTL2MJb+9AAAAAM3MTL1LfrG9bxIDPM3MTL1LfrG9AAAAAM3MTL0K16O9bxIDPM3MTL0K16O9AAAAAM3MTL3JL5a9bxIDPM3MTL3JL5a9AAAAAM3MTL2JiIi9bxIDPM3MTL2JiIi9AAAAAM3MTL2PwnW9bxIDPM3MTL2PwnW9AAAAAM3MTL0OdFq9bxIDPM3MTL0OdFq9q6oqoc3MTL2MJT+9bxIDPM3MTL2MJT+9AAAAAM3MTL0K1yO9bxIDPM3MTL0K1yO9q6oqIc3MTL2IiAi9bxIDPM3MTL2IiAi9q6oqoc3MTL0OdNq8bxIDPM3MTL0OdNq8AAAAAM3MTL0K16O8bxIDPM3MTL0K16O8AAAAAM3MTL0NdFq8bxIDPM3MTL0NdFq8AAAAAM3MTL0=
+        </DataArray>
+      </Points>
+      <Polys>
+        <DataArray type='Int32' Name='connectivity' format='binary'>
+0AAAAAAAAAAAAAAAAQAAAAIAAAADAAAAAwAAAAIAAAAEAAAABQAAAAUAAAAEAAAABgAAAAcAAAAHAAAABgAAAAgAAAAJAAAACQAAAAgAAAAKAAAACwAAAAsAAAAKAAAADAAAAA0AAAANAAAADAAAAA4AAAAPAAAADwAAAA4AAAAQAAAAEQAAABEAAAAQAAAAEgAAABMAAAATAAAAEgAAABQAAAAVAAAAFQAAABQAAAAWAAAAFwAAABcAAAAWAAAAGAAAABkAAAAZAAAAGAAAABoAAAAbAAAA
+        </DataArray>
+        <DataArray type='Int32' Name='offsets' format='binary'>
+NAAAAAAAAAAEAAAACAAAAAwAAAAQAAAAFAAAABgAAAAcAAAAIAAAACQAAAAoAAAALAAAADAAAAA0AAAA
+        </DataArray>
+      </Polys>
+      <CellData>
+        <DataArray type='Float32' Name='T' format='binary'>
+NAAAAAAAAAABEmZEQA9mRCMJZkQYAGZEnfNlRKHkZUQh1GVE2sJlRGmwZUQnoGVE6JFlRIOGZURkf2VE
+        </DataArray>
+        <DataArray type='Float32' Name='betavSolid' format='binary'>
+NAAAAAAAAAAAAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/
+        </DataArray>
+        <DataArray type='Float32' Name='h' format='binary'>
+NAAAAAAAAADjsohId7CISBiriEglo4hILZiISAGLiEiBfIhIUm2ISBxdiEjSTohITUKISEk4iEgHMohI
+        </DataArray>
+        <DataArray type='Float32' Name='p' format='binary'>
+NAAAAAAAAAAAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNH
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:alpha' format='binary'>
+NAAAAAAAAABhCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:mu' format='binary'>
+NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:psi' format='binary'>
+NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:rho' format='binary'>
+NAAAAAAAAAAAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpF
+        </DataArray>
+      </CellData>
+      <PointData>
+        <DataArray type='Float32' Name='T' format='binary'>
+cAAAAAAAAAABEmZEARJmRKEQZkShEGZEMgxmRDIMZkSeBGZEngRmRNv5ZUTb+WVEH+xlRB/sZURh3GVEYdxlRH3LZUR9y2VEorllRKK5ZURIqGVESKhlRAiZZUQImWVENoxlRDaMZUT0gmVE9IJlRGR/ZURkf2VE
+        </DataArray>
+        <DataArray type='Float32' Name='betavSolid' format='binary'>
+cAAAAAAAAAAAAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AACAPwAAgD8AAIA/
+        </DataArray>
+        <DataArray type='Float32' Name='h' format='binary'>
+cAAAAAAAAADjsohI47KISK2xiEitsYhIyK2ISMitiEgep4hIHqeISKmdiEipnYhIl5GISJeRiEjBg4hIwYOISOl0iEjpdIhIN2WISDdliEj3VYhI91WISJBIiEiQSIhISz2ISEs9iEgoNYhIKDWISAcyiEgHMohI
+        </DataArray>
+        <DataArray type='Float32' Name='p' format='binary'>
+cAAAAAAAAAAAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNHAFDDRwBQw0cAUMNH
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:alpha' format='binary'>
+cAAAAAAAAABhCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+YQs2PmELNj5hCzY+
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:mu' format='binary'>
+cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:psi' format='binary'>
+cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        </DataArray>
+        <DataArray type='Float32' Name='thermo:rho' format='binary'>
+cAAAAAAAAAAAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpFAAD6RQAA+kUAAPpF
+        </DataArray>
+      </PointData>
+    </Piece>
+  </PolyData>
+</VTKFile>
