@@ -1,0 +1,3 @@
+[submodule "OpenFOAM/Flow-past-a-sphere-OpenFOAM"]
+	path = OpenFOAM/Flow-past-a-sphere-OpenFOAM
+	url = https://github.com/PubInv/EcoPot
