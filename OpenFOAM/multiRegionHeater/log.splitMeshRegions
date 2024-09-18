@@ -1,0 +1,196 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : splitMeshRegions -cellZones -overwrite
+Date   : Sep 17 2024
+Time   : 12:22:19
+Host   : DESKTOP-KOC0FTN
+PID    : 961
+I/O    : uncollated
+Case   : /home/cledito/OpenFOAM/cledito-v2012/run/multiRegionHeater
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Creating single patch per inter-region interface.
+
+Trying to match regions to existing cell zones.
+
+
+Number of regions:5
+
+Writing region per cell file (for manual decomposition) to "/home/cledito/OpenFOAM/cledito-v2012/run/multiRegionHeater/constant/cellToRegion"
+
+Writing region per cell as volScalarField to "/home/cledito/OpenFOAM/cledito-v2012/run/multiRegionHeater/0/cellToRegion"
+
+Region	Cells
+------	-----
+0	1460
+1	130
+2	80
+3	130
+4	1200
+
+Region	Zone	Name
+------	----	----
+0	4	bottomWater
+1	1	leftSolid
+2	0	heater
+3	2	rightSolid
+4	3	topAir
+
+Sizes of interfaces between regions:
+
+Interface	Region	Region	Faces
+---------	------	------	-----
+0		0	3	130
+1		3	4	130
+2		0	1	130
+3		2	4	40
+4		2	3	10
+5		1	2	10
+6		0	2	92
+7		1	4	130
+
+Reading volScalarField: T cellToRegion epsilon k p p_rgh
+Reading volVectorField: U
+
+
+Adding patches
+
+
+Adding patches
+
+For interface between region bottomWater and rightSolid added patches
+    6	bottomWater_to_rightSolid
+    7	rightSolid_to_bottomWater
+For interface between region rightSolid and topAir added patches
+    8	rightSolid_to_topAir
+    9	topAir_to_rightSolid
+For interface between region bottomWater and leftSolid added patches
+    10	bottomWater_to_leftSolid
+    11	leftSolid_to_bottomWater
+For interface between region heater and topAir added patches
+    12	heater_to_topAir
+    13	topAir_to_heater
+For interface between region heater and rightSolid added patches
+    14	heater_to_rightSolid
+    15	rightSolid_to_heater
+For interface between region leftSolid and heater added patches
+    16	leftSolid_to_heater
+    17	heater_to_leftSolid
+For interface between region bottomWater and heater added patches
+    18	bottomWater_to_heater
+    19	heater_to_bottomWater
+For interface between region leftSolid and topAir added patches
+    20	leftSolid_to_topAir
+    21	topAir_to_leftSolid
+
+Region 0
+-------- 
+Creating mesh for region 0 bottomWater
+Mapping fields
+Mapping field cellToRegion
+Mapping field k
+Mapping field p_rgh
+Mapping field p
+Mapping field T
+Mapping field epsilon
+Mapping field U
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region0 points back to base mesh.
+Writing map faceRegionAddressing from region0 faces back to base mesh.
+Writing map cellRegionAddressing from region0 cells back to base mesh.
+Writing map boundaryRegionAddressing from region0 boundary back to base mesh.
+
+Region 1
+-------- 
+Creating mesh for region 1 leftSolid
+Mapping fields
+Mapping field cellToRegion
+Mapping field k
+Mapping field p_rgh
+Mapping field p
+Mapping field T
+Mapping field epsilon
+Mapping field U
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region1 points back to base mesh.
+Writing map faceRegionAddressing from region1 faces back to base mesh.
+Writing map cellRegionAddressing from region1 cells back to base mesh.
+Writing map boundaryRegionAddressing from region1 boundary back to base mesh.
+
+Region 2
+-------- 
+Creating mesh for region 2 heater
+Mapping fields
+Mapping field cellToRegion
+Mapping field k
+Mapping field p_rgh
+Mapping field p
+Mapping field T
+Mapping field epsilon
+Mapping field U
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region2 points back to base mesh.
+Writing map faceRegionAddressing from region2 faces back to base mesh.
+Writing map cellRegionAddressing from region2 cells back to base mesh.
+Writing map boundaryRegionAddressing from region2 boundary back to base mesh.
+
+Region 3
+-------- 
+Creating mesh for region 3 rightSolid
+Mapping fields
+Mapping field cellToRegion
+Mapping field k
+Mapping field p_rgh
+Mapping field p
+Mapping field T
+Mapping field epsilon
+Mapping field U
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region3 points back to base mesh.
+Writing map faceRegionAddressing from region3 faces back to base mesh.
+Writing map cellRegionAddressing from region3 cells back to base mesh.
+Writing map boundaryRegionAddressing from region3 boundary back to base mesh.
+
+Region 4
+-------- 
+Creating mesh for region 4 topAir
+Mapping fields
+Mapping field cellToRegion
+Mapping field k
+Mapping field p_rgh
+Mapping field p
+Mapping field T
+Mapping field epsilon
+Mapping field U
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region4 points back to base mesh.
+Writing map faceRegionAddressing from region4 faces back to base mesh.
+Writing map cellRegionAddressing from region4 cells back to base mesh.
+Writing map boundaryRegionAddressing from region4 boundary back to base mesh.
+End
+

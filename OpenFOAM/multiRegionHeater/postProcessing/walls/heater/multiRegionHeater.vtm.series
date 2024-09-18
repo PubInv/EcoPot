@@ -1,0 +1,15 @@
+{
+  "file-series-version" : "1.0",
+  "files" : [
+    { "name" : "multiRegionHeater_00000407.vtm", "time" : 10 },
+    { "name" : "multiRegionHeater_00000891.vtm", "time" : 20 },
+    { "name" : "multiRegionHeater_00001390.vtm", "time" : 30 },
+    { "name" : "multiRegionHeater_00001919.vtm", "time" : 40 },
+    { "name" : "multiRegionHeater_00002476.vtm", "time" : 50 },
+    { "name" : "multiRegionHeater_00003053.vtm", "time" : 60 },
+    { "name" : "multiRegionHeater_00003643.vtm", "time" : 70 },
+    { "name" : "multiRegionHeater_00004243.vtm", "time" : 80 },
+    { "name" : "multiRegionHeater_00004853.vtm", "time" : 90 },
+    { "name" : "multiRegionHeater_00005473.vtm", "time" : 100 }
+  ]
+}

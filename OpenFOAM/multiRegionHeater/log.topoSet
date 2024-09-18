@@ -1,0 +1,92 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : topoSet
+Date   : Sep 17 2024
+Time   : 12:22:19
+Host   : DESKTOP-KOC0FTN
+PID    : 958
+I/O    : uncollated
+Case   : /home/cledito/OpenFOAM/cledito-v2012/run/multiRegionHeater
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create polyMesh for time = 0
+
+Reading topoSetDict
+
+Time = 0
+    mesh not changed.
+Created cellSet heaterCellSet
+    Applying source boxToCell
+    Adding cells with centre within boxes 1((-0.01001 0 -100) (0.01001 0.00999 100))
+    cellSet heaterCellSet now size 40
+Read set cellSet heaterCellSet with size 40
+    Applying source boxToCell
+    Adding cells with centre within boxes 1((-0.01001 -100 -0.01001) (0.01001 0.00999 0.01001))
+    cellSet heaterCellSet now size 80
+Created cellZoneSet heater
+    Applying source setToCellZone
+    Adding all cells from cellSet heaterCellSet ...
+    cellZoneSet heater now size 80
+Created cellSet leftSolidCellSet
+    Applying source boxToCell
+    Adding cells with centre within boxes 1((-100 0 -100) (-0.01001 0.00999 100))
+    cellSet leftSolidCellSet now size 130
+Created cellZoneSet leftSolid
+    Applying source setToCellZone
+    Adding all cells from cellSet leftSolidCellSet ...
+    cellZoneSet leftSolid now size 130
+Created cellSet rightSolidCellSet
+    Applying source boxToCell
+    Adding cells with centre within boxes 1((0.01001 0 -100) (100 0.00999 100))
+    cellSet rightSolidCellSet now size 130
+Created cellZoneSet rightSolid
+    Applying source setToCellZone
+    Adding all cells from cellSet rightSolidCellSet ...
+    cellZoneSet rightSolid now size 130
+Created cellSet topAirCellSet
+    Applying source boxToCell
+    Adding cells with centre within boxes 1((-100 0.00999 -100) (100 100 100))
+    cellSet topAirCellSet now size 1200
+Created cellZoneSet topAir
+    Applying source setToCellZone
+    Adding all cells from cellSet topAirCellSet ...
+    cellZoneSet topAir now size 1200
+Created cellSet bottomWaterCellSet
+    Applying source cellToCell
+    Adding all elements of cellSet (heaterCellSet)
+    cellSet bottomWaterCellSet now size 80
+Read set cellSet bottomWaterCellSet with size 80
+    Applying source cellToCell
+    Adding all elements of cellSet (leftSolidCellSet)
+    cellSet bottomWaterCellSet now size 210
+Read set cellSet bottomWaterCellSet with size 210
+    Applying source cellToCell
+    Adding all elements of cellSet (rightSolidCellSet)
+    cellSet bottomWaterCellSet now size 340
+Read set cellSet bottomWaterCellSet with size 340
+    Applying source cellToCell
+    Adding all elements of cellSet (topAirCellSet)
+    cellSet bottomWaterCellSet now size 1540
+Read set cellSet bottomWaterCellSet with size 1540
+    Inverting cellSet
+    cellSet bottomWaterCellSet now size 1460
+Created cellZoneSet bottomWater
+    Applying source setToCellZone
+    Adding all cells from cellSet bottomWaterCellSet ...
+    cellZoneSet bottomWater now size 1460
+
+End
+

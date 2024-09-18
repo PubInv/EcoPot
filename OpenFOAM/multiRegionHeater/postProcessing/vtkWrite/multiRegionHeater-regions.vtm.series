@@ -1,0 +1,15 @@
+{
+  "file-series-version" : "1.0",
+  "files" : [
+    { "name" : "multiRegionHeater-regions_00000407.vtm", "time" : 10 },
+    { "name" : "multiRegionHeater-regions_00000891.vtm", "time" : 20 },
+    { "name" : "multiRegionHeater-regions_00001390.vtm", "time" : 30 },
+    { "name" : "multiRegionHeater-regions_00001919.vtm", "time" : 40 },
+    { "name" : "multiRegionHeater-regions_00002476.vtm", "time" : 50 },
+    { "name" : "multiRegionHeater-regions_00003053.vtm", "time" : 60 },
+    { "name" : "multiRegionHeater-regions_00003643.vtm", "time" : 70 },
+    { "name" : "multiRegionHeater-regions_00004243.vtm", "time" : 80 },
+    { "name" : "multiRegionHeater-regions_00004853.vtm", "time" : 90 },
+    { "name" : "multiRegionHeater-regions_00005473.vtm", "time" : 100 }
+  ]
+}

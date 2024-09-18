@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<!-- time='10' -->
+<VTKFile type='vtkMultiBlockDataSet' version='1.0' byte_order='LittleEndian' header_type='UInt64'>
+  <vtkMultiBlockDataSet>
+    <Block name='boundary'>
+      <DataSet name='minX' file='boundary/minX.vtp' />
+      <DataSet name='minZ' file='boundary/minZ.vtp' />
+      <DataSet name='maxZ' file='boundary/maxZ.vtp' />
+      <DataSet name='leftSolid_to_bottomWater' file='boundary/leftSolid_to_bottomWater.vtp' />
+      <DataSet name='leftSolid_to_heater' file='boundary/leftSolid_to_heater.vtp' />
+      <DataSet name='leftSolid_to_topAir' file='boundary/leftSolid_to_topAir.vtp' />
+    </Block>
+  </vtkMultiBlockDataSet>
+  <FieldData>
+    <DataArray type='Float32' Name='TimeValue' NumberOfTuples='1' format='ascii'>
+10
+    </DataArray>
+  </FieldData>
+</VTKFile>

@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<!-- patch='leftSolid_to_heater' time='20' index='891' -->
+<VTKFile type='PolyData' version='0.1' byte_order='LittleEndian' header_type='UInt64'>
+  <PolyData>
+    <FieldData>
+      <DataArray type='Float32' Name='TimeValue' NumberOfTuples='1' format='binary'>
+BAAAAAAAAAAAAKBB
+      </DataArray>
+    </FieldData>
+    <Piece NumberOfPoints='22' NumberOfPolys='10'>
+      <Points>
+        <DataArray type='Float32' Name='Points' NumberOfComponents='3' format='binary'>
+CAEAAAAAAAANdFq8AAAAAM3MTL0NdFq8bxIDPM3MTL0NdFq8bxIDPArXI70NdFq8AAAAAArXI70NdFq8bxIDPI/C9bwNdFq8AAAAAI/C9bwNdFq8bxIDPArXo7wNdFq8AAAAAArXo7wNdFq8bxIDPArXI7wNdFq8AAAAAArXI7wNdFq8bxIDPAAAAAANdFq8AAAAAAAAAAANdFq8bxIDPArXIzwNdFq8AAAAAArXIzwNdFq8bxIDPArXozwNdFq8AAAAAArXozwNdFq8bxIDPI/C9TwNdFq8AAAAAI/C9TwNdFq8bxIDPArXIz0NdFq8AAAAAArXIz0NdFq8bxIDPM3MTD0NdFq8AAAAAM3MTD0=
+        </DataArray>
+      </Points>
+      <Polys>
+        <DataArray type='Int32' Name='connectivity' format='binary'>
+oAAAAAAAAAAAAAAAAQAAAAIAAAADAAAAAwAAAAIAAAAEAAAABQAAAAUAAAAEAAAABgAAAAcAAAAHAAAABgAAAAgAAAAJAAAACQAAAAgAAAAKAAAACwAAAAsAAAAKAAAADAAAAA0AAAANAAAADAAAAA4AAAAPAAAADwAAAA4AAAAQAAAAEQAAABEAAAAQAAAAEgAAABMAAAATAAAAEgAAABQAAAAVAAAA
+        </DataArray>
+        <DataArray type='Int32' Name='offsets' format='binary'>
+KAAAAAAAAAAEAAAACAAAAAwAAAAQAAAAFAAAABgAAAAcAAAAIAAAACQAAAAoAAAA
+        </DataArray>
+      </Polys>
+      <CellData>
+        <DataArray type='Float32' Name='T' format='binary'>
+KAAAAAAAAAAjWbtDbGe7Q/Fku0PYVLtD10K7Q9dCu0PYVLtD8WS7Q2xnu0MjWbtD
+        </DataArray>
+      </CellData>
+    </Piece>
+  </PolyData>
+</VTKFile>

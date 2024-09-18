@@ -1,0 +1,78 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/bottomWater";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [ 0 0 0 1 0 0 0 ];
+
+internalField   uniform 1073;
+
+boundaryField
+{
+    minX
+    {
+        type            zeroGradient;
+        value           uniform 1073;
+    }
+    maxX
+    {
+        type            zeroGradient;
+        value           uniform 1073;
+    }
+    minY
+    {
+        type            fixedValue;
+        value           uniform 1073;
+    }
+    minZ
+    {
+        type            zeroGradient;
+        value           uniform 1073;
+    }
+    maxZ
+    {
+        type            zeroGradient;
+        value           uniform 1073;
+    }
+    bottomWater_to_rightSolid
+    {
+        type            compressible::turbulentTemperatureCoupledBaffleMixed;
+        value           uniform 1073;
+        Tnbr            T;
+        kappaMethod     fluidThermo;
+    }
+    bottomWater_to_leftSolid
+    {
+        type            compressible::turbulentTemperatureCoupledBaffleMixed;
+        value           uniform 1073;
+        Tnbr            T;
+        kappaMethod     fluidThermo;
+    }
+    bottomWater_to_heater
+    {
+        type            compressible::turbulentTemperatureCoupledBaffleMixed;
+        value           uniform 1073;
+        Tnbr            T;
+        kappaMethod     fluidThermo;
+    }
+    maxY
+    {
+        type            inletOutlet;
+        inletValue      uniform 1073;
+    }
+}
+
+
+// ************************************************************************* //
