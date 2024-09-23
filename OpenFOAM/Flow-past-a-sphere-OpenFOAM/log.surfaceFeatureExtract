@@ -1,0 +1,86 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : surfaceFeatureExtract
+Date   : Sep 18 2024
+Time   : 19:45:22
+Host   : DESKTOP-KOC0FTN
+PID    : 960
+I/O    : uncollated
+Case   : /home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+Note: Feature line extraction only valid on closed manifold surfaces
+
+Reading surfaceFeatureExtractDict
+
+Surfaces     : sphere.stl
+Output       : sphere
+Load options : offset
+Write options: writeObj=yes writeVTK=off
+
+Statistics:
+Triangles    : 1360 in 1 region(s)
+Vertices     : 682
+Bounding Box : (-0.5 -0.5 -0.5) (0.5 0.5 0.5)
+
+Constructing feature set from included angle 180
+Selecting edges based purely on geometric tests: no
+Removing all non-manifold edges (edges with > 2 connected faces) unless they cross multiple regions
+
+Initial Feature set:
+    points : 682
+    edges  : 2040
+    of which
+        region edges   : 0
+        external edges : 1959
+        internal edges : 81
+
+Final Feature set:
+    points : 682
+    of which
+        convex             : 494
+        concave            : 0
+        mixed              : 188
+        non-feature        : 0
+    edges  : 2040
+    of which
+        external edges     : 1896
+        internal edges     : 54
+        flat edges         : 90
+        open edges         : 0
+        multiply connected : 0
+
+Writing extendedFeatureEdgeMesh to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere"
+Writing 494 convex feature points to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_convexFeaturePts.obj"
+Writing 0 concave feature points to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_concaveFeaturePts.obj"
+Writing 188 mixed feature points to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_mixedFeaturePts.obj"
+Writing 188 mixed feature point structure to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_mixedFeaturePtsStructure.obj"
+Writing 1896 external edges to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_externalEdges.obj"
+Writing 54 internal edges to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_internalEdges.obj"
+Writing 90 flat edges to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_flatEdges.obj"
+Writing 0 open edges to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_openEdges.obj"
+Writing 0 multiple edges to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_multipleEdges.obj"
+Writing 0 region edges to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_regionEdges.obj"
+Writing 2040 edge directions to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/extendedFeatureEdgeMesh/sphere_edgeDirections.obj"
+
+Writing featureEdgeMesh to "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/constant/triSurface/sphere.eMesh"
+ExecutionTime = 0.22 s  ClockTime = 0 s
+
+End
+

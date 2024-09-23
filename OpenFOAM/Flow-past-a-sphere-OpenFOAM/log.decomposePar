@@ -1,0 +1,116 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : decomposePar
+Date   : Sep 18 2024
+Time   : 19:45:37
+Host   : DESKTOP-KOC0FTN
+PID    : 962
+I/O    : uncollated
+Case   : /home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+
+Decomposing mesh region0
+
+Create mesh
+
+Calculating distribution of cells
+Selecting decompositionMethod hierarchical [4]
+
+Finished decomposition in 0.15 s
+
+Calculating original mesh data
+
+Distributing cells to processors
+
+Distributing faces to processors
+
+Distributing points to processors
+
+Constructing processor meshes
+
+Processor 0
+    Number of cells = 16000
+    Number of faces shared with processor 1 = 800
+    Number of faces shared with processor 2 = 800
+    Number of processor patches = 2
+    Number of processor faces = 1600
+    Number of boundary faces = 2400
+
+Processor 1
+    Number of cells = 16000
+    Number of faces shared with processor 0 = 800
+    Number of faces shared with processor 3 = 800
+    Number of processor patches = 2
+    Number of processor faces = 1600
+    Number of boundary faces = 2400
+
+Processor 2
+    Number of cells = 16000
+    Number of faces shared with processor 0 = 800
+    Number of faces shared with processor 3 = 800
+    Number of processor patches = 2
+    Number of processor faces = 1600
+    Number of boundary faces = 2400
+
+Processor 3
+    Number of cells = 16000
+    Number of faces shared with processor 1 = 800
+    Number of faces shared with processor 2 = 800
+    Number of processor patches = 2
+    Number of processor faces = 1600
+    Number of boundary faces = 2400
+
+Number of processor faces = 3200
+Max number of cells = 16000 (0% above average 16000)
+Max number of processor patches = 2 (0% above average 2)
+Max number of faces between processors = 1600 (0% above average 1600)
+
+Time = 0
+--> FOAM Warning : 
+    From bool Foam::IOobject::readHeader(Foam::Istream&)
+    in file db/IOobject/IOobjectReadHeader.C at line 111
+    Reading "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/0/nil" at line 2
+    First token could not be read or is not the keyword 'FoamFile'
+
+Check header is of the form:
+
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       IOobject;
+    location    "0";
+    object      nil;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+Processor 0: field transfer
+Processor 1: field transfer
+Processor 2: field transfer
+Processor 3: field transfer
+
+End
+

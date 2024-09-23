@@ -1,0 +1,104 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : snappyHexMesh -overwrite
+Date   : Sep 18 2024
+Time   : 19:45:32
+Host   : DESKTOP-KOC0FTN
+PID    : 961
+I/O    : uncollated
+Case   : /home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Read mesh in = 0.79 s
+
+Overall mesh bounding box  : (-0.5 -0.5 -0.5) (0.5 0.5 0.5)
+Relative tolerance         : 1e-06
+Absolute matching distance : 1.73205e-06
+
+Reading refinement surfaces.
+Read refinement surfaces in = 0.07 s
+
+Reading refinement shells.
+Refinement level 3 for all cells inside box0
+Refinement level 2 for all cells inside box1
+Refinement level 1 for all cells inside box2
+Read refinement shells in = 0 s
+
+Setting refinement level of surface to be consistent with shells.
+For geometry sphere detected 0 uncached triangles out of 1360
+Checked shell refinement in = 0.02 s
+
+Reading features.
+Read edgeMesh sphere.eMesh
+    points      : 682
+    edges       : 2040
+    boundingBox : (-0.5 -0.5 -0.5) (0.5 0.5 0.5)
+
+Refinement level according to distance to "sphere.eMesh" (682 points, 2040 edges).
+    level 3 for all cells within 0 metre.
+Read features in = 0.03 s
+
+
+Determining initial surface intersections
+-----------------------------------------
+
+Edge intersection testing:
+    Number of edges             : 196800
+    Number of edges to retest   : 0
+    Number of intersected edges : 0
+Edge intersection testing:
+    Number of edges             : 196800
+    Number of edges to retest   : 196800
+    Number of intersected edges : 7472
+Calculated surface intersections in = 1.15 s
+
+Initial mesh : cells:64000  faces:196800  points:68921
+Cells per refinement level:
+    0	64000
+
+Adding patches for surface regions
+----------------------------------
+
+Patch Type                Region                        
+----- ----                ------                        
+sphere:
+
+5     wall                sphere                        
+
+Added patches in = 0.11 s
+
+Edge intersection testing:
+    Number of edges             : 196800
+    Number of edges to retest   : 0
+    Number of intersected edges : 7472
+Selecting decompositionMethod none [1]
+
+Refinement phase
+----------------
+
+
+
+--> FOAM FATAL ERROR: (openfoam-2012)
+Point (1 0 0) is not inside the mesh or on a face or edge.
+Bounding box of the mesh:(-0.5 -0.5 -0.5) (0.5 0.5 0.5)
+
+    From static Foam::labelList Foam::refinementParameters::findCells(bool, const Foam::polyMesh&, const pointField&)
+    in file snappyHexMeshDriver/refinementParameters/refinementParameters.C at line 242.
+
+FOAM exiting
+
