@@ -1,0 +1,169 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      changeDictionaryDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+U
+{
+    internalField   uniform (0 0.5 0);
+
+    boundaryField
+    {
+        minY
+        {
+            type            fixedValue;
+            inletValue           uniform (0 0.5 0);
+        }
+
+        maxY
+        {
+            type            inletOutlet;
+            value           uniform (0 0 0);
+        }
+
+        ".*"
+        {
+            type            fixedValue;
+            value           uniform (0 0 0);
+        }
+    }
+}
+
+T
+{
+    internalField   uniform 1073;
+
+    boundaryField
+    {
+        minY
+        {
+            type            fixedValue;
+            value           uniform 1073;
+        }
+
+        maxY
+        {
+            type            inletOutlet;
+            inletValue      uniform 1073;
+        }
+
+        ".*"
+        {
+            type            fixedValue;
+            value           uniform 1073;
+        }
+
+        "bottomWater_to_.*"
+        {
+            type            compressible::turbulentTemperatureCoupledBaffleMixed;
+            Tnbr            T;
+            kappaMethod     fluidThermo;
+            value           uniform 1000;
+        }
+    }
+}
+
+epsilon
+{
+    internalField   uniform 0.01;
+
+    boundaryField
+    {
+        minY
+        {
+            type            fixedValue;
+            value           uniform 0.01;
+        }
+
+        maxY
+        {
+            type            inletOutlet;
+            inletValue      uniform 0.01;
+        }
+
+        ".*"
+        {
+            type            epsilonWallFunction;
+            value           uniform 0.01;
+        }
+    }
+}
+
+k
+{
+    internalField   uniform 0.1;
+
+    boundaryField
+    {
+        minY
+        {
+            type            inletOutlet;
+            inletValue      uniform 0.1;
+        }
+
+        maxY
+        {
+            type            zeroGradient;
+            value           uniform 0.1;
+        }
+
+        ".*"
+        {
+            type            kqRWallFunction;
+            value           uniform 0.1;
+        }
+    }
+}
+
+p_rgh
+{
+    internalField   uniform 0;
+
+    boundaryField
+    {
+        minY
+        {
+            type            fixedValue;
+            value           uniform 0;
+        }
+
+        maxY
+        {
+            type            fixedValue;
+            value           uniform 0;
+        }
+
+        ".*"
+        {
+            type            fixedFluxPressure;
+            value           uniform 0;
+        }
+    }
+}
+
+p
+{
+    internalField   uniform 50;
+
+    boundaryField
+    {
+        ".*"
+        {
+            type            calculated;
+            value           uniform 0;
+        }
+    }
+}
+
+// ************************************************************************* //
