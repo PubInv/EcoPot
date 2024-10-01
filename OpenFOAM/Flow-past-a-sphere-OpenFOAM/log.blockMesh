@@ -1,0 +1,81 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : blockMesh
+Date   : Sep 18 2024
+Time   : 19:45:19
+Host   : DESKTOP-KOC0FTN
+PID    : 959
+I/O    : uncollated
+Case   : /home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Creating block mesh from "system/blockMeshDict"
+--> FOAM IOWarning :
+    Found [v1012] 'convertToMeters' entry instead of 'scale' in dictionary "/home/cledito/OpenFOAM/cledito-v2012/run/Flow-past-a-sphere-OpenFOAM/system/blockMeshDict" 
+
+    This keyword is deemed to be 120 months old.
+
+Creating block edges
+No non-planar block faces defined
+Creating topology blocks
+Creating topology patches
+
+Creating block mesh topology
+
+Check topology
+
+	Basic statistics
+		Number of internal faces : 0
+		Number of boundary faces : 6
+		Number of defined boundary faces : 6
+		Number of undefined boundary faces : 0
+	Checking patch -> block consistency
+
+Creating block offsets
+Creating merge list (topological search)...
+
+Creating polyMesh from blockMesh
+Creating patches
+Creating cells
+Creating points with scale 1
+    Block 0 cell size :
+        i : 0.025 .. 0.025
+        j : 0.025 .. 0.025
+        k : 0.025 .. 0.025
+
+
+There are no merge patch pairs
+
+Writing polyMesh with 0 cellZones
+----------------
+Mesh Information
+----------------
+  boundingBox: (-0.5 -0.5 -0.5) (0.5 0.5 0.5)
+  nPoints: 68921
+  nCells: 64000
+  nFaces: 196800
+  nInternalFaces: 187200
+----------------
+Patches
+----------------
+  patch 0 (start: 187200 size: 1600) name: inlet
+  patch 1 (start: 188800 size: 1600) name: outlet
+  patch 2 (start: 190400 size: 1600) name: top
+  patch 3 (start: 192000 size: 1600) name: bottom
+  patch 4 (start: 193600 size: 3200) name: sides
+
+End
+
