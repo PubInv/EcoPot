@@ -1,0 +1,135 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : changeDictionary -region bottomAir
+Date   : Oct 04 2024
+Time   : 11:38:27
+Host   : DESKTOP-KOC0FTN
+PID    : 512
+I/O    : uncollated
+Case   : /home/cledito/OpenFOAM/cledito-v2012/run/snappyMultiRegionHeater
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh bottomAir for time = 0
+
+Read dictionary changeDictionaryDict with replacements for dictionaries 7(boundary U T epsilon k p_rgh p)
+Reading polyMesh/boundary file to extract patch names
+Loaded dictionary boundary with entries 8(minX maxX minY minZ maxZ bottomAir_to_rightSolid bottomAir_to_leftSolid bottomAir_to_heater)
+Extracted patch groups:
+    group wall with patches 6(minY minZ maxZ bottomAir_to_rightSolid bottomAir_to_leftSolid bottomAir_to_heater)
+Replacing entries in dictionary boundary
+Special handling of boundary as polyMesh/boundary file.
+Merging entries from 2(minX maxX)
+fieldDict:
+{
+    minX
+    {
+        type            wall;
+        nFaces          80;
+        startFace       11196;
+    }
+    maxX
+    {
+        type            wall;
+        nFaces          80;
+        startFace       11276;
+    }
+    minY
+    {
+        type            wall;
+        inGroups        1 ( wall );
+        nFaces          340;
+        startFace       11356;
+    }
+    minZ
+    {
+        type            wall;
+        inGroups        1 ( wall );
+        nFaces          240;
+        startFace       11696;
+    }
+    maxZ
+    {
+        type            wall;
+        inGroups        1 ( wall );
+        nFaces          240;
+        startFace       11936;
+    }
+    bottomAir_to_rightSolid
+    {
+        type            mappedWall;
+        inGroups        1 ( wall );
+        nFaces          520;
+        startFace       12176;
+        sampleMode      nearestPatchFace;
+        sampleRegion    rightSolid;
+        samplePatch     rightSolid_to_bottomAir;
+    }
+    bottomAir_to_leftSolid
+    {
+        type            mappedWall;
+        inGroups        1 ( wall );
+        nFaces          520;
+        startFace       12696;
+        sampleMode      nearestPatchFace;
+        sampleRegion    leftSolid;
+        samplePatch     leftSolid_to_bottomAir;
+    }
+    bottomAir_to_heater
+    {
+        type            mappedWall;
+        inGroups        1 ( wall );
+        nFaces          368;
+        startFace       13216;
+        sampleMode      nearestPatchFace;
+        sampleRegion    heater;
+        samplePatch     heater_to_bottomAir;
+    }
+}
+
+Writing modified boundary
+Replacing entries in dictionary U
+Loading dictionary U
+Loaded dictionary U with entries 3(dimensions internalField boundaryField)
+Merging entries from 2(internalField boundaryField)
+Writing modified fieldDict U
+Replacing entries in dictionary T
+Loading dictionary T
+Loaded dictionary T with entries 3(dimensions internalField boundaryField)
+Merging entries from 2(internalField boundaryField)
+Writing modified fieldDict T
+Replacing entries in dictionary epsilon
+Loading dictionary epsilon
+Loaded dictionary epsilon with entries 3(dimensions internalField boundaryField)
+Merging entries from 2(internalField boundaryField)
+Writing modified fieldDict epsilon
+Replacing entries in dictionary k
+Loading dictionary k
+Loaded dictionary k with entries 3(dimensions internalField boundaryField)
+Merging entries from 2(internalField boundaryField)
+Writing modified fieldDict k
+Replacing entries in dictionary p_rgh
+Loading dictionary p_rgh
+Loaded dictionary p_rgh with entries 3(dimensions internalField boundaryField)
+Merging entries from 2(internalField boundaryField)
+Writing modified fieldDict p_rgh
+Replacing entries in dictionary p
+Loading dictionary p
+Loaded dictionary p with entries 3(dimensions internalField boundaryField)
+Merging entries from 2(internalField boundaryField)
+Writing modified fieldDict p
+
+End
+
