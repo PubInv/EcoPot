@@ -1,3 +1,4 @@
+
 // Copyright Cledden Obeng-Poku Kwanin and Robert L. Read, 2024
 // Released under CERN Strong-reciprocal Open Hardware License
 
@@ -12,8 +13,9 @@ base_scale_factor = 2;
 height_scale_factor = 0.5;
 extra_height = 3;
 
-lid_thickness = 2;
+lid_thickness =20;
 lid_handle_height = 10;
+lid_wall_size = sqrt(lid_thickness);
 
 finWidth = wall_thickness;
 // finLength = outer_rad/2;
@@ -77,8 +79,9 @@ echo(cyl_height(A,V));
 ptype = "roundbottom_with_fins";
 
 // ltype = "none";
-ltype = "flat_lid";
-// ltype = "conical";
+//ltype = "flat_lid";
+// ltype = "solidconical";
+ltype = "hollowconical";
 
 // set resolution here
 $fn=40;
@@ -188,8 +191,8 @@ module flatBottomPotWithFins() {
 
 module conicalHandle() {
     rotate ([180,0,0])
-    translate ([0,0,lid_thickness/2])
-    cylinder (h= lid_handle_height, r1=lid_thickness,r2=lid_thickness*5);
+    translate ([0,0,lid_thickness*0.01])
+    cylinder (h= lid_handle_height, r1=sqrt(lid_thickness),r2=lid_thickness);
 }
 module flatLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
@@ -203,14 +206,44 @@ module flatLid (inner_rad) {
      } 
 }
 
+module solidconicalLid (inner_rad) {
+    outer_rad = inner_rad+wall_thickness;
+    union () {
+//        cylinder (h=lid_thickness, r=outer_rad, center = true);
+        conicalHandle();
+            cylinder (h=lid_thickness*10, r1=(inner_rad*0.6), r2 =(inner_rad-1));    
+            
+     } 
+}
+
+module hollowconicalLid (inner_rad) {
+    outer_rad = inner_rad+wall_thickness;
+    union () {
+//        cylinder (h=lid_thickness, r=outer_rad, center = true);
+        conicalHandle();
+        difference(){
+            cylinder (h=lid_thickness*10, r1=(inner_rad*0.6), r2 =(inner_rad));
+            translate([0,0,lid_thickness*0.55])
+            cylinder (h=lid_thickness*10-lid_wall_size, r1=(inner_rad*0.6-(lid_wall_size)), r2 =(inner_rad-1)-(lid_wall_size));
+        }
+     } 
+}
+
 
 module renderLid(ltype,r) {
     if (ltype == "flat_lid") {
 
-        translate ([0,0,cyl_height(A,V)/2+20])
+        translate ([0,0,cyl_height(A,V)/2+50+lid_thickness])
         rotate ([180,0,0])
         flatLid(r);  
-    } else  if (ltype == "conical") {
+    } else  if (ltype == "solidconical") {
+        translate ([0,0,cyl_height(A,V)/2+50+lid_thickness])
+        rotate ([180,0,0])
+        solidconicalLid(r);  
+    } else if (ltype == "hollowconical"){
+        translate ([0,0,cyl_height(A,V)/2+50+lid_thickness*10])
+        rotate ([180,0,0])
+        hollowconicalLid(r);
     }
 }
 
