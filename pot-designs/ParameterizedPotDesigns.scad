@@ -14,8 +14,14 @@ height_scale_factor = 0.5;
 extra_height = 3;
 
 lid_thickness =20;
-lid_handle_height = 10;
+lid_knob_height = 15;
+knob_scale_factor = 2;
 lid_wall_size = sqrt(lid_thickness);
+
+conical_lid_scale_factor = 0.6;
+conical_lid_height = 150;
+
+lid_distance_from_pot = 100;
 
 finWidth = wall_thickness;
 // finLength = outer_rad/2;
@@ -189,16 +195,16 @@ module flatBottomPotWithFins() {
     }
 }
 
-module conicalHandle() {
+module conicalknob() {
     rotate ([180,0,0])
     translate ([0,0,lid_thickness*0.01])
-    cylinder (h= lid_handle_height, r1=sqrt(lid_thickness),r2=lid_thickness);
+    cylinder (h= lid_knob_height, r1=(lid_thickness),r2=lid_thickness*knob_scale_factor);
 }
 module flatLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
     union () {
         cylinder (h= lid_thickness, r=outer_rad, center = true);
-        conicalHandle();
+        conicalknob();
         difference () {
             cylinder (h=lid_thickness*2, r1=(inner_rad), r2 =(inner_rad));    
             cylinder (h=(lid_thickness+extra_height), r1=(inner_rad-lid_thickness), r2 =(inner_rad-lid_thickness));
@@ -210,8 +216,8 @@ module solidconicalLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
     union () {
 //        cylinder (h=lid_thickness, r=outer_rad, center = true);
-        conicalHandle();
-            cylinder (h=lid_thickness*10, r1=(inner_rad*0.6), r2 =(inner_rad-1));    
+        conicalknob();
+            cylinder (h=lconical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));    
             
      } 
 }
@@ -220,11 +226,11 @@ module hollowconicalLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
     union () {
 //        cylinder (h=lid_thickness, r=outer_rad, center = true);
-        conicalHandle();
+        conicalknob();
         difference(){
-            cylinder (h=lid_thickness*10, r1=(inner_rad*0.6), r2 =(inner_rad));
+            cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));
             translate([0,0,lid_thickness*0.55])
-            cylinder (h=lid_thickness*10-lid_wall_size, r1=(inner_rad*0.6-(lid_wall_size)), r2 =(inner_rad-1)-(lid_wall_size));
+            cylinder (h=conical_lid_height-lid_wall_size, r1=(outer_rad*conical_lid_scale_factor)-(lid_wall_size), r2 =(outer_rad)-(lid_wall_size));
         }
      } 
 }
@@ -233,15 +239,15 @@ module hollowconicalLid (inner_rad) {
 module renderLid(ltype,r) {
     if (ltype == "flat_lid") {
 
-        translate ([0,0,cyl_height(A,V)/2+50+lid_thickness])
+        translate ([0,0,cyl_height(A,V)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
         flatLid(r);  
     } else  if (ltype == "solidconical") {
-        translate ([0,0,cyl_height(A,V)/2+50+lid_thickness])
+        translate ([0,0,cyl_height(A,V)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
         solidconicalLid(r);  
     } else if (ltype == "hollowconical"){
-        translate ([0,0,cyl_height(A,V)/2+50+lid_thickness*10])
+        translate ([0,0,cyl_height(A,V)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
         hollowconicalLid(r);
     }
