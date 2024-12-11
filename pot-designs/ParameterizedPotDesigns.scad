@@ -27,8 +27,9 @@ lid_hook_connector_height = 2;
 conical_lid_scale_factor = 0.6;
 conical_lid_height = 150;
 
-pot_handle_radius = 40;
-pot_handle_thickness = 15;
+pot_handle_radius = 50;
+pot_handle_thickness = 20;
+pot_handle_wall_thickness = 3;
 handle_height = 0;
 
 lid_distance_from_pot = 100;
@@ -303,7 +304,7 @@ module pothandleshell (){
             translate([pot_handle_radius - pot_handle_thickness/2, 0])
                 circle(d=pot_handle_thickness);
             translate([pot_handle_radius - pot_handle_thickness/2, 0])
-                circle(d=pot_handle_thickness - 1);
+                circle(d=pot_handle_thickness - pot_handle_wall_thickness);
         }
     }
 }
