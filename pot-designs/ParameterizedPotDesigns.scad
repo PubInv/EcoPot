@@ -137,7 +137,7 @@ module radialFin(r,angle) {
     finHeight = ro;
     rotate([0,0,angle])
     translate([0,ro-finLength/2,-finHeight/2])
-    roundedFin(finWidth*3,finLength*2,finHeight);
+    roundedFin(finWidth*3,finLength*1.5,finHeight);
 }
 
 
