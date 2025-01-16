@@ -118,13 +118,18 @@ ltype = "none";
 // set resolution here
 $fn=40;
 
-module roundedFin(){
-    
+module roundedFin(Fw,Fl,Fh){
+    color ("red")
+    //cube([Fw,Fl,Fh],center=true);
+    resize(newsize=[Fw,Fl,Fh])
+        sphere(Fh);
 }
 
+module cubeFin(Fw,Fl,Fh){
+    color ("purple")
+    cube([Fw,Fl,Fh],center=true);
+}
 
-translate([200,0,0])
-roundedFin();
 
 module radialFin(r,angle) {
     ro = r + wall_thickness;
@@ -132,7 +137,7 @@ module radialFin(r,angle) {
     finHeight = ro;
     rotate([0,0,angle])
     translate([0,ro-finLength/2,-finHeight/2])
-    cube([finWidth,finLength,finHeight],center=true);
+    roundedFin(finWidth*3,finLength*2,finHeight);
 }
 
 
@@ -143,7 +148,7 @@ module legFin(r,angle) {
     rotate([0,0,angle])
     translate([0,ro-legLength/2,-ro/2])
     union() {
-        cube([legWidth,legLength,legHeight],center=true);
+        cubeFin(legWidth,legLength,legHeight);
         translate([0,legLength/2 - legBallRadius,-legHeight/2])
         sphere(legBallRadius);
     }
