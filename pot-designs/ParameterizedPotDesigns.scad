@@ -105,8 +105,8 @@ echo(cyl_height(A,V));
 // ptype = "flatbottom_with_fins";
 // ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
-ptype = "roundbottom_with_handles";
-//ptype = "none";
+//ptype = "roundbottom_with_handles";
+ptype = "none";
 
 ltype = "none";
 //ltype = "flat_lid";
@@ -135,9 +135,9 @@ module radialFin(r,angle) {
     ro = r + wall_thickness;
     finLength = ro/2;
     finHeight = ro;
-    rotate([0,0,angle])
-    translate([0,ro-finLength/2,-finHeight/2])
-    roundedFin(finWidth*3,finLength*1.5,finHeight);
+        rotate([0,0,angle])
+        translate([0,ro-finLength/2,-finHeight/2])
+        roundedFin(finWidth*3,finLength*1.5,finHeight);
 }
 
 
@@ -496,4 +496,66 @@ module renderPotType(ptype) {
 
 
 
-//difference () {
+module triangularFin(){
+    linear_extrude(height = finWidth, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
+        difference(){
+            offset(r=10)
+            polygon(points=[[0,0],[100,0],[100,100]]);
+            translate([0,100,0])
+            circle(100,$fn=64);
+        }
+    
+}
+
+module translate_children(){
+    for(i=[0:$children-1])
+        translate([200,0,0])
+        children(i);
+    }
+    
+
+
+
+module triangularFinMK(){
+    rotate([0,90,0])
+    difference(){
+        minkowski(){
+            sphere(2);
+           sharpFin();
+        }
+        translate([0,100,0])
+        sphere(100,$fn=64);
+    }
+}
+
+//translate_children(){
+triangularFinMK();
+//sharpFin();
+//}
+
+
+module sharpFin (){
+    thickener = 5;
+    fw = finWidth*thickener;
+    knife_thickness = 50;
+    z = fw/2+knife_thickness/2;
+    //z=30;
+    theta = atan2(fw/2,100*sqrt(2));
+    echo(theta);
+    difference(){
+        linear_extrude(height = fw, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
+        offset(r=0)
+        polygon(points=[[0,0],[100,0],[100,100]]);
+        translate([0,0,z])
+        translate([0,100,0])
+        rotate(theta,[1,1,0])
+        cube([220,220,knife_thickness],center=true);
+        translate([0,0,-z])
+        translate([0,100,0])
+        rotate(-theta,[1,1,0])
+        cube([220,220,knife_thickness],center=true);
+    }
+}
+
+
+
