@@ -105,8 +105,8 @@ echo(cyl_height(A,V));
 // ptype = "flatbottom_with_fins";
 // ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
-//ptype = "roundbottom_with_handles";
-ptype = "none";
+ptype = "roundbottom_with_handles";
+//ptype = "none";
 
 ltype = "none";
 //ltype = "flat_lid";
@@ -167,6 +167,13 @@ module legFins(r,num) {
        legFin(r,delta*i);
     }
 }
+module triangularFins(r,num) {
+    delta = 360 / num;
+    for ( i = [0:1:num-1]) {
+       triangularFinMK(r,delta*i);
+    }
+}
+
 module roundBottomOutside(A,V) {
     radius_mm = radius(A,V);
     side_h = side(A,V);
@@ -201,7 +208,7 @@ module roundBottomPotWithFins(A,V) {
 
     difference() {
         union() {
-            legFins(radius_mm,3);
+            triangularFins(radius_mm,3);
             radialFins(radius_mm,12);
         }
         roundBottomOutside(A,V);
@@ -516,9 +523,10 @@ module translate_children(){
 
 
 
-module triangularFinMK(){
+module triangularFinMK(r,angle){
     radius_mm = radius(A,V);
-    rotate([0,90,0])
+    rotate([0,90,angle-200])
+    translate([0,radius_mm/2,-radius_mm/2])
     difference(){
         minkowski(){
             sphere(2);
@@ -530,7 +538,7 @@ module triangularFinMK(){
 }
 
 //translate_children(){
-triangularFinMK();
+//triangularFinMK();
 //sharpFin();
 //}
 
