@@ -517,14 +517,15 @@ module translate_children(){
 
 
 module triangularFinMK(){
+    radius_mm = radius(A,V);
     rotate([0,90,0])
     difference(){
         minkowski(){
             sphere(2);
            sharpFin();
         }
-        translate([0,100,0])
-        sphere(100,$fn=64);
+        translate([0,radius_mm,0])
+        sphere(radius_mm,$fn=64);
     }
 }
 
@@ -536,24 +537,25 @@ triangularFinMK();
 
 module sharpFin (){
     thickener = 5;
+    radius_mm = radius(A,V);
     fw = finWidth*thickener;
     knife_thickness = 50;
     z = fw/2+knife_thickness/2;
     //z=30;
-    theta = atan2(fw/2,100*sqrt(2));
+    theta = atan2(fw/2,radius_mm*sqrt(2));
     echo(theta);
     difference(){
         linear_extrude(height = fw, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
         offset(r=0)
-        polygon(points=[[0,0],[100,0],[100,100]]);
+        polygon(points=[[0,0],[radius_mm,0],[radius_mm,radius_mm]]);
         translate([0,0,z])
-        translate([0,100,0])
+        translate([0,radius_mm,0])
         rotate(theta,[1,1,0])
-        cube([220,220,knife_thickness],center=true);
+        cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
         translate([0,0,-z])
-        translate([0,100,0])
+        translate([0,radius_mm,0])
         rotate(-theta,[1,1,0])
-        cube([220,220,knife_thickness],center=true);
+        cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
     }
 }
 
