@@ -208,8 +208,9 @@ module roundBottomPotWithFins(A,V) {
 
     difference() {
         union() {
-            triangularFins(radius_mm,3);
-            radialFins(radius_mm,12);
+
+            triangularFins(radius_mm,6);
+            //radialFins(radius_mm,12);
         }
         roundBottomOutside(A,V);
     }
@@ -525,14 +526,15 @@ module translate_children(){
 
 module triangularFinMK(r,angle){
     radius_mm = radius(A,V);
-    rotate([0,90,angle-200])
-    translate([0,radius_mm/2,-radius_mm/2])
+    //translate([0,-radius_mm,0])
+    rotate([0,-90,angle])
+    translate([-radius_mm,0,0])
     difference(){
         minkowski(){
             sphere(2);
            sharpFin();
         }
-        translate([0,radius_mm,0])
+        translate([radius_mm,0,0])
         sphere(radius_mm,$fn=64);
     }
 }
@@ -555,14 +557,14 @@ module sharpFin (){
     difference(){
         linear_extrude(height = fw, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
         offset(r=0)
-        polygon(points=[[0,0],[radius_mm,0],[radius_mm,radius_mm]]);
+        polygon(points=[[0,0],[0,radius_mm],[radius_mm,radius_mm]]);
         translate([0,0,z])
-        translate([0,radius_mm,0])
-        rotate(theta,[1,1,0])
+        translate([radius_mm,0,0])
+        rotate(theta,[-1,-1,0])
         cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
         translate([0,0,-z])
-        translate([0,radius_mm,0])
-        rotate(-theta,[1,1,0])
+        translate([radius_mm,0,0])
+        rotate(-theta,[-1,-1,0])
         cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
     }
 }
