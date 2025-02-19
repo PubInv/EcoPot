@@ -1,6 +1,6 @@
 
 
-// Copyright Cledden Obeng-Poku Kwanin and Robert L. Read, 2024
+// Copyright Aditya Choksi, Cledden Obeng-Poku Kwanin, and Robert L. Read, 2024
 // Released under CERN Strong-reciprocal Open Hardware License
 
 // This is an attempt to make a new parametrized experimental apparatus
