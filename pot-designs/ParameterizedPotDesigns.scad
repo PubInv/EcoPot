@@ -51,7 +51,7 @@ finWidth = wall_thickness;
 legWidth = wall_thickness;
 // legLength = outer_rad/2;
 // legHeight = 5;
-legBallRadius = 10;
+legBallRadius = 12;
 
 PI = 3.141592;
 
@@ -148,7 +148,7 @@ module legFin(r,angle) {
     rotate([0,0,angle])
     translate([0,ro-legLength/2,-ro/2])
     union() {
-        cubeFin(legWidth,legLength,legHeight);
+        //cubeFin(legWidth,legLength,legHeight);
         translate([0,legLength/2 - legBallRadius,-legHeight/2])
         sphere(legBallRadius);
     }
@@ -208,8 +208,8 @@ module roundBottomPotWithFins(A,V) {
 
     difference() {
         union() {
-
-            triangularFins(radius_mm,6);
+            legFins(radius_mm,3);
+            triangularFins(radius_mm,18);
             //radialFins(radius_mm,12);
         }
         roundBottomOutside(A,V);
@@ -531,7 +531,7 @@ module triangularFinMK(r,angle){
     translate([-radius_mm,0,0])
     difference(){
         minkowski(){
-            sphere(2);
+            sphere(4);
            sharpFin();
         }
         translate([radius_mm,0,0])
