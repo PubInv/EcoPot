@@ -431,8 +431,8 @@ module pothandleshell (){
         difference(){
             translate([pot_handle_radius - pot_handle_thickness/2, 0])
                 circle(d=pot_handle_thickness);
-            translate([pot_handle_radius - pot_handle_thickness/2, 0])
-                circle(d=pot_handle_thickness - pot_handle_wall_thickness);
+            //translate([pot_handle_radius - pot_handle_thickness/2, 0])
+                //circle(d=pot_handle_thickness - pot_handle_wall_thickness);
         }
     }
 }
@@ -535,7 +535,7 @@ module triangularFinMK(r,angle){
            sharpFin();
         }
         translate([radius_mm,0,0])
-        sphere(radius_mm,$fn=64);
+        sphere(radius_mm,$fn=24);
     }
 }
 
