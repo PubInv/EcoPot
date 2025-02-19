@@ -428,12 +428,12 @@ module lidhandleshell (){
 
 module pothandleshell (){
     rotate_extrude(angle=360) {
-        difference(){
+        //difference(){
             translate([pot_handle_radius - pot_handle_thickness/2, 0])
                 circle(d=pot_handle_thickness);
             //translate([pot_handle_radius - pot_handle_thickness/2, 0])
                 //circle(d=pot_handle_thickness - pot_handle_wall_thickness);
-        }
+        //}
     }
 }
 
