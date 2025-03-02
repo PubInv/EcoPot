@@ -8,56 +8,12 @@
 // that Veronica design in SolidWorks, but will use the improved, 360 degree design
 
 
-wall_thickness =6;
-
-base_scale_factor = 2;
-height_scale_factor = 0.5;
-extra_height = 3;
-
-lid_thickness =20;
-lid_knob_height = 15;
-knob_scale_factor = 2;
-lid_wall_size = sqrt(lid_thickness);
-lid_scale_factor = 0.6;
-
-lid_hook_height = 20;
-lid_hook_gap_tolerance = 10;
-lid_hook_thickness = 4;
-lid_hook_connector_height = 2;
-
-lid_handle_radius = 85;
-lid_handle_thickness = 20;
-lid_handle_wall_thickness = 3;
-lid_handle_scale_factor = 0.8;
-
-
-conical_lid_scale_factor = 0.6;
-conical_lid_height = 150;
-
-conical_end_height = 30;
-conical_end_scale_factor = 1.3;
-
-pot_handle_radius = 50;
-pot_handle_thickness = 20;
-pot_handle_wall_thickness = 3;
-handle_position = -20;
-
-lid_distance_from_pot = 100;
-
-finWidth = wall_thickness;
-// finLength = outer_rad/2;
-// finHeight = 5;
-
-legWidth = wall_thickness;
-// legLength = outer_rad/2;
-// legHeight = 5;
-legBallRadius = 12;
 
 PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
 A = 1.3; // aspect ratio (pure number)
-V = 8*1000*1000; // cubic millimeters
+V = 8*100*100; // cubic millimeters
 // This math done by Cledden...
 // H = heigh will be a computed value
 // S = height of the side 
@@ -98,7 +54,52 @@ echo(height(A,V));
 echo(cyl_radius(A,V));
 echo(cyl_height(A,V));
 
+radius_mm = radius(A,V);
 
+wall_thickness = radius_mm/20;
+
+base_scale_factor = 2;
+height_scale_factor = 0.5;
+extra_height = radius_mm/40;
+
+lid_thickness = radius_mm/6;
+lid_knob_height = radius_mm/8;
+knob_scale_factor = 2;
+lid_wall_size = sqrt(lid_thickness);
+lid_scale_factor =  0.5;
+
+lid_hook_height = radius_mm/6;
+lid_hook_gap_tolerance = radius_mm/12;
+lid_hook_thickness = radius_mm/30;
+lid_hook_connector_height = radius_mm/60;
+
+lid_handle_radius = radius_mm*0.6;
+lid_handle_thickness = radius_mm/6;
+lid_handle_wall_thickness = radius_mm/40;
+lid_handle_scale_factor = 1.2;
+
+
+conical_lid_scale_factor = 0.7;
+conical_lid_height = radius_mm/0.8;
+
+conical_end_height = radius_mm/4;
+conical_end_scale_factor = 1.33;
+
+pot_handle_radius = radius_mm/2.4;
+pot_handle_thickness = radius_mm/6;
+pot_handle_wall_thickness = radius_mm/40;
+handle_position = -(radius_mm/6);
+
+lid_distance_from_pot = radius_mm/1.2;
+
+finWidth = wall_thickness;
+// finLength = outer_rad/2;
+// finHeight = 5;
+
+legWidth = wall_thickness;
+// legLength = outer_rad/2;
+// legHeight = 5;
+legBallRadius = radius_mm/10;
 
 
 // ptype = "flatbottom";
@@ -108,11 +109,11 @@ echo(cyl_height(A,V));
 ptype = "roundbottom_with_handles";
 //ptype = "none";
 
-ltype = "none";
+//ltype = "none";
 //ltype = "flat_lid";
 // ltype = "solidconical";
 //ltype = "hollowconical";
-//ltype = "hollowconicalwithconcavelid";
+ltype = "hollowconicalwithconcavelid";
 
 
 // set resolution here
@@ -227,10 +228,10 @@ module roundBottomPotWithHandles(A,V){
             union(){
                 translate([-radius_mm-wall_thickness+0.01,0,side_h+handle_position-(pot_handle_thickness/2)])
                     leftpothandle();
-                translate([-radius_mm-wall_thickness+0.01,-pot_handle_radius+10,side_h+handle_position-(pot_handle_thickness/2)])
+                translate([-radius_mm-wall_thickness+0.01,-pot_handle_radius+(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
                 rotate([0,90,0])
                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
-                translate([-radius_mm-wall_thickness+0.01,pot_handle_radius-10,side_h+handle_position-(pot_handle_thickness/2)])
+                translate([-radius_mm-wall_thickness+0.01,pot_handle_radius-(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
                 rotate([0,90,0])
                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
             }
@@ -240,10 +241,10 @@ module roundBottomPotWithHandles(A,V){
             union(){
                 translate([radius_mm+wall_thickness-0.01,0,side_h+handle_position-(pot_handle_thickness/2)])
                 rightpothandle();
-                 translate([radius_mm+wall_thickness-0.01,pot_handle_radius-10,side_h+handle_position-(pot_handle_thickness/2)])
+                 translate([radius_mm+wall_thickness-0.01,pot_handle_radius-(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
                 rotate([0,-90,0])
                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
-                translate([radius_mm+wall_thickness-0.01,-pot_handle_radius+10,side_h+handle_position-(pot_handle_thickness/2)])
+                translate([radius_mm+wall_thickness-0.01,-pot_handle_radius+(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
                 rotate([0,-90,0])
                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
             }
@@ -392,11 +393,11 @@ module concaveconicalLid(inner_rad){
                 scale([lid_handle_scale_factor,1,1])
                 translate([-(radius_mm*conical_lid_scale_factor)/2,0,0])
                 lidhandleshell();
-                translate([0,-(radius_mm*conical_lid_scale_factor)/1.33,0])
-                rotate([30,0,0])
+                translate([0,-(radius_mm*conical_lid_scale_factor)/1.8,0])
+                rotate([25,0,0])
                 cylinder(conical_end_height,lid_handle_thickness/2.1,(lid_handle_thickness/2)*conical_end_scale_factor);
-               translate([0,(radius_mm*conical_lid_scale_factor)/1.33,0])
-                rotate([-30,0,0])
+               translate([0,(radius_mm*conical_lid_scale_factor)/1.8,0])
+                rotate([-25,0,0])
                 cylinder(conical_end_height,lid_handle_thickness/2.1,(lid_handle_thickness/2)*conical_end_scale_factor);
             }
             difference(){
@@ -531,7 +532,7 @@ module triangularFinMK(r,angle){
     translate([-radius_mm,0,0])
     difference(){
         minkowski(){
-            sphere(4);
+            sphere(radius_mm/30);
            sharpFin();
         }
         translate([radius_mm,0,0])
@@ -546,10 +547,10 @@ module triangularFinMK(r,angle){
 
 
 module sharpFin (){
-    thickener = 5;
+    thickener = 1;
     radius_mm = radius(A,V);
     fw = finWidth*thickener;
-    knife_thickness = 50;
+    knife_thickness = radius_mm/2.4;
     z = fw/2+knife_thickness/2;
     //z=30;
     theta = atan2(fw/2,radius_mm*sqrt(2));
