@@ -106,8 +106,8 @@ legBallRadius = radius_mm/10;
 // ptype = "flatbottom_with_fins";
 // ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
-ptype = "roundbottom_with_handles";
-//ptype = "none";
+//ptype = "roundbottom_with_handles";
+ptype = "none";
 
 //ltype = "none";
 //ltype = "flat_lid";
@@ -418,12 +418,12 @@ module concaveconicalLid(inner_rad){
 
 module lidhandleshell (){
     rotate_extrude(angle=360) {
-        difference(){
+        //difference(){
             translate([lid_handle_radius - lid_handle_thickness/2, 0])
                 circle(d=lid_handle_thickness);
-            translate([lid_handle_radius - lid_handle_thickness/2, 0])
-                circle(d=lid_handle_thickness - lid_handle_wall_thickness);
-        }
+            //translate([lid_handle_radius - lid_handle_thickness/2, 0])
+                //circle(d=lid_handle_thickness - lid_handle_wall_thickness);
+        //}
     }
 }
 
