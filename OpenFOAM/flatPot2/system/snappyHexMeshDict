@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    fluid
+    {
+        type triSurfaceMesh;
+        file "air.stl";
+
+        regions
+        {
+            inlet	   { name inlet;     }
+            outlet         { name outlet;    }
+            walls          { name walls;     }
+        }
+    }
+
+    solid
+    {
+        type triSurfaceMesh;
+        file "flatPot.stl";
+    }
+};
+
+castellatedMeshControls
+{
+
+    
+    features
+    (
+        {
+           file "flatPot.eMesh";
+           levels ((1 4));
+        }
+    );
+    
+    refinementSurfaces
+    {
+        fluid
+        {
+            level (1 4);
+            regions
+            {
+                inlet     { level (1 4); patchInfo { type patch; } }
+                outlet    { level (1 4); patchInfo { type patch; } }
+                walls	  { level (0 0); patchInfo { type wall;  } }
+            }
+        }
+
+        solid
+        {
+            level (1 4);
+            faceZone solidToFluid;
+            cellZone solid;
+            mode        insidePoint;
+            insidePoint (0 0 -2.7);
+        }
+
+    }
+
+    nCellsBetweenLevels 1;
+
+    insidePoint (1 1 1);
+}
+
+addLayersControls
+{
+    relativeSizes       true;
+    minThickness        1;
+    finalLayerThickness 1;
+    expansionRatio      1;
+    layers
+    {}
+}
+
+// ************************************************************************* //
