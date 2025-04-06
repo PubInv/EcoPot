@@ -103,19 +103,19 @@ legWidth = wall_thickness;
 legBallRadius = radius_mm/10;
 
 
-//ptype = "flatbottom";
+ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
-ptype = "roundbottom_with_handles";
+//ptype = "roundbottom_with_handles";
 //ptype = "roundbottom_with_fins_and_handles";
 //ptype = "none";
 
-//ltype = "none";
+ltype = "none";
 //ltype = "flat_lid";
 // ltype = "solidconical";
 //ltype = "hollowconical";
-ltype = "hollowconicalwithconcavelid";
+//ltype = "hollowconicalwithconcavelid";
 
 
 // set resolution here
@@ -295,10 +295,40 @@ module flatBottomPot (A,V) {
     echo("outer_rad");
     echo(outer_rad);
     pot_height = cyl_height(A,V);
-    difference () {
-        cylinder (h=    pot_height, r=outer_rad, center = true);
-        translate ([0,0,(wall_thickness+(extra_height/2))])
-        cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
+    union(){
+        difference () {
+            cylinder (h=    pot_height, r=outer_rad, center = true);
+            translate ([0,0,(wall_thickness+(extra_height/2))])
+            cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
+        
+        }
+        
+        difference(){
+             union(){
+                 translate([-outer_rad+wall_thickness+0.01,0,(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                    leftpothandle();
+                 translate([-outer_rad+wall_thickness+0.01,-pot_handle_radius+(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+                 translate([-outer_rad+wall_thickness+0.01,pot_handle_radius-(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+            }
+         cylinder (h=(pot_height/2)*2,r1=outer_rad-wall_thickness,r2=outer_rad-wall_thickness,center=true);
+        }
+        difference(){
+             union(){
+                 translate([outer_rad-wall_thickness-0.01,0,(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rightpothandle();
+                 translate([outer_rad-wall_thickness-0.01,pot_handle_radius-(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,-90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+                 translate([outer_rad-wall_thickness-0.01,-pot_handle_radius+(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,-90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+            }
+            cylinder (h=(pot_height/2)*2,r1=outer_rad-wall_thickness,r2=outer_rad-wall_thickness,center=true);
+        }     
     }
 }
 
