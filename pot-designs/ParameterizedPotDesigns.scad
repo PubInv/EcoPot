@@ -70,9 +70,10 @@ lid_wall_size = sqrt(lid_thickness);
 lid_scale_factor =  0.5;
 
 lid_hook_height = radius_mm/6;
-lid_hook_gap_tolerance = radius_mm/12;
+lid_hook_gap_tolerance = radius_mm/14;
 lid_hook_thickness = radius_mm/30;
 lid_hook_connector_height = radius_mm/60;
+lid_extender_angle_scale = 0.9;
 
 lid_handle_radius = radius_mm*0.6;
 lid_handle_thickness = radius_mm/6;
@@ -103,19 +104,19 @@ legWidth = wall_thickness;
 legBallRadius = radius_mm/10;
 
 
-ptype = "flatbottom";
+//ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
 //ptype = "roundbottom_with_fins_and_handles";
-//ptype = "none";
+ptype = "none";
 
-ltype = "none";
+//ltype = "none";
 //ltype = "flat_lid";
 // ltype = "solidconical";
 //ltype = "hollowconical";
-//ltype = "hollowconicalwithconcavelid";
+ltype = "hollowconicalwithconcavelid";
 
 
 // set resolution here
@@ -366,9 +367,9 @@ module lidhookextender() {
     radius_mm = radius(A,V);
     difference(){
 
-        cylinder(h = lid_hook_height, r = radius_mm - lid_hook_gap_tolerance,center=true);
+        cylinder(h = lid_hook_height, r2 = radius_mm - lid_hook_gap_tolerance, r1 = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale, center=true);
 
-        cylinder(h = lid_hook_height*6, r = (radius_mm - lid_hook_gap_tolerance)-lid_hook_thickness,center=true);
+        cylinder(h = lid_hook_height*6, r2 = (radius_mm - lid_hook_gap_tolerance)-lid_hook_thickness, r1 = ((radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale)-lid_hook_thickness, center=true);
     }
 }
 
@@ -377,7 +378,7 @@ module lidhookconnector() {
     difference(){
         
             cylinder(h = lid_hook_connector_height, r = radius_mm,center=true);
-            cylinder(h = lid_hook_connector_height*6, r = (radius_mm - lid_hook_gap_tolerance),center=true);
+            cylinder(h = lid_hook_connector_height*6, r = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale,center=true);
     }
 }
 
