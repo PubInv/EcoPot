@@ -1,0 +1,84 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : dev-26ba086f3168
+Exec   : surfaceFeatures
+Date   : Apr 21 2025
+Time   : 21:51:28
+Host   : "openfoam"
+PID    : 8578
+I/O    : uncollated
+Case   : /home/ubuntu/EcoPot/OpenFOAM/ecoPot2
+nProcs : 1
+sigFpe : Floating point exception trapping - not supported on this platform
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading "surfaceFeaturesDict"
+
+Surface            : "pot.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 21530
+Vertices     : 10763
+Bounding Box : (-4.3630118 -3.1242356 -3.4208646) (4.3630118 3.1242356 0.89263868)
+
+
+Constructing feature set from included angle 2.6179939
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 86
+    feature edges  : 2798
+    of which
+        region edges   : 0
+        external edges : 396
+        internal edges : 2402
+
+
+Final feature set:
+points      : 2766
+edges       : 2798
+boundingBox : (-3.1242356 -3.1242356 -3.0743389) (3.1242356 3.1242356 0.89263868)
+point classification :
+    convex feature points          :        6
+    concave feature points         :        6
+    mixed feature points           :       74
+    other (non-feature) points     :     2680
+edge classification :
+    external (convex angle) edges  :      396
+    internal (concave angle) edges :     2402
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/pot.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot"
+Writing convex feature points to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_convexFeaturePts.obj"
+Writing concave feature points to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_externalEdges.obj"
+Writing internal edges to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_internalEdges.obj"
+Writing flat edges to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_flatEdges.obj"
+Writing open edges to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_openEdges.obj"
+Writing multiple edges to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_multipleEdges.obj"
+Writing region edges to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_regionEdges.obj"
+Writing edge directions to "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/extendedFeatureEdgeMesh/pot_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/pot.eMesh"
+
+ExecutionTime = 0.030697 s  ClockTime = 0 s
+
+End
+

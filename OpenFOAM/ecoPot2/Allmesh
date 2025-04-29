@@ -22,7 +22,7 @@ runApplication snappyHexMesh -overwrite
 #runApplication blockMesh -region fluid
 runApplication transformPoints "scale=(0.01 0.01 0.01)"
 #runApplication splitMeshRegions -makeCellZones -overwrite
-runApplication splitMeshRegions -cellZones -overwrite -defaultRegionName fluid #-overwrite
+runApplication splitMeshRegions -cellZones -overwrite -defaultRegionName air #-overwrite
 #runApplication splitMeshRegions -cellZones -overwrite -region '(solid fluid)'
 runApplication foamSetupCHT
 

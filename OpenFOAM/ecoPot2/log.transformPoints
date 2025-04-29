@@ -1,0 +1,27 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : dev-26ba086f3168
+Exec   : transformPoints scale=(0.01 0.01 0.01)
+Date   : Apr 21 2025
+Time   : 21:53:04
+Host   : "openfoam"
+PID    : 8633
+I/O    : uncollated
+Case   : /home/ubuntu/EcoPot/OpenFOAM/ecoPot2
+nProcs : 1
+sigFpe : Floating point exception trapping - not supported on this platform
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Writing points into directory "/home/ubuntu/EcoPot/OpenFOAM/ecoPot2/constant/polyMesh"
+
+End
+

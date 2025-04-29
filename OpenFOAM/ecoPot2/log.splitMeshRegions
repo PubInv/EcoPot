@@ -1,0 +1,95 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : dev-26ba086f3168
+Exec   : splitMeshRegions -cellZones -overwrite -defaultRegionName fluid
+Date   : Apr 21 2025
+Time   : 21:53:04
+Host   : "openfoam"
+PID    : 8634
+I/O    : uncollated
+Case   : /home/ubuntu/EcoPot/OpenFOAM/ecoPot2
+nProcs : 1
+sigFpe : Floating point exception trapping - not supported on this platform
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Creating single patch per inter-region interface.
+
+Trying to match regions to existing cell zones.
+
+
+Number of regions:2
+
+Writing region per cell file (for manual decomposition) to "constant/cellToRegion"
+
+Writing region per cell as volScalarField to "0/cellToRegion"
+
+Region	Cells
+------	-----
+0	798502
+1	81768
+
+Region	Zone	Name
+------	----	----
+0	-1	fluid
+1	0	solid
+
+Sizes of interfaces between regions:
+
+Interface	Region	Region	Faces
+---------	------	------	-----
+0		0	1	80142
+
+Reading geometric fields
+
+Reading volScalarField cellToRegion
+
+
+Adding patches
+
+
+Adding patches
+
+For interface between region fluid and solid added patches
+    3	fluid_to_solid
+    4	solid_to_fluid
+
+Region 0
+-------- 
+Creating mesh for region 0 fluid
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region0 points back to base mesh.
+Writing map faceRegionAddressing from region0 faces back to base mesh.
+Writing map cellRegionAddressing from region0 cells back to base mesh.
+
+Region 1
+-------- 
+Creating mesh for region 1 solid
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 285680 outside range 0..285458
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region1 points back to base mesh.
+Writing map faceRegionAddressing from region1 faces back to base mesh.
+Writing map cellRegionAddressing from region1 cells back to base mesh.
+End
+

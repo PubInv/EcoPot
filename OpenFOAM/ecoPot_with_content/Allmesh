@@ -1,0 +1,16 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runApplication blockMesh 
+runApplication surfaceFeatures
+runApplication snappyHexMesh -overwrite
+runApplication transformPoints "scale=(0.01 0.01 0.01)"
+runApplication splitMeshRegions -cellZones -overwrite -defaultRegionName air
+runApplication foamSetupCHT
+cp -r templates/0/air/* 0/air/
+cp -r templates/0/water/* 0/water/
+runApplication -s solid foamDictionary -entry internalField -set "uniform 298" 0/solid/T
+#------------------------------------------------------------------------------
