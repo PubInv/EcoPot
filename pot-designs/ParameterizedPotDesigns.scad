@@ -8,12 +8,13 @@
 // that Veronica design in SolidWorks, but will use the improved, 360 degree design
 
 
+excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
 A = 1.3; // aspect ratio (pure number)
-V = 8*100*100; // cubic millimeters
+V = ((8*100*100)*excess_lip_scale_factor); // cubic millimeters
 // This math done by Cledden...
 // H = heigh will be a computed value
 // S = height of the side 
@@ -69,9 +70,10 @@ lid_wall_size = sqrt(lid_thickness);
 lid_scale_factor =  0.5;
 
 lid_hook_height = radius_mm/6;
-lid_hook_gap_tolerance = radius_mm/12;
+lid_hook_gap_tolerance = radius_mm/14;
 lid_hook_thickness = radius_mm/30;
 lid_hook_connector_height = radius_mm/60;
+lid_extender_angle_scale = 0.9;
 
 lid_handle_radius = radius_mm*0.6;
 lid_handle_thickness = radius_mm/6;
@@ -102,11 +104,12 @@ legWidth = wall_thickness;
 legBallRadius = radius_mm/10;
 
 
-// ptype = "flatbottom";
-// ptype = "flatbottom_with_fins";
-// ptype = "roundbottom";
+//ptype = "flatbottom";
+//ptype = "flatbottom_with_fins";
+//ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
+//ptype = "roundbottom_with_fins_and_handles";
 ptype = "none";
 
 //ltype = "none";
@@ -220,6 +223,41 @@ module roundBottomPotWithFins(A,V) {
 module roundBottomPotWithHandles(A,V){
     radius_mm = radius(A,V);
      side_h = side(A,V);
+    roundBottomPot(A,V);
+    
+    union(){
+        roundBottomPot(A,V);
+        difference(){
+            union(){
+                translate([-radius_mm-wall_thickness+0.01,0,side_h+handle_position-(pot_handle_thickness/2)])
+                    leftpothandle();
+                translate([-radius_mm-wall_thickness+0.01,-pot_handle_radius+(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
+                rotate([0,90,0])
+                cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+                translate([-radius_mm-wall_thickness+0.01,pot_handle_radius-(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
+                rotate([0,90,0])
+                cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+            }
+        cylinder (h=side_h*2,r1=radius_mm+wall_thickness,r2=radius_mm+wall_thickness,center=true);
+        }
+        difference(){
+            union(){
+                translate([radius_mm+wall_thickness-0.01,0,side_h+handle_position-(pot_handle_thickness/2)])
+                rightpothandle();
+                 translate([radius_mm+wall_thickness-0.01,pot_handle_radius-(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
+                rotate([0,-90,0])
+                cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+                translate([radius_mm+wall_thickness-0.01,-pot_handle_radius+(radius_mm/12),side_h+handle_position-(pot_handle_thickness/2)])
+                rotate([0,-90,0])
+                cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+            }
+            cylinder (h=side_h*2,r1=radius_mm+wall_thickness,r2=radius_mm+wall_thickness,center=true);
+        }
+    }
+}
+module roundBottomPotWithHandlesAndFins(A,V){
+    radius_mm = radius(A,V);
+     side_h = side(A,V);
     roundBottomPotWithFins(A,V);
     
     union(){
@@ -258,10 +296,40 @@ module flatBottomPot (A,V) {
     echo("outer_rad");
     echo(outer_rad);
     pot_height = cyl_height(A,V);
-    difference () {
-        cylinder (h=    pot_height, r=outer_rad, center = true);
-        translate ([0,0,(wall_thickness+(extra_height/2))])
-        cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
+    union(){
+        difference () {
+            cylinder (h=    pot_height, r=outer_rad, center = true);
+            translate ([0,0,(wall_thickness+(extra_height/2))])
+            cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
+        
+        }
+        
+        difference(){
+             union(){
+                 translate([-outer_rad+wall_thickness+0.01,0,(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                    leftpothandle();
+                 translate([-outer_rad+wall_thickness+0.01,-pot_handle_radius+(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+                 translate([-outer_rad+wall_thickness+0.01,pot_handle_radius-(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+            }
+         cylinder (h=(pot_height/2)*2,r1=outer_rad-wall_thickness,r2=outer_rad-wall_thickness,center=true);
+        }
+        difference(){
+             union(){
+                 translate([outer_rad-wall_thickness-0.01,0,(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rightpothandle();
+                 translate([outer_rad-wall_thickness-0.01,pot_handle_radius-(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,-90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+                 translate([outer_rad-wall_thickness-0.01,-pot_handle_radius+(outer_rad/12),(pot_height/2)+handle_position-(pot_handle_thickness/2)])
+                 rotate([0,-90,0])
+                 cylinder(conical_end_height,pot_handle_thickness/2,(pot_handle_thickness/2)*conical_end_scale_factor);
+            }
+            cylinder (h=(pot_height/2)*2,r1=outer_rad-wall_thickness,r2=outer_rad-wall_thickness,center=true);
+        }     
     }
 }
 
@@ -299,9 +367,9 @@ module lidhookextender() {
     radius_mm = radius(A,V);
     difference(){
 
-        cylinder(h = lid_hook_height, r = radius_mm - lid_hook_gap_tolerance,center=true);
+        cylinder(h = lid_hook_height, r2 = radius_mm - lid_hook_gap_tolerance, r1 = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale, center=true);
 
-        cylinder(h = lid_hook_height*6, r = (radius_mm - lid_hook_gap_tolerance)-lid_hook_thickness,center=true);
+        cylinder(h = lid_hook_height*6, r2 = (radius_mm - lid_hook_gap_tolerance)-lid_hook_thickness, r1 = ((radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale)-lid_hook_thickness, center=true);
     }
 }
 
@@ -310,7 +378,7 @@ module lidhookconnector() {
     difference(){
         
             cylinder(h = lid_hook_connector_height, r = radius_mm,center=true);
-            cylinder(h = lid_hook_connector_height*6, r = (radius_mm - lid_hook_gap_tolerance),center=true);
+            cylinder(h = lid_hook_connector_height*6, r = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale,center=true);
     }
 }
 
@@ -493,6 +561,10 @@ module renderPotType(ptype) {
         r = radius(A,V);
         renderLid(ltype,r);
         roundBottomPotWithHandles(A,V);
+    } else if (ptype == "roundbottom_with_fins_and_handles"){
+        r = radius(A,V);
+        renderLid(ltype,r);
+        roundBottomPotWithHandlesAndFins(A,V);    
     }else if (ptype == "none"){
         
     }
