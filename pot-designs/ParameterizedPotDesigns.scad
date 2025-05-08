@@ -14,7 +14,8 @@ PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
 A = 1.3; // aspect ratio (pure number)
-V = ((8*100*100)*excess_lip_scale_factor); // cubic millimeters
+V_ml = 10;
+V = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thoushands of a mililter)
 // This math done by Cledden...
 // H = heigh will be a computed value
 // S = height of the side 
@@ -109,18 +110,18 @@ legBallRadius = radius_mm/10;
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
-//ptype = "roundbottom_with_fins_and_handles";
-ptype = "none";
+ptype = "roundbottom_with_fins_and_handles";
+// ptype = "none";
 
-//ltype = "none";
+ltype = "none";
 //ltype = "flat_lid";
 // ltype = "solidconical";
 //ltype = "hollowconical";
-ltype = "hollowconicalwithconcavelid";
+//ltype = "hollowconicalwithconcavelid";
 
 
 // set resolution here
-$fn=40;
+$fn=30;
 
 module roundedFin(Fw,Fl,Fh){
     color ("red")
