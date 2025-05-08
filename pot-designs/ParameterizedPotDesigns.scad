@@ -119,6 +119,9 @@ ltype = "none";
 //ltype = "hollowconical";
 //ltype = "hollowconicalwithconcavelid";
 
+//ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
+//ctype = "flatBottomPot_content";//added by Cleddden for Pot content
+ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
 $fn=30;
@@ -347,6 +350,33 @@ module flatBottomPotWithFins() {
     }
 }
 
+//this module was added by Cledden
+module flatBottomPot_content (A,V) {
+    outer_rad = cyl_radius(A,V) + wall_thickness;
+    echo("outer_rad");
+    echo(outer_rad);
+    pot_height = cyl_height(A,V);
+        translate ([0,0,wall_thickness/2])
+    color ("blue")
+        cylinder (h=(pot_height-(wall_thickness)),r1 =(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
+}
+
+//this module was added by Cledden
+module roundBottomPot_content(A,V) {
+   radius_mm = radius(A,V);
+   side_h = side(A,V);
+      difference () {
+        union () {
+            sphere (r = radius_mm);
+            translate([0,0,0])
+            cylinder (h=side_h,r1 =radius_mm, 
+            r2= radius_mm);
+        }
+        translate ([-radius_mm,-radius_mm,side_h])
+        cube (size = radius_mm*2, center =false);
+    }
+}
+
 module concavehandleshell (){
     radius_mm = radius(A,V);
     difference(){
@@ -571,9 +601,26 @@ module renderPotType(ptype) {
     }
 }
 
+//this module was added by Cledden
+module renderContentType(ctype) {
+    if (ctype == "flatBottomPot_content") {
+       
+    r = cyl_radius(A,V); 
+     scale (1)   flatBottomPot_content(A,V);
+    } 
+    else  if (ctype == "roundBottomPot_content") {
+    r = cyl_radius(A,V);
+    scale (1)    roundBottomPot_content(A,V);
+    }
+    else if (ctype == "none"){
+        
+    }
+        }
+
 
  renderLid(ltype,radius(A,V));
  renderPotType(ptype);
+ renderContentType(ctype);//added by Cledden for the pot content
 
 
 
