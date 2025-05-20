@@ -8,7 +8,7 @@
 // that Veronica design in SolidWorks, but will use the improved, 360 degree design
 
 
-excess_lip_scale_factor = 1.5;
+excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
@@ -109,19 +109,19 @@ legWidth = wall_thickness;
 legBallRadius = radius_mm/10;
 
 
-ptype = "flatbottom";
+// ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
-//ptype = "roundbottom_with_fins_and_handles";
+ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
-ltype = "none";
-//ltype = "flat_lid";
-// ltype = "solidconical";
-//ltype = "hollowconical";
-//ltype = "hollowconicalwithconcavelid";
+// ltype = "none";
+// ltype = "flat_lid"; -- incorrect!
+// ltype = "solidconical"; -- incorrect!
+// ltype = "hollowconical"; 
+ltype = "hollowconicalwithconcavelid";
 
 // ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
 ctype = "flatBottomPot_content";//added by Cleddden for Pot content
@@ -365,6 +365,7 @@ module flatBottomPot_content (A,V_pot,V_water) {
     water_height = pot_height * V_water/V_pot;
     
         translate ([0,0,wall_thickness/2])
+    translate([0,0,-(pot_height - water_height)/2])
     color ("blue")
         cylinder (h=(water_height-(wall_thickness)),r1 =(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
 }
