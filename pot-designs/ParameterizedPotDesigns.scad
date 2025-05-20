@@ -401,7 +401,7 @@ module roundBottomPot_content(A,V_pot,V_water) {
 }
 
 module concavehandleshell (){
-    radius_mm = radius(A,V);
+    radius_mm = radius(A,V_pot);
     difference(){
         scale([1,1,lid_scale_factor])
             sphere(radius_mm*conical_lid_scale_factor);
@@ -418,7 +418,7 @@ module conicalknob() {
 }
 
 module lidhookextender() {
-    radius_mm = radius(A,V);
+    radius_mm = radius(A,V_pot);
     difference(){
 
         cylinder(h = lid_hook_height, r2 = radius_mm - lid_hook_gap_tolerance, r1 = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale, center=true);
@@ -428,7 +428,7 @@ module lidhookextender() {
 }
 
 module lidhookconnector() {
-        radius_mm = radius(A,V);
+        radius_mm = radius(A,V_pot);
     difference(){
         
             cylinder(h = lid_hook_connector_height, r = radius_mm,center=true);
@@ -485,7 +485,7 @@ module hollowconicalLid (inner_rad) {
 
 module concaveconicalLid(inner_rad){
     outer_rad = inner_rad+wall_thickness;
-    radius_mm = radius(A,V);
+    radius_mm = radius(A,V_pot);
     
     union(){
         difference(){
