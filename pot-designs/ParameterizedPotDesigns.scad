@@ -8,13 +8,13 @@
 // that Veronica design in SolidWorks, but will use the improved, 360 degree design
 
 
-excess_lip_scale_factor = 1.3;
+excess_lip_scale_factor = 1.5;
 
 PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
 A = 1.3; // aspect ratio (pure number)
-V_ml = 10; 
+V_ml = 4000; 
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
 V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a mililter)
@@ -40,6 +40,8 @@ V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths
 
 function radius(A,V) = pow(V / (PI *(A - 1/3)),1/3);
 
+// This is the aspect ratio times the radius...
+// This is now unclear to me
 function height(A,V) = A * radius(A,V);
 
 function side(A,V) = height(A,V) - radius(A,V);
@@ -52,13 +54,13 @@ function side(A,V) = height(A,V) - radius(A,V);
 function cyl_radius(A,V) = pow(V / ( 2 * PI * A), 1/3);
 function cyl_height(A,V) = A*(2*cyl_radius(A,V));
 
-echo(radius(A,V));
-echo(height(A,V));
+echo(radius(A,V_pot));
+echo(height(A,V_pot));
 
-echo(cyl_radius(A,V));
-echo(cyl_height(A,V));
+echo(cyl_radius(A,V_pot));
+echo(cyl_height(A,V_pot));
 
-radius_mm = radius(A,V);
+radius_mm = radius(A,V_pot);
 
 wall_thickness = radius_mm/20;
 
@@ -107,12 +109,12 @@ legWidth = wall_thickness;
 legBallRadius = radius_mm/10;
 
 
-//ptype = "flatbottom";
+ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
-ptype = "roundbottom_with_fins_and_handles";
+//ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
 ltype = "none";
@@ -121,8 +123,8 @@ ltype = "none";
 //ltype = "hollowconical";
 //ltype = "hollowconicalwithconcavelid";
 
-ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
-//ctype = "flatBottomPot_content";//added by Cleddden for Pot content
+// ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
+ctype = "flatBottomPot_content";//added by Cleddden for Pot content
 // ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
@@ -353,33 +355,46 @@ module flatBottomPotWithFins() {
 }
 
 //this module was added by Cledden
-module flatBottomPot_content (A,V) {
-    outer_rad = cyl_radius(A,V) + wall_thickness;
+module flatBottomPot_content (A,V_pot,V_water) {
+    outer_rad = cyl_radius(A,V_pot) + wall_thickness;
     echo("outer_rad");
     echo(outer_rad);
-    pot_height = cyl_height(A,V);
+    // I think this is wrong...we want to use 
+    // the cyl_radius to compute the water...
+    pot_height = cyl_height(A,V_pot);
+    water_height = pot_height * V_water/V_pot;
+    
         translate ([0,0,wall_thickness/2])
     color ("blue")
-        cylinder (h=(pot_height-(wall_thickness)),r1 =(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
+        cylinder (h=(water_height-(wall_thickness)),r1 =(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
 }
 
 //this module was added by Cledden
 // Take the Volume here to be the true volume of water,
 // which is less than the pot volume
-module roundBottomPot_content(A,V) {
+module roundBottomPot_content(A,V_pot,V_water) {
     // We need to correct the radius here
     // for the excessive lip factor.
     // The radius must be computed from the pot volume
-   radius_mm = radius(A,V);
-   side_h = side(A,V);
+   radius_mm = radius(A,V_pot);
+    
+   side_water_h = height(A,V_water) - radius(A,V_pot);
+   side_h = side(A,V_water);
+    // if the side_h is not positive here, we likely 
+    // have a serious problem...we need to rethink this..
+    
+    echo("side_h");
+    echo(side_h);
+    echo("side_water__h");
+    echo(side_water_h);
       difference () {
         union () {
             sphere (r = radius_mm);
             translate([0,0,0])
-            cylinder (h=side_h,r1 =radius_mm, 
+            cylinder (h=side_water_h,r1 =radius_mm, 
             r2= radius_mm);
         }
-        translate ([-radius_mm,-radius_mm,side_h])
+        translate ([-radius_mm,-radius_mm,side_water_h])
         cube (size = radius_mm*2, center =false);
     }
 }
@@ -559,20 +574,19 @@ module rightpothandle(){
 
 module renderLid(ltype,r) {
     if (ltype == "flat_lid") {
-
-        translate ([0,0,cyl_height(A,V)/1.35+lid_distance_from_pot])
+        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
         flatLid(r);  
     } else  if (ltype == "solidconical") {
-        translate ([0,0,cyl_height(A,V)/1.35+lid_distance_from_pot])
+        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
         solidconicalLid(r);  
     } else if (ltype == "hollowconical"){
-        translate ([0,0,cyl_height(A,V)/1.35+lid_distance_from_pot])
+        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
         hollowconicalLid(r);
     }  else if (ltype == "hollowconicalwithconcavelid"){
-        translate ([0,0,cyl_height(A,V)/1.35+lid_distance_from_pot])
+        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
         concaveconicalLid(r);
     }
@@ -580,29 +594,29 @@ module renderLid(ltype,r) {
 
 module renderPotType(ptype) {
     if (ptype == "flatbottom") {
-        r = cyl_radius(A,V);
+        r = cyl_radius(A,V_pot);
         renderLid(ltype,r);
-        flatBottomPot(A,V);
+        flatBottomPot(A,V_pot);
     } else  if (ptype == "flatbottom_with_fins") {
-        r = cyl_radius(A,V);
+        r = cyl_radius(A,V_pot);
         renderLid(ltype,r);
-        flatBottomPotWithFins(A,V);
+        flatBottomPotWithFins(A,V_pot);
     } else if (ptype == "roundbottom") {
-        r = radius(A,V);
+        r = radius(A,V_pot);
         renderLid(ltype,r);
-        roundBottomPot(A,V);
+        roundBottomPot(A,V_pot);
     } else if (ptype == "roundbottom_with_fins") {
-        r = radius(A,V);
+        r = radius(A,V_pot);
         renderLid(ltype,r);
-        roundBottomPotWithFins(A,V);
+        roundBottomPotWithFins(A,V_pot);
     } else if (ptype == "roundbottom_with_handles"){
-        r = radius(A,V);
+        r = radius(A,V_pot);
         renderLid(ltype,r);
-        roundBottomPotWithHandles(A,V);
+        roundBottomPotWithHandles(A,V_pot);
     } else if (ptype == "roundbottom_with_fins_and_handles"){
-        r = radius(A,V);
+        r = radius(A,V_pot);
         renderLid(ltype,r);
-        roundBottomPotWithHandlesAndFins(A,V);    
+        roundBottomPotWithHandlesAndFins(A,V_pot);    
     }else if (ptype == "none"){
         
     }
@@ -610,22 +624,17 @@ module renderPotType(ptype) {
 
 //this module was added by Cledden
 module renderContentType(ctype) {
-    if (ctype == "flatBottomPot_content") {
-       
-    r = cyl_radius(A,V); 
-     scale (1)   flatBottomPot_content(A,V);
-    } 
-    else  if (ctype == "roundBottomPot_content") {
-    r = cyl_radius(A,V);
-    scale (1)    roundBottomPot_content(A,V);
+    if (ctype == "flatBottomPot_content") {      
+         scale (1)   flatBottomPot_content(A,V_pot,V_water);
+    } else  if (ctype == "roundBottomPot_content") {
+        scale (1)    roundBottomPot_content(A,V_pot,V_water);
+    } else if (ctype == "none"){
+            
     }
-    else if (ctype == "none"){
-        
-    }
-        }
+}
 
 
- renderLid(ltype,radius(A,V));
+ renderLid(ltype,radius(A,V_pot));
  renderPotType(ptype);
  renderContentType(ctype);//added by Cledden for the pot content
 
@@ -653,7 +662,7 @@ module translate_children(){
 
 
 module triangularFinMK(r,angle){
-    radius_mm = radius(A,V);
+    radius_mm = radius(A,V_pot);
     //translate([0,-radius_mm,0])
     rotate([0,-90,angle])
     translate([-radius_mm,0,0])
@@ -675,7 +684,7 @@ module triangularFinMK(r,angle){
 
 module sharpFin (){
     thickener = 1;
-    radius_mm = radius(A,V);
+    radius_mm = radius(A,V_pot);
     fw = finWidth*thickener;
     knife_thickness = radius_mm/2.4;
     z = fw/2+knife_thickness/2;
