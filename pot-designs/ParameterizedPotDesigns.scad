@@ -14,8 +14,10 @@ PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
 A = 1.3; // aspect ratio (pure number)
-V_ml = 10;
-V = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thoushands of a mililter)
+V_ml = 10; 
+// 1 ml = 1000 mm^3
+V_water = V_ml*1000;
+V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a mililter)
 // This math done by Cledden...
 // H = heigh will be a computed value
 // S = height of the side 
@@ -119,9 +121,9 @@ ltype = "none";
 //ltype = "hollowconical";
 //ltype = "hollowconicalwithconcavelid";
 
-//ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
+ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
 //ctype = "flatBottomPot_content";//added by Cleddden for Pot content
-ctype = "none"; //added by Cleddden for Pot content
+// ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
 $fn=30;
@@ -362,7 +364,12 @@ module flatBottomPot_content (A,V) {
 }
 
 //this module was added by Cledden
+// Take the Volume here to be the true volume of water,
+// which is less than the pot volume
 module roundBottomPot_content(A,V) {
+    // We need to correct the radius here
+    // for the excessive lip factor.
+    // The radius must be computed from the pot volume
    radius_mm = radius(A,V);
    side_h = side(A,V);
       difference () {
