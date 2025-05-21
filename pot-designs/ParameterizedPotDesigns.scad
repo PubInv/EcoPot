@@ -18,6 +18,8 @@ V_ml = 4000;
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
 V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a mililter)
+
+
 // This math done by Cledden...
 // H = heigh will be a computed value
 // S = height of the side 
@@ -46,6 +48,8 @@ function height(A,V) = A * radius(A,V);
 
 function side(A,V) = height(A,V) - radius(A,V);
 
+rim_bead_radius = min(15,side(A,V_pot));
+
 // In this case, A = H / (2R)
 // V = H * PI * R^2 
 // V = (A * 2R ) PI * R^2 =  2 * PI * AR^3
@@ -57,7 +61,9 @@ function cyl_height(A,V) = A*(2*cyl_radius(A,V));
 echo(radius(A,V_pot));
 echo(height(A,V_pot));
 
+echo("cyl radius");
 echo(cyl_radius(A,V_pot));
+echo("cyl height");
 echo(cyl_height(A,V_pot));
 
 radius_mm = radius(A,V_pot);
@@ -97,7 +103,9 @@ pot_handle_thickness = radius_mm/6;
 pot_handle_wall_thickness = radius_mm/40;
 handle_position = -(radius_mm/6);
 
-lid_distance_from_pot = radius_mm/1.2;
+// lid_distance_from_pot = radius_mm/1.2;
+lid_distance_from_pot = radius_mm/2.8;
+
 
 finWidth = wall_thickness;
 // finLength = outer_rad/2;
@@ -114,18 +122,18 @@ legBallRadius = radius_mm/10;
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
-ptype = "roundbottom_with_fins_and_handles";
+ ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
 // ltype = "none";
 // ltype = "flat_lid"; -- incorrect!
 // ltype = "solidconical"; -- incorrect!
 // ltype = "hollowconical"; 
-ltype = "hollowconicalwithconcavelid";
+ ltype = "hollowconicalwithconcavelid";
 
-// ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
-ctype = "flatBottomPot_content";//added by Cleddden for Pot content
-// ctype = "none"; //added by Cleddden for Pot content
+ //ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
+// ctype = "flatBottomPot_content";//added by Cleddden for Pot content
+ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
 $fn=30;
@@ -196,21 +204,30 @@ module roundBottomOutside(A,V) {
             translate([0,0,radius_mm*2])
             cube(radius_mm*4,center=true);
         }
+        
+        // now we add the rim and cut away a cone to make a 
+        // Conical fit for the rim.
         color("blue")
-        cylinder (h=side_h,r1=radius_mm+wall_thickness,r2=radius_mm+wall_thickness);
+        difference() {
+            cylinder (h=side_h,r1=radius_mm+wall_thickness,r2=radius_mm+wall_thickness);
+        }
     }
 }
 module roundBottomPot(A,V) {
    radius_mm = radius(A,V);
    side_h = side(A,V);
-   difference() {    
-        roundBottomOutside(A,V);
-        union () {
-            sphere (r = radius_mm);
-            translate([0,0,1])
-            cylinder (h=side_h+1,r1 =radius_mm, 
-            r2= radius_mm);
+    union() {
+       difference() {    
+            roundBottomOutside(A,V);
+            union () {
+                sphere (r = radius_mm);
+                translate([0,0,1])
+                cylinder (h=side_h+1,r1 =radius_mm, 
+                r2= radius_mm);
+            }
         }
+        translate([0,0,side_h-rim_bead_radius])
+        potInterface(radius_mm,radius_mm+wall_thickness,rim_bead_radius);
     }
 }
 
@@ -417,31 +434,69 @@ module conicalknob() {
     cylinder (h= lid_knob_height, r1=(lid_thickness),r2=lid_thickness*knob_scale_factor);
 }
 
+// This is the lip that goes into the pot.
 module lidhookextender() {
     radius_mm = radius(A,V_pot);
     difference(){
 
         cylinder(h = lid_hook_height, r2 = radius_mm - lid_hook_gap_tolerance, r1 = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale, center=true);
 
+// This removes the core.
         cylinder(h = lid_hook_height*6, r2 = (radius_mm - lid_hook_gap_tolerance)-lid_hook_thickness, r1 = ((radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale)-lid_hook_thickness, center=true);
     }
 }
-
+// I guess that this connects the extender to the lid.
 module lidhookconnector() {
-        radius_mm = radius(A,V_pot);
+    radius_mm = radius(A,V_pot);
     difference(){
-        
             cylinder(h = lid_hook_connector_height, r = radius_mm,center=true);
             cylinder(h = lid_hook_connector_height*6, r = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale,center=true);
     }
 }
-
+// I think the idea here is to build up 
 module lidhook(){
     union() {
         lidhookextender();
         translate([0,0,-lid_hook_height/10])
         lidhookconnector();
     }
+}
+
+
+// this is the part of the pot that is a "bead" inside
+// the rim of the pot strenghtening it from dings and producing
+// a tight fit with the lid. The lid Interface cuts away
+// the pot Interface, so that the shape need only be programmed once
+// ri = pot inner radius
+// ro = pot outer radius
+module potInterface(ri,ro,rim_bead_radius = 10) {
+    difference() {
+        rotate_extrude(angle = 360, convexity = 2) 
+        translate([ri, 0])
+        circle(r = rim_bead_radius);
+      // now cutaway a cylinder of radius rotate
+        difference() {
+            cylinder(h=80,r=ro+rim_bead_radius,center=true);
+            cylinder(h=100,r=ri,center=true);
+        }
+    }
+}
+
+// this is the part of the lid that strengthens the rim
+// and makes a seal with the pot
+// ri is the innner radius of the pot rim,
+// ro is the outer radius
+module lidInterface(ri,ro,rim_bead_radius = 10) {
+    difference() {
+        rotate_extrude(angle = 360, convexity = 2) 
+        translate([ri-rim_bead_radius, 0])
+        circle(r = rim_bead_radius);
+      // now cutaway a cylinder of radius rotate
+        translate([0,0,rim_bead_radius])
+        rotate_extrude(angle = 360, convexity = 2) 
+        translate([ri, 0])
+        circle(r = rim_bead_radius);
+    }  
 }
 
 module flatLid (inner_rad) {
@@ -459,7 +514,6 @@ module flatLid (inner_rad) {
 module solidconicalLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
     union () {
-//        cylinder (h=lid_thickness, r=outer_rad, center = true);
           conicalknob();
           cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));  
           translate([0,0,conical_lid_height])
@@ -483,6 +537,7 @@ module hollowconicalLid (inner_rad) {
      }
 }
 
+// This is our main pot lid.
 module concaveconicalLid(inner_rad){
     outer_rad = inner_rad+wall_thickness;
     radius_mm = radius(A,V_pot);
@@ -490,8 +545,6 @@ module concaveconicalLid(inner_rad){
     union(){
         difference(){
             union () {
-//        cylinder (h=lid_thickness, r=outer_rad, center = true);
-//        conicalknob(); 
                 difference(){
                     scale([1,1,lid_scale_factor])
                         sphere(radius_mm*conical_lid_scale_factor);
@@ -501,14 +554,20 @@ module concaveconicalLid(inner_rad){
                 difference(){
                     cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));
                     translate([0,0,lid_thickness*0.55])
+                    // this cuts away a portion of the lid..
                     cylinder (h=conical_lid_height-lid_wall_size, r1=(outer_rad*conical_lid_scale_factor)-(lid_wall_size), r2 =(outer_rad)-(lid_wall_size));
                 }
                 translate([0,0,conical_lid_height])
-                lidhook();
+                // This is actually the inner part of the rim that
+                // fits inside the male part of the pot.
+                lidInterface(radius_mm,radius_mm+wall_thickness,
+                    rim_bead_radius);
             }
             scale([1,1,lid_scale_factor])
                 sphere((radius_mm*conical_lid_scale_factor)-lid_wall_size);
         }
+        
+        // This is the handle
         difference(){
             union(){
                 rotate([0,90,0])
@@ -691,7 +750,6 @@ module sharpFin (){
     z = fw/2+knife_thickness/2;
     //z=30;
     theta = atan2(fw/2,radius_mm*sqrt(2));
-    echo(theta);
     difference(){
         linear_extrude(height = fw, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
         offset(r=0)
