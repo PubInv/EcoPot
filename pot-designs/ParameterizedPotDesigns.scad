@@ -12,9 +12,17 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
+// TODO: we need a good module for the D-handles.
+// Right now that code is spread across a lot of places.
+
+// TODO: An Aspect Ratio for flat pots can be less than 1,
+// but not for round-bottomed pots. We should reorganize 
+// the code to take that into account.
+
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
-A = 1.3; // aspect ratio (pure number)
-V_ml = 4000; 
+// A = 1.3; // aspect ratio (pure number) for rounded pots
+A = 0.8; // aspect ratio for flat pots
+V_ml = 100; 
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
 V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a mililter)
@@ -48,7 +56,7 @@ function height(A,V) = A * radius(A,V);
 
 function side(A,V) = height(A,V) - radius(A,V);
 
-rim_bead_radius = min(15,side(A,V_pot));
+
 
 // In this case, A = H / (2R)
 // V = H * PI * R^2 
@@ -74,8 +82,8 @@ base_scale_factor = 2;
 height_scale_factor = 0.5;
 extra_height = radius_mm/40;
 
-lid_thickness = radius_mm/6;
-lid_knob_height = radius_mm/8;
+lid_thickness = radius_mm/12;
+lid_knob_height = radius_mm/5;
 knob_scale_factor = 2;
 lid_wall_size = sqrt(lid_thickness);
 lid_scale_factor =  0.5;
@@ -117,26 +125,38 @@ legWidth = wall_thickness;
 legBallRadius = radius_mm/10;
 
 
-// ptype = "flatbottom";
+ ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
- ptype = "roundbottom_with_fins_and_handles";
+// ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
+rim_bead_radius = lid_thickness;
+if (ptype == "flatbottom") {
+    rim_bead_radius = lid_thickness;
+} else {
+    rim_bead_radius = min(3,side(A,V_pot));
+}
+echo("rim_bead_radius");
+echo(rim_bead_radius);
 
 // ltype = "none";
-// ltype = "flat_lid"; -- incorrect!
-// ltype = "solidconical"; -- incorrect!
+ ltype = "flat_lid"; // -- incorrect!
+// ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
- ltype = "hollowconicalwithconcavelid";
+// ltype = "hollowconicalwithconcavelid";
+
+
+
+
 
  //ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
 // ctype = "flatBottomPot_content";//added by Cleddden for Pot content
 ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
-$fn=30;
+$fn=80;
 
 module roundedFin(Fw,Fl,Fh){
     color ("red")
@@ -317,11 +337,14 @@ module roundBottomPotWithHandlesAndFins(A,V){
 }
 
 module flatBottomPot (A,V) {
+    radius_mm = cyl_radius(A,V);
     outer_rad = cyl_radius(A,V) + wall_thickness;
     echo("outer_rad");
     echo(outer_rad);
     pot_height = cyl_height(A,V);
     union(){
+        translate([0,0,pot_height/2 - rim_bead_radius])
+        potInterface(radius_mm,radius_mm+wall_thickness,rim_bead_radius);
         difference () {
             cylinder (h=    pot_height, r=outer_rad, center = true);
             translate ([0,0,(wall_thickness+(extra_height/2))])
@@ -503,11 +526,11 @@ module flatLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
     union () {
         cylinder (h= lid_thickness, r=outer_rad, center = true);
+        // this needs to be improved.
         conicalknob();
-        difference () {
-            cylinder (h=lid_thickness*2, r1=(inner_rad), r2 =(inner_rad));    
-            cylinder (h=(lid_thickness+extra_height), r1=(inner_rad-lid_thickness), r2 =(inner_rad-lid_thickness));
-        }
+        translate([0,0, rim_bead_radius/2])
+        lidInterface(inner_rad,inner_rad+wall_thickness,
+        rim_bead_radius);
      } 
 }
 
@@ -636,7 +659,7 @@ module renderLid(ltype,r) {
     if (ltype == "flat_lid") {
         translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
-        flatLid(r);  
+        flatLid(cyl_radius(A,V_pot));  
     } else  if (ltype == "solidconical") {
         translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
