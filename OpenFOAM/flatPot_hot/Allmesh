@@ -1,0 +1,31 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+#rm -r meshes/solid/solid/*
+#rm -r meshes/fluid/fluid/*
+runApplication blockMesh
+#runApplication -s fluid blockMesh -region fluid
+#runApplication -s solid blockMesh -region solid
+runApplication surfaceFeatures
+#runApplication snappyHexMesh -overwrite -region solid
+runApplication snappyHexMesh -overwrite
+#runApplication -s solid topoSet -region solid
+#cp -r constant/solid/polyMesh/ meshes/solid/solid/polyMesh
+#cp -r constant/fluid/polyMesh/ meshes/fluid/fluid/polyMesh
+#cp -r meshes/ constant/
+#cp -r dummyMesh/polyMesh/ constant/
+#mergeMeshes -addMeshRegions '((solid solid) (fluid fluid))' -overwrite
+#runApplication topoSet
+#runApplication blockMesh -region fluid
+#runApplication transformPoints "scale=(0.01 0.01 0.01)"
+#runApplication splitMeshRegions -makeCellZones -overwrite
+runApplication splitMeshRegions -cellZones -overwrite -defaultRegionName air #-overwrite
+#runApplication splitMeshRegions -cellZones -overwrite -region '(solid fluid)'
+runApplication foamSetupCHT
+cp -r templates/0/air/* 0/air/
+cp -r templates/0/water/* 0/water/
+#runApplication -s solid foamDictionary -entry internalField -set "uniform 298" 0/solid/T
+#------------------------------------------------------------------------------
