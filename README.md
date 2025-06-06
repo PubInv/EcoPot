@@ -1,6 +1,24 @@
 # EcoPot
 Project #5: A more efficient pot for those who cook over wood fires and related technologies
 
+
+# Status as of June, 2025
+
+Thanks to Cledden Kwanin and Ivan Urdiales, we have a computational fluid dynaimcs (CFD) simulation
+based on OpenFOAM. We are approaching the ability to test hypotheses with this tool.
+
+We have a particular design based on an initial hypothesis: The faster the flow around the pot,
+the more the flames and hot flue gases will be "sucked" against the pot due to the Coandă effect/Bernoulli 
+effect. Based on this idea, we have made a "fish" shaped pot (and lid) which is streamlined,
+with heat transfer fins. 
+
+Our initial goal is to compare this pot to a cylindrical pot.
+
+![IMG_0422](https://github.com/user-attachments/assets/f064e68d-c3c8-453a-ab46-8c5241dd8bff)
+![IMG_0421](https://github.com/user-attachments/assets/24c9a17f-f34f-4c5c-85bc-9c41c8c4102f)
+![IMG_0418](https://github.com/user-attachments/assets/c2521fd1-0f5f-4996-ba93-3304cebf6434)
+![IMG_0417](https://github.com/user-attachments/assets/b74e1eef-d8a5-46e1-b05d-4fd755c0d1a7)
+
 # Team Ecopot for Rice University
 
 Team Ecopot, of Rice University, did the initial work on this base on ideas from Public Invention.
