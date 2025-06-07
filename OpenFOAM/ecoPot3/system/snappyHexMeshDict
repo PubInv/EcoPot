@@ -1,0 +1,117 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    air
+    {
+        type triSurfaceMesh;
+        file "air50.stl";
+
+        regions
+        {
+            inlet	   { name inlet;     }
+            outlet         { name outlet;    }
+            walls          { name walls;     }
+        }
+    }
+
+    solid
+    {
+        type triSurfaceMesh;
+        file "pot40.stl";
+    }
+    
+    water
+    {
+        type triSurfaceMesh;
+        file "ecoPotContent40.stl";
+    }
+};
+
+castellatedMeshControls
+{
+
+    
+    features
+    (
+        {
+           file "pot40.eMesh";
+           levels ((2 4));
+        }
+        
+        {
+           file "ecoPotContent40.eMesh";
+           levels ((1 4));
+        }
+    );
+    
+    refinementSurfaces
+    {
+        air
+        {
+            level (1 4);
+            regions
+            {
+                inlet     { level (1 4); patchInfo { type patch; } }
+                outlet    { level (1 4); patchInfo { type patch; } }
+                walls	  { level (0 0); patchInfo { type wall;  } }
+            }
+        }
+
+        solid
+        {
+            level 	(1 4);
+            faceZone 	solidToWater;
+            cellZone 	solid;
+            mode        insidePoint;
+            insidePoint (0 0 -30);
+        }
+        
+        water
+        {
+            level 	(1 4);
+            faceZone 	waterToSolid;
+            cellZone 	water;
+            mode        insidePoint;
+            insidePoint (0 0 0);
+        }
+
+    }
+
+    nCellsBetweenLevels 1;
+    resolveFeatureAngle 90;
+
+    insidePoint (0 0 -45);
+}
+
+addLayersControls
+{
+    relativeSizes       true;
+    minThickness        1;
+    finalLayerThickness 1;
+    expansionRatio      1;
+    layers
+    {}
+}
+
+// ************************************************************************* //
