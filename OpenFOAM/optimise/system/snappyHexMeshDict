@@ -1,0 +1,99 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    fluid
+    {
+        type triSurfaceMesh;
+        file "air_fire.stl";
+
+        regions
+        {
+            inlet	   { name inlet;     }
+            outlet         { name outlet;    }
+            walls          { name walls;     }
+        }
+    }
+
+    solid
+    {
+        type triSurfaceMesh;
+        file "robert.stl";
+    }
+};
+
+castellatedMeshControls
+{
+
+
+
+    features
+    (
+    
+        {
+           file "air_fire.eMesh";
+           levels ((2 4));
+        }
+     );
+     
+     
+    refinementSurfaces
+    {
+        fluid
+        {
+            level (0 0);
+            regions
+            {
+                inlet     { level (0 0); patchInfo { type patch; } }
+                outlet    { level (0 0); patchInfo { type patch; } }
+                walls	  { level (0 0); patchInfo { type wall;  } }
+            }
+        }
+
+        solid
+        {
+            level (1 4);
+            faceZone solidToFluid;
+            cellZone solid;
+            mode        insidePoint;
+            insidePoint (0 0 0);
+        }
+
+    }
+
+    nCellsBetweenLevels 1;
+
+    insidePoint (2 0 -2);
+}
+
+addLayersControls
+{
+    relativeSizes       true;
+    minThickness        1;
+    finalLayerThickness 1;
+    expansionRatio      1;
+    layers
+    {}
+}
+
+// ************************************************************************* //
