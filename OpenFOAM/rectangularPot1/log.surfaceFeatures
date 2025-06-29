@@ -1,0 +1,194 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : dev-26ba086f3168
+Exec   : surfaceFeatures
+Date   : Jun 14 2025
+Time   : 21:31:29
+Host   : "openfoam"
+PID    : 5713
+I/O    : uncollated
+Case   : /home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1
+nProcs : 1
+sigFpe : Floating point exception trapping - not supported on this platform
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading "surfaceFeaturesDict"
+
+Surface            : "air_fire.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 412
+Vertices     : 208
+Bounding Box : (-50 -50 -55) (50 50 50)
+
+
+Constructing feature set from included angle 2.6179939
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 8
+    feature edges  : 212
+    of which
+        region edges   : 0
+        external edges : 112
+        internal edges : 100
+
+
+Final feature set:
+points      : 208
+edges       : 212
+boundingBox : (-50 -50 -55) (50 50 50)
+point classification :
+    convex feature points          :        8
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :      200
+edge classification :
+    external (convex angle) edges  :      112
+    internal (concave angle) edges :      100
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/air_fire.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire"
+Writing convex feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_convexFeaturePts.obj"
+Writing concave feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_externalEdges.obj"
+Writing internal edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_internalEdges.obj"
+Writing flat edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_flatEdges.obj"
+Writing open edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_openEdges.obj"
+Writing multiple edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_multipleEdges.obj"
+Writing region edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_regionEdges.obj"
+Writing edge directions to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/air_fire_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/air_fire.eMesh"
+
+Surface            : "rectangularPot.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 28
+Vertices     : 16
+Bounding Box : (-33.483807 -33.483807 -17.527546) (33.483807 33.483807 17.527546)
+
+
+Constructing feature set from included angle 2.6179939
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 16
+    feature edges  : 24
+    of which
+        region edges   : 0
+        external edges : 16
+        internal edges : 8
+
+
+Final feature set:
+points      : 16
+edges       : 24
+boundingBox : (-33.483807 -33.483807 -17.527546) (33.483807 33.483807 17.527546)
+point classification :
+    convex feature points          :        8
+    concave feature points         :        4
+    mixed feature points           :        4
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :       16
+    internal (concave angle) edges :        8
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/rectangularPot.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot"
+Writing convex feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_convexFeaturePts.obj"
+Writing concave feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_externalEdges.obj"
+Writing internal edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_internalEdges.obj"
+Writing flat edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_flatEdges.obj"
+Writing open edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_openEdges.obj"
+Writing multiple edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_multipleEdges.obj"
+Writing region edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_regionEdges.obj"
+Writing edge directions to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPot_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/rectangularPot.eMesh"
+
+Surface            : "rectangularPotContent.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 12
+Vertices     : 8
+Bounding Box : (-31.912521 -31.912521 -15.956261) (31.912521 31.912521 8.5918331)
+
+
+Constructing feature set from included angle 3.1415927
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 8
+    feature edges  : 18
+    of which
+        region edges   : 0
+        external edges : 18
+        internal edges : 0
+
+
+Final feature set:
+points      : 8
+edges       : 18
+boundingBox : (-31.912521 -31.912521 -15.956261) (31.912521 31.912521 8.5918331)
+point classification :
+    convex feature points          :        4
+    concave feature points         :        0
+    mixed feature points           :        4
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :       12
+    internal (concave angle) edges :        0
+    flat region edges              :        6
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/rectangularPotContent.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent"
+Writing convex feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_convexFeaturePts.obj"
+Writing concave feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_externalEdges.obj"
+Writing internal edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_internalEdges.obj"
+Writing flat edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_flatEdges.obj"
+Writing open edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_openEdges.obj"
+Writing multiple edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_multipleEdges.obj"
+Writing region edges to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_regionEdges.obj"
+Writing edge directions to "/home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1/constant/extendedFeatureEdgeMesh/rectangularPotContent_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/rectangularPotContent.eMesh"
+
+ExecutionTime = 0.002602 s  ClockTime = 0 s
+
+End
+

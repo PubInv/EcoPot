@@ -1,0 +1,137 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : dev-26ba086f3168
+Exec   : splitMeshRegions -cellZones -overwrite -defaultRegionName air
+Date   : Jun 14 2025
+Time   : 21:32:09
+Host   : "openfoam"
+PID    : 5716
+I/O    : uncollated
+Case   : /home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1
+nProcs : 1
+sigFpe : Floating point exception trapping - not supported on this platform
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Creating single patch per inter-region interface.
+
+Trying to match regions to existing cell zones.
+
+
+Number of regions:3
+
+Writing region per cell file (for manual decomposition) to "constant/cellToRegion"
+
+Writing region per cell as volScalarField to "0/cellToRegion"
+
+Region	Cells
+------	-----
+0	213308
+1	101690
+2	125070
+
+Region	Zone	Name
+------	----	----
+0	-1	air
+1	1	water
+2	0	solid
+
+Sizes of interfaces between regions:
+
+Interface	Region	Region	Faces
+---------	------	------	-----
+0		0	1	6328
+1		1	2	31554
+2		0	2	56244
+
+Reading geometric fields
+
+Reading volScalarField cellToRegion
+
+
+Adding patches
+
+
+Adding patches
+
+For interface between region air and water added patches
+    3	air_to_water
+    4	water_to_air
+For interface between region water and solid added patches
+    5	water_to_solid
+    6	solid_to_water
+For interface between region air and solid added patches
+    7	air_to_solid
+    8	solid_to_air
+
+Region 0
+-------- 
+Creating mesh for region 0 air
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 827196 outside range 0..741820
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 749105 outside range 0..741820
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region0 points back to base mesh.
+Writing map faceRegionAddressing from region0 faces back to base mesh.
+Writing map cellRegionAddressing from region0 cells back to base mesh.
+
+Region 1
+-------- 
+Creating mesh for region 1 water
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 343305 outside range 0..342427
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 342428 outside range 0..342427
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region1 points back to base mesh.
+Writing map faceRegionAddressing from region1 faces back to base mesh.
+Writing map cellRegionAddressing from region1 cells back to base mesh.
+
+Region 2
+-------- 
+Creating mesh for region 2 solid
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 421045 outside range 0..421043
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 421111 outside range 0..421043
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region2 points back to base mesh.
+Writing map faceRegionAddressing from region2 faces back to base mesh.
+Writing map cellRegionAddressing from region2 cells back to base mesh.
+End
+
