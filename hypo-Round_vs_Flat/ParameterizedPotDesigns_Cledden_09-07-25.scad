@@ -76,7 +76,7 @@ echo(cyl_height(A,V_pot));
 
 radius_mm = radius(A,V_pot);
 
-wall_thickness = radius_mm/20;
+wall_thickness = radius_mm/40;
 
 base_scale_factor = 2;
 height_scale_factor = 0.5;
@@ -108,7 +108,8 @@ conical_end_scale_factor = 1.33;
 
 pot_handle_radius = radius_mm/2.4;
 pot_handle_thickness = radius_mm/6;
-pot_handle_wall_thickness = radius_mm/40;
+// pot_handle_wall_thickness = radius_mm/40;
+pot_handle_wall_thickness = radius_mm/80;
 handle_position = -(radius_mm/6);
 
 // lid_distance_from_pot = radius_mm/1.2;
@@ -125,14 +126,14 @@ legWidth = wall_thickness;
 legBallRadius = radius_mm/10;
 
 
-//ptype = "flatbottom";
+// ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
-ptype = "roundbottom_with_handles";
+ ptype = "roundbottom_with_handles";
 //ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
-rim_bead_radius = lid_thickness;
+rim_bead_radius = lid_thickness/2;
 if (ptype == "flatbottom") {
     rim_bead_radius = lid_thickness;
 } else {
@@ -156,7 +157,9 @@ echo(rim_bead_radius);
 ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
-$fn=30;
+// This is good for fast rendering
+// $fn=30;
+$fn = 100;
 
 module roundedFin(Fw,Fl,Fh){
     color ("red")
