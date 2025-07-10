@@ -1,0 +1,162 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "constant/air/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+14
+(
+    inlet
+    {
+        type            patch;
+        nFaces          0;
+        startFace       53630;
+    }
+    outlet
+    {
+        type            patch;
+        nFaces          0;
+        startFace       53630;
+    }
+    walls
+    {
+        type            wall;
+        inGroups        List<word> 1(wall);
+        nFaces          0;
+        startFace       53630;
+    }
+    air_to_water
+    {
+        type            mappedWall;
+        inGroups        List<word> 
+2
+(
+wall
+mapped
+)
+;
+        nFaces          0;
+        startFace       53630;
+        neighbourRegion water;
+        neighbourPatch  water_to_air;
+        transformType   none;
+    }
+    air_to_solid
+    {
+        type            mappedWall;
+        inGroups        List<word> 
+2
+(
+wall
+mapped
+)
+;
+        nFaces          9239;
+        startFace       53630;
+        neighbourRegion solid;
+        neighbourPatch  solid_to_air;
+        transformType   none;
+    }
+    procBoundary1to0
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          216;
+        startFace       62869;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    0;
+    }
+    procBoundary1to2
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          233;
+        startFace       63085;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    2;
+    }
+    procBoundary1to3
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          155;
+        startFace       63318;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    3;
+    }
+    procBoundary1to6
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          14;
+        startFace       63473;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    6;
+    }
+    procBoundary1to7
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          15;
+        startFace       63487;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    7;
+    }
+    procBoundary1to8
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          3;
+        startFace       63502;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    8;
+    }
+    procBoundary1to9
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          10;
+        startFace       63505;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    9;
+    }
+    procBoundary1to10
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          625;
+        startFace       63515;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    10;
+    }
+    procBoundary1to11
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          649;
+        startFace       64140;
+        matchTolerance  0.0001;
+        myProcNo        1;
+        neighbProcNo    11;
+    }
+)
+
+// ************************************************************************* //

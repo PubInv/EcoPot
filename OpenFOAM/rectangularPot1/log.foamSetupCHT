@@ -1,0 +1,45 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : dev-26ba086f3168
+Exec   : foamSetupCHT
+Date   : Jun 14 2025
+Time   : 21:32:11
+Host   : "openfoam"
+PID    : 5717
+I/O    : uncollated
+Case   : /home/ubuntu/OpenFOAM/ubuntu-dev/run/rectangularPot1
+nProcs : 1
+sigFpe : Floating point exception trapping - not supported on this platform
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading material properties
+
+
+Region air:
+	Creating 0/air directory
+	Creating constant/air directory with air material
+	Creating system/air directory
+
+Region water:
+	Creating 0/water directory
+	Creating constant/water directory with water material
+	Creating system/water directory
+
+Region solid:
+	Creating 0/solid directory
+	Creating constant/solid directory with copper material
+	Creating system/solid directory
+
+Writing regionSolvers
+
+End
+

@@ -1,0 +1,83 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "constant/water/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+5
+(
+    water_to_air
+    {
+        type            mappedWall;
+        inGroups        List<word> 
+2
+(
+wall
+mapped
+)
+;
+        nFaces          662;
+        startFace       24701;
+        neighbourRegion air;
+        neighbourPatch  air_to_water;
+        transformType   none;
+    }
+    water_to_solid
+    {
+        type            mappedWall;
+        inGroups        List<word> 
+2
+(
+wall
+mapped
+)
+;
+        nFaces          2720;
+        startFace       25363;
+        neighbourRegion solid;
+        neighbourPatch  solid_to_water;
+        transformType   none;
+    }
+    procBoundary5to0
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          83;
+        startFace       28083;
+        matchTolerance  0.0001;
+        myProcNo        5;
+        neighbProcNo    0;
+    }
+    procBoundary5to4
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          319;
+        startFace       28166;
+        matchTolerance  0.0001;
+        myProcNo        5;
+        neighbProcNo    4;
+    }
+    procBoundary5to8
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          274;
+        startFace       28485;
+        matchTolerance  0.0001;
+        myProcNo        5;
+        neighbProcNo    8;
+    }
+)
+
+// ************************************************************************* //
