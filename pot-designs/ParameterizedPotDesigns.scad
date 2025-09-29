@@ -33,6 +33,14 @@ ltype = "none";
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
 
+// This is the type for the adapter for testing
+ttype = "none";
+// ttype = "threestone";
+
+adapter_h_mm = 30;
+adapter_r_mm = 10;
+adapter_w_mm = 2;
+
 // TODO: An Aspect Ratio for flat pots can be less than 1,
 // but not for round-bottomed pots. We should reorganize 
 // the code to take that into account.
@@ -103,6 +111,11 @@ echo(cyl_height(A,V_pot));
 
 radius_mm = radius(A,V_pot);
 
+tester_mm = radius_mm*2;
+
+// This is the radius to hold the heat gun.
+adapter_mm = 60;
+
 rim_bead_radius = radius_mm/24;
 
 wall_thickness = radius_mm/20;
@@ -147,30 +160,7 @@ handle_position = -(radius_mm/6);
 lid_distance_from_pot = radius_mm/2.8;
 
 
-if (ptype == "flatbottom") {
-    rim_bead_radius = lid_thickness;
-} else {
-    rim_bead_radius = min(3,side(A,V_pot));
-}
-echo("rim_bead_radius");
-echo(rim_bead_radius);
 
-finWidth = wall_thickness;
-// finLength = outer_rad/2;
-// finHeight = 5;
-
-legWidth = wall_thickness;
-// legLength = outer_rad/2;
-// legHeight = 5;
-legBallRadius = radius_mm/10;
-
-if (ptype == "flatbottom") {
-    rim_bead_radius = lid_thickness;
-} else {
-    rim_bead_radius = min(3,side(A,V_pot));
-}
-echo("rim_bead_radius");
-echo(rim_bead_radius);
 
 
 
@@ -772,4 +762,88 @@ module sharpFin (){
 }
 
 
+if (ptype == "flatbottom") {
+    rim_bead_radius = lid_thickness;
+} else {
+    rim_bead_radius = min(3,side(A,V_pot));
+}
+echo("rim_bead_radius");
+echo(rim_bead_radius);
 
+finWidth = wall_thickness;
+// finLength = outer_rad/2;
+// finHeight = 5;
+
+legWidth = wall_thickness;
+// legLength = outer_rad/2;
+// legHeight = 5;
+legBallRadius = radius_mm/10;
+
+if (ptype == "flatbottom") {
+    rim_bead_radius = lid_thickness;
+} else {
+    rim_bead_radius = min(3,side(A,V_pot));
+}
+echo("rim_bead_radius");
+echo(rim_bead_radius);
+
+if (ttype == "threestone") {
+    // tester_mm The adapter radius
+    stone_center_r = tester_mm;
+    fill_factor = 0.8;
+    brace_mm = 100;
+    brace_w_mm = 15;
+    translate([0,0,-tester_mm/2])
+    
+    difference() {
+        union() {
+            union() {
+                    translate([0,-(adapter_r_mm+brace_mm/2),0])
+                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);
+                                     
+                    rotate([0,0,120])
+                    translate([0,-(adapter_r_mm+brace_mm/2),0])
+                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);
+                    
+                    rotate([0,0,-120])
+                    translate([0,-(adapter_r_mm+brace_mm/2),0])
+                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);       
+            }
+           
+            difference() {
+                cylinder(adapter_h_mm,
+                        adapter_r_mm+adapter_w_mm,
+                        adapter_r_mm+adapter_w_mm,
+                        center=true);
+                cylinder(adapter_h_mm*2,
+                        adapter_r_mm,
+                        adapter_r_mm,
+                        center=true);
+            }
+            intersection() {
+                cylinder(h=tester_mm*10,r=tester_mm,center=true);
+                
+                color("brown")
+                union() {
+                    translate([0,-stone_center_r,0])
+                    sphere(r = tester_mm*fill_factor);
+                    
+                    rotate([0,0,120])
+                    translate([0,-stone_center_r,0])
+                    sphere(r = tester_mm*fill_factor);
+                    
+                    rotate([0,0,-120])
+                    translate([0,-stone_center_r,0])
+                    sphere(r = tester_mm*fill_factor);       
+                }
+            }
+        }
+        translate([0,0,-tester_mm*5])
+        cylinder(h=tester_mm*10,r=tester_mm*10,center=true);
+    }
+
+    // This is the radius to hold the heat gun.
+    // adapter_mm 
+    
+} else {
+}
