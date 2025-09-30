@@ -1,6 +1,27 @@
 # EcoPot
 Project #5: A more efficient pot for those who cook over wood fires and related technologies
 
+#Status as of September, 2025
+
+We 3D printed a pot without heat transfer fins in the 100ml size. Using the a heat gun strapped
+to a pipe, we were able to boil water efficiently. This is not a scientific test; it is prelude
+to A-B testing. Nonetheless one must sometimes "play" to design the next step.
+
+
+![IMG_1045](https://github.com/user-attachments/assets/13c94d47-ee11-4b70-8cf3-e61ead2679c0)
+
+
+https://github.com/user-attachments/assets/eb1e9b2b-b452-4a84-bfa1-b5ce4db439bc
+
+We attempted first to use a dryer hose, and that was a complete failure; the heat gun was so hot that 
+it discolored the inside of the dryer hose. It is clear that a great deal of heat was being lost through
+the hose, as the discoloration fades of about 3 feet.
+
+![IMG_1047](https://github.com/user-attachments/assets/50165534-cee1-422f-9e66-6b1c08312df6)
+
+BTW, this small pot (we use 100ml standard test size) boils VERY quickly when put over a natural gas 
+burner. We are learning that the temperature of the heating gas is extremely important.
+
 
 # Status as of June, 2025
 

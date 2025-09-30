@@ -12,16 +12,51 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
+USE_VERTICAL_POT_KNIFE = false;
+
+// change these together! 
+POT_BOTTOM_SHAPE_FLAT = true;
+ptype = "flatbottom";
+//ptype = "flatbottom_with_fins";
+//ptype = "roundbottom";
+//ptype = "roundbottom_with_fins";
+//ptype = "roundbottom_with_handles";
+// ptype = "roundbottom_with_fins_and_handles";
+// ptype = "none";
+
+ltype = "none";
+// ltype = "flat_lid"; // -- incorrect!
+// ltype = "solidconical"; // -- incorrect!
+// ltype = "hollowconical"; 
+// ltype = "hollowconicalwithconcavelid";
+
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
+
+// This is the type for the adapter for testing
+ttype = "none";
+// ttype = "threestone";
+
+adapter_h_mm = 30;
+adapter_r_mm = 10;
+adapter_w_mm = 2;
 
 // TODO: An Aspect Ratio for flat pots can be less than 1,
 // but not for round-bottomed pots. We should reorganize 
 // the code to take that into account.
 
+
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
-// A = 1.3; // aspect ratio (pure number) for rounded pots
-A = 1.3; // aspect ratio for flat pots
+//if (POT_BOTTOM_SHAPE_FLAT) {
+//    A = 0.6; // aspect ratio for flat pots
+//} else {
+//    A = 1.3; // aspect ratio (pure number) for rounded pots
+//}
+A = POT_BOTTOM_SHAPE_FLAT ? 0.6 : 1.3;
+
+echo("A");
+echo(A);
+
 V_ml = 100; 
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
@@ -76,13 +111,20 @@ echo(cyl_height(A,V_pot));
 
 radius_mm = radius(A,V_pot);
 
+tester_mm = radius_mm*2;
+
+// This is the radius to hold the heat gun.
+adapter_mm = 60;
+
+rim_bead_radius = radius_mm/24;
+
 wall_thickness = radius_mm/20;
 
 base_scale_factor = 2;
 height_scale_factor = 0.5;
 extra_height = radius_mm/40;
 
-lid_thickness = radius_mm/12;
+lid_thickness = wall_thickness;
 lid_knob_height = radius_mm/5;
 knob_scale_factor = 2;
 lid_wall_size = sqrt(lid_thickness);
@@ -106,8 +148,11 @@ conical_lid_height = radius_mm/0.8;
 conical_end_height = radius_mm/4;
 conical_end_scale_factor = 1.33;
 
-pot_handle_radius = radius_mm/2.4;
-pot_handle_thickness = radius_mm/6;
+
+pot_handle_radius = POT_BOTTOM_SHAPE_FLAT ? radius_mm/3 : radius_mm/2.4;
+pot_handle_thickness = POT_BOTTOM_SHAPE_FLAT ? radius_mm/8 : radius_mm/6;
+
+
 pot_handle_wall_thickness = radius_mm/40;
 handle_position = -(radius_mm/6);
 
@@ -115,37 +160,9 @@ handle_position = -(radius_mm/6);
 lid_distance_from_pot = radius_mm/2.8;
 
 
-finWidth = wall_thickness;
-// finLength = outer_rad/2;
-// finHeight = 5;
-
-legWidth = wall_thickness;
-// legLength = outer_rad/2;
-// legHeight = 5;
-legBallRadius = radius_mm/10;
 
 
-ptype = "flatbottom";
-//ptype = "flatbottom_with_fins";
-//ptype = "roundbottom";
-//ptype = "roundbottom_with_fins";
-//ptype = "roundbottom_with_handles";
-//ptype = "roundbottom_with_fins_and_handles";
-// ptype = "none";
-rim_bead_radius = lid_thickness;
-if (ptype == "flatbottom") {
-    rim_bead_radius = lid_thickness;
-} else {
-    rim_bead_radius = min(3,side(A,V_pot));
-}
-echo("rim_bead_radius");
-echo(rim_bead_radius);
 
- ltype = "none";
-// ltype = "flat_lid"; // -- incorrect!
-// ltype = "solidconical"; // -- incorrect!
-// ltype = "hollowconical"; 
-// ltype = "hollowconicalwithconcavelid";
 
 
 
@@ -156,7 +173,7 @@ echo(rim_bead_radius);
 ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
-$fn=30;
+$fn=100;
 
 module roundedFin(Fw,Fl,Fh){
     color ("red")
@@ -298,7 +315,7 @@ module flatBottomPot (A,V) {
     echo("outer_rad");
     echo(outer_rad);
     pot_height = cyl_height(A,V);
-    #union(){
+    union(){
         translate([0,0,pot_height/2 - rim_bead_radius])
         potInterface(radius_mm,radius_mm+wall_thickness,rim_bead_radius);
         difference () {
@@ -307,8 +324,12 @@ module flatBottomPot (A,V) {
             cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
         
     }
-    handle(A,V,ptype,radius_mm);
-    handle(A,V,ptype,-radius_mm);
+    translate([0,0,pot_height/4]) {
+        union() {
+            handle(A,V,ptype,radius_mm);
+            handle(A,V,ptype,-radius_mm);
+        }
+    }
 }    
 }
 
@@ -644,7 +665,9 @@ module renderPotType(ptype) {
     }else if (ptype == "none"){
         
     }
+
 }
+
 
 //this module was added by Cledden
 module renderContentType(ctype) {
@@ -659,7 +682,16 @@ module renderContentType(ctype) {
 
 
  renderLid(ltype,radius(A,V_pot));
+ 
+if (USE_VERTICAL_POT_KNIFE) {
+    difference() {
+        renderPotType(ptype);
+        translate([500,0,0])
+        #cube([1000,1000,1000],center = true);
+    }
+} else {
  renderPotType(ptype);
+}
  renderContentType(ctype);//added by Cledden for the pot content
 
 
@@ -730,4 +762,88 @@ module sharpFin (){
 }
 
 
+if (ptype == "flatbottom") {
+    rim_bead_radius = lid_thickness;
+} else {
+    rim_bead_radius = min(3,side(A,V_pot));
+}
+echo("rim_bead_radius");
+echo(rim_bead_radius);
 
+finWidth = wall_thickness;
+// finLength = outer_rad/2;
+// finHeight = 5;
+
+legWidth = wall_thickness;
+// legLength = outer_rad/2;
+// legHeight = 5;
+legBallRadius = radius_mm/10;
+
+if (ptype == "flatbottom") {
+    rim_bead_radius = lid_thickness;
+} else {
+    rim_bead_radius = min(3,side(A,V_pot));
+}
+echo("rim_bead_radius");
+echo(rim_bead_radius);
+
+if (ttype == "threestone") {
+    // tester_mm The adapter radius
+    stone_center_r = tester_mm;
+    fill_factor = 0.8;
+    brace_mm = 100;
+    brace_w_mm = 15;
+    translate([0,0,-tester_mm/2])
+    
+    difference() {
+        union() {
+            union() {
+                    translate([0,-(adapter_r_mm+brace_mm/2),0])
+                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);
+                                     
+                    rotate([0,0,120])
+                    translate([0,-(adapter_r_mm+brace_mm/2),0])
+                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);
+                    
+                    rotate([0,0,-120])
+                    translate([0,-(adapter_r_mm+brace_mm/2),0])
+                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);       
+            }
+           
+            difference() {
+                cylinder(adapter_h_mm,
+                        adapter_r_mm+adapter_w_mm,
+                        adapter_r_mm+adapter_w_mm,
+                        center=true);
+                cylinder(adapter_h_mm*2,
+                        adapter_r_mm,
+                        adapter_r_mm,
+                        center=true);
+            }
+            intersection() {
+                cylinder(h=tester_mm*10,r=tester_mm,center=true);
+                
+                color("brown")
+                union() {
+                    translate([0,-stone_center_r,0])
+                    sphere(r = tester_mm*fill_factor);
+                    
+                    rotate([0,0,120])
+                    translate([0,-stone_center_r,0])
+                    sphere(r = tester_mm*fill_factor);
+                    
+                    rotate([0,0,-120])
+                    translate([0,-stone_center_r,0])
+                    sphere(r = tester_mm*fill_factor);       
+                }
+            }
+        }
+        translate([0,0,-tester_mm*5])
+        cylinder(h=tester_mm*10,r=tester_mm*10,center=true);
+    }
+
+    // This is the radius to hold the heat gun.
+    // adapter_mm 
+    
+} else {
+}
