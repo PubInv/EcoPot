@@ -16,12 +16,12 @@ USE_VERTICAL_POT_KNIFE = false;
 
 // change these together! 
 POT_BOTTOM_SHAPE_FLAT = true;
-ptype = "flatbottom";
+// ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 //ptype = "roundbottom_with_handles";
-// ptype = "roundbottom_with_fins_and_handles";
+ ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
 ltype = "none";
@@ -34,8 +34,9 @@ ltype = "none";
 // Right now that code is spread across a lot of places.
 
 // This is the type for the adapter for testing
-ttype = "none";
+// ttype = "none";
 // ttype = "threestone";
+ttype = "printableThreeStone";
 
 adapter_h_mm = 30;
 adapter_r_mm = 10;
@@ -845,5 +846,44 @@ if (ttype == "threestone") {
     // This is the radius to hold the heat gun.
     // adapter_mm 
     
+} else if (ttype =="printableThreeStone") {
+// I'm not going to attempt to make a cone on top of a cylinder
+// with three radial cuts for the purpose of attempting to make 
+// 3D-printable test apparatus.
+// I will add the heatgun adapter as module separately....
+    cylinder_inner_radius_mm = 20;
+    cylinder_wall_mm = 2;
+    cylinder_height_mm = 25;
+    cone_large_radius_mm = 30;
+    cone_height_mm = 30;
+    cone_wall_mm = 2;
+    
+    // first, put the cylinder with its top at the origin.
+    translate([0,0,-cylinder_height_mm/2])
+    difference() {
+                cylinder(cylinder_height_mm,
+                        cylinder_inner_radius_mm+cylinder_wall_mm,
+                        cylinder_inner_radius_mm+cylinder_wall_mm,
+                        center=true);
+                translate([0,0,cylinder_wall_mm])
+                cylinder(cylinder_height_mm,
+                        cylinder_inner_radius_mm,
+                        cylinder_inner_radius_mm,
+                        center=true);
+            }
+     translate([0,0,cone_height_mm/2])      
+     difference() {
+                cylinder(cone_height_mm,
+                        cylinder_inner_radius_mm+cylinder_wall_mm,
+                        cone_large_radius_mm+cone_wall_mm,
+                        center=true);
+                cylinder(cone_height_mm+0.5,
+                        cylinder_inner_radius_mm,
+                        cone_large_radius_mm,
+                        center=true);
+     }
+     color("red")
+    cylinder(h = 20, r = 25, $fn = 3);
+
 } else {
 }
