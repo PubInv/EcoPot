@@ -15,14 +15,14 @@ PI = 3.141592;
 USE_VERTICAL_POT_KNIFE = false;
 
 // change these together! 
-POT_BOTTOM_SHAPE_FLAT = true;
+POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
-//ptype = "roundbottom_with_handles";
- ptype = "roundbottom_with_fins_and_handles";
-// ptype = "none";
+// ptype = "roundbottom_with_handles";
+// ptype = "roundbottom_with_fins_and_handles";
+ptype = "none";
 
 ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
@@ -847,7 +847,7 @@ if (ttype == "threestone") {
     // adapter_mm 
     
 } else if (ttype =="printableThreeStone") {
-// I'm not going to attempt to make a cone on top of a cylinder
+// I'm now going to attempt to make a cone on top of a cylinder
 // with three radial cuts for the purpose of attempting to make 
 // 3D-printable test apparatus.
 // I will add the heatgun adapter as module separately....
@@ -858,7 +858,9 @@ if (ttype == "threestone") {
     cone_height_mm = 30;
     cone_wall_mm = 2;
     
+    difference() {
     // first, put the cylinder with its top at the origin.
+    union() {
     translate([0,0,-cylinder_height_mm/2])
     difference() {
                 cylinder(cylinder_height_mm,
@@ -882,8 +884,12 @@ if (ttype == "threestone") {
                         cone_large_radius_mm,
                         center=true);
      }
+     }
      color("red")
-    cylinder(h = 20, r = 25, $fn = 3);
+    cylinder(h = cone_height_mm+1, 
+            r1 = 1.5*cylinder_inner_radius_mm+1, r2=cone_large_radius_mm *2 +1, $fn = 3);
+            }
+ 
 
 } else {
 }
