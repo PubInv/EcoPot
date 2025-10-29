@@ -22,10 +22,10 @@ POT_BOTTOM_SHAPE_FLAT = false;
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
 // ptype = "roundbottom_with_fins_and_handles";
-ptype = "none";
+ ptype = "none";
 
-ltype = "none";
-// ltype = "flat_lid"; // -- incorrect!
+// ltype = "none";
+ ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
@@ -34,9 +34,9 @@ ltype = "none";
 // Right now that code is spread across a lot of places.
 
 // This is the type for the adapter for testing
-// ttype = "none";
+ ttype = "none";
 // ttype = "threestone";
-ttype = "printableThreeStone";
+// ttype = "printableThreeStone";
 
 adapter_h_mm = 30;
 adapter_r_mm = 10;
@@ -476,15 +476,29 @@ module lidInterface(ri,ro,rim_bead_radius = 10) {
 }
 
 module flatLid (inner_rad) {
-    outer_rad = inner_rad+wall_thickness;
+    outer_rad = 1.8*(inner_rad)+wall_thickness;
     union () {
-        cylinder (h= lid_thickness, r=outer_rad, center = true);
+    translate ([0,0,outer_rad*0.9])
+    rotate ([180,0,0])
+        difference () {
+
+           intersection() {
+            sphere (outer_rad, $fn=100);
+            cylinder (h=outer_rad, r =outer_rad/2, center = false);
+};
+translate ([-outer_rad/2,-outer_rad/2,-outer_rad/8])
+cube (outer_rad); }
+                }
+                
+    
+    /*outer_rad = inner_rad+wall_thickness;
+    union () {
+        cylinder (h= lid_thickness, r=outer_rad, center = true);*/
         // this needs to be improved.
         conicalknob();
         translate([0,0, rim_bead_radius/2])
         lidInterface(inner_rad,inner_rad+wall_thickness,
         rim_bead_radius);
-     } 
 }
 
 module solidconicalLid (inner_rad) {
