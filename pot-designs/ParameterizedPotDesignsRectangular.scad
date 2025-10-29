@@ -21,7 +21,7 @@ PI = 3.141592;
 
 // Currently if the Aspect Ratio is <= 1.0, the bot is not defined.
 // A = 1.3; // aspect ratio (pure number) for rounded pots
-A = 0.5; // aspect ratio for flat pots
+A = 1.3; // aspect ratio for flat pots
 V_ml = 100; 
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
@@ -146,9 +146,9 @@ legBallRadius = radius_mm/10;
 //ptype = "flatbottom_with_fins";
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
-//ptype = "roundbottom_with_handles";
+ptype = "roundbottom_with_handles";
 //ptype = "roundbottom_with_fins_and_handles";
- ptype = "none";
+//ptype = "none";
 rim_bead_radius = lid_thickness;
 if (ptype == "flatbottom") {
     rim_bead_radius = lid_thickness;
@@ -168,9 +168,9 @@ echo(rim_bead_radius);
 
 //ctype = "rectangular_content"; 
 
- //ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
-// ctype = "flatBottomPot_content";//added by Cleddden for Pot content
-ctype = "none"; //added by Cleddden for Pot content
+ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
+//ctype = "flatBottomPot_content";//added by Cleddden for Pot content
+//ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
 $fn=30;
@@ -262,8 +262,8 @@ module rectangularPotContent(A,V,V_water,wall_thickness){
 }
 
 
-rectangularPot(A,V_pot,wall_thickness);
-rectangularPotContent(A,V_pot,V_water,wall_thickness);
+//rectangularPot(A,V_pot,wall_thickness);
+//rectangularPotContent(A,V_pot,V_water,wall_thickness);
 
 module roundBottomOutside(A,V) {
     radius_mm = radius(A,V);
@@ -358,7 +358,9 @@ module flatBottomPot (A,V) {
             cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
         
     }
+    translate ([0,0,20])
     handle(A,V,ptype,radius_mm);
+    translate ([0,0,20])
     handle(A,V,ptype,-radius_mm);
 }    
 }
@@ -669,8 +671,9 @@ module renderLid(ltype,r) {
 
 module renderPotType(ptype) {
     if (ptype == "flatbottom") {
-        r = cyl_radius(A,V_pot);
+        r = cyl_radius(A,V);
         renderLid(ltype,r);
+        translate ([0,0,height(A,V_pot)/1.4])
         flatBottomPot(A,V_pot);
     } else  if (ptype == "flatbottom_with_fins") {
         r = cyl_radius(A,V_pot);
@@ -687,7 +690,7 @@ module renderPotType(ptype) {
     } else if (ptype == "roundbottom_with_handles"){
         r = radius(A,V_pot);
         renderLid(ltype,r);
-        roundBottomPotWithHandles(A,V_pot);
+       translate ([0,0,height(A,V_pot)/1.25]) roundBottomPotWithHandles(A,V_pot);
     } else if (ptype == "roundbottom_with_fins_and_handles"){
         r = radius(A,V_pot);
         renderLid(ltype,r);
@@ -704,9 +707,9 @@ module renderPotType(ptype) {
 //this module was added by Cledden
 module renderContentType(ctype) {
     if (ctype == "flatBottomPot_content") {      
-         scale (1)   flatBottomPot_content(A,V_pot,V_water);
+    translate ([0,0,height(A,V_pot)/1.4])   flatBottomPot_content(A,V_pot,V_water);
     } else  if (ctype == "roundBottomPot_content") {
-        scale (1)    roundBottomPot_content(A,V_pot,V_water);
+        translate ([0,0,height(A,V_pot)/1.25])    roundBottomPot_content(A,V_pot,V_water);
     } else  if (ctype == "rectangular_content") {
         scale (1)    rectangularPotContent(A,V_pot,V_water,wall_thickness);
     }else if (ctype == "none"){
