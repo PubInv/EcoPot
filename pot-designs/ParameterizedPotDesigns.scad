@@ -21,8 +21,8 @@ POT_BOTTOM_SHAPE_FLAT = false;
 //ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
-// ptype = "roundbottom_with_fins_and_handles";
- ptype = "none";
+ptype = "roundbottom_with_fins_and_handles";
+// ptype = "none";
 
 // ltype = "none";
  ltype = "flat_lid"; // -- incorrect!
@@ -119,7 +119,8 @@ adapter_mm = 60;
 
 rim_bead_radius = radius_mm/24;
 
-wall_thickness = radius_mm/20;
+// wall_thickness = radius_mm/20;
+wall_thickness = radius_mm/30;
 
 base_scale_factor = 2;
 height_scale_factor = 0.5;
@@ -475,13 +476,38 @@ module lidInterface(ri,ro,rim_bead_radius = 10) {
     }  
 }
 
+
 module flatLid (inner_rad) {
+    outer_rad = inner_rad+wall_thickness;
+    radius_mm = radius(A,V_pot);
+    theta = 20;
+    cr = outer_rad / sin(theta);
+    y = cr * cos(theta);
+    union () {
+        rotate([180,0,0])
+        intersection() {
+            translate([0,0,-y])
+            difference() {
+                sphere(cr, $fn=200);
+                sphere(cr-wall_thickness, $fn=200);
+            }
+            translate([0,0,-rim_bead_radius/8])
+            cylinder(h=outer_rad*10, r = inner_rad - rim_bead_radius/2,);
+         };
+            
+        translate([0,0,-(-0.5 + cr-y)])       
+        conicalknob();     
+        lidInterface(inner_rad,inner_rad+wall_thickness,
+                    rim_bead_radius);
+                    };
+}
+
+module flatLidOrig (inner_rad) {
     outer_rad = 1.8*(inner_rad)+wall_thickness;
     union () {
     translate ([0,0,outer_rad*0.9])
     rotate ([180,0,0])
         difference () {
-
            intersection() {
             sphere (outer_rad, $fn=100);
             cylinder (h=outer_rad, r =outer_rad/2, center = false);
@@ -634,9 +660,10 @@ module handle(A,V,ptype,radius){
 
 module renderLid(ltype,r) {
     if (ltype == "flat_lid") {
-        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
+        // translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
+        translate ([0,0,lid_distance_from_pot])
         rotate ([180,0,0])
-        flatLid(cyl_radius(A,V_pot));  
+        flatLid(radius_mm);
     } else  if (ltype == "solidconical") {
         translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
@@ -696,13 +723,22 @@ module renderContentType(ctype) {
 }
 
 
+if (USE_VERTICAL_POT_KNIFE) {
+    difference() {
+        renderLid(ltype,radius(A,V_pot));
+        translate([500,0,0])
+        cube([1000,1000,1000],center = true);
+    }
+} else {
  renderLid(ltype,radius(A,V_pot));
+}
+ 
  
 if (USE_VERTICAL_POT_KNIFE) {
     difference() {
         renderPotType(ptype);
         translate([500,0,0])
-        #cube([1000,1000,1000],center = true);
+        cube([1000,1000,1000],center = true);
     }
 } else {
  renderPotType(ptype);
