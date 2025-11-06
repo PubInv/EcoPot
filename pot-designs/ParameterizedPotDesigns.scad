@@ -12,23 +12,24 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
-USE_VERTICAL_POT_KNIFE = false;
+USE_VERTICAL_POT_KNIFE = true;
 
 // change these together! 
 POT_BOTTOM_SHAPE_FLAT = false;
-// ptype = "flatbottom";
+//ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
-//ptype = "roundbottom";
+ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
-ptype = "roundbottom_with_fins_and_handles";
-// ptype = "none";
+//ptype = "roundbottom_with_fins_and_handles";
+//ptype = "none";
 
 // ltype = "none";
- ltype = "flat_lid"; // -- incorrect!
+//ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
+ltype="conicalLidIvan";
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
@@ -163,19 +164,12 @@ lid_distance_from_pot = radius_mm/2.8;
 
 
 
-
-
-
-
-
-
-
  //ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
 // ctype = "flatBottomPot_content";//added by Cleddden for Pot content
 ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
-$fn=100;
+$fn=30;
 
 module roundedFin(Fw,Fl,Fh){
     color ("red")
@@ -492,7 +486,7 @@ module flatLid (inner_rad) {
                 sphere(cr-wall_thickness, $fn=200);
             }
             translate([0,0,-rim_bead_radius/8])
-            cylinder(h=outer_rad*10, r = inner_rad - rim_bead_radius/2,);
+            cylinder(h=outer_rad*10, r = inner_rad - rim_bead_radius/2);
          };
             
         translate([0,0,-(-0.5 + cr-y)])       
@@ -552,6 +546,55 @@ module hollowconicalLid (inner_rad) {
         lidhook();
      }
 }
+
+
+
+//Ivan
+function pType(ptype) = 
+    ptype != "flatbottom";
+
+echo("Ivan");
+echo(pType(ptype));
+distance=0.5;  //change
+
+module conical_part (radius,height) {
+    
+    translate([0,0,lid_thickness*0.55+lidPositionZ(A,V_pot)+distance]){
+    cylinder (h=(height), r1 =(radius) ,r2=(radius*conical_lid_scale_factor));
+    }
+}
+function lidPositionZ(A,V_pot) =
+    pType(ptype)
+    ? side(A,V_pot)  
+    : cyl_height(A,V_pot)/2; 
+
+function lid_radius()=
+    pType(ptype)
+    ? radius_mm
+    : cyl_radius(A,V_pot); 
+
+echo("Ivan");
+echo(lid_radius());
+
+module conicalLidIvan(inner_rad,A,V_pot){
+      outer_rad = inner_rad + lid_thickness;
+      difference(){
+            conical_part(outer_rad,conical_lid_height);
+            translate([0,0,wall_thickness]){
+            conical_part(inner_rad,conical_lid_height-wall_thickness+0.001);
+            }
+        }
+        
+        translate([0,0,lidPositionZ(A,V_pot)+distance]){
+        rotate ([180,0,0]){    
+        lidInterface(inner_rad,inner_rad+wall_thickness,
+                    rim_bead_radius);}
+        }          
+}
+
+
+
+
 
 // This is our main pot lid.
 module concaveconicalLid(inner_rad){
@@ -677,6 +720,10 @@ module renderLid(ltype,r) {
         rotate ([180,0,0])
         concaveconicalLid(r);
     }
+    else if (ltype == "conicalLidIvan"){
+            rad=lid_radius();
+            conicalLidIvan(rad,A,V_pot);
+     }
 }
 
 module renderPotType(ptype) {
