@@ -555,7 +555,7 @@ function pType(ptype) =
 
 echo("Ivan");
 echo(pType(ptype));
-distance=0.5;  //change
+distance=0.1;  //change
 
 module conical_part (radius,height) {
     
@@ -578,18 +578,22 @@ echo(lid_radius());
 
 module conicalLidIvan(inner_rad,A,V_pot){
       outer_rad = inner_rad + lid_thickness;
-      difference(){
+    translate([0,0,-rim_bead_radius/2]){
+    union(){  
+    difference(){
             conical_part(outer_rad,conical_lid_height);
             translate([0,0,wall_thickness]){
             conical_part(inner_rad,conical_lid_height-wall_thickness+0.001);
             }
         }
         
-        translate([0,0,lidPositionZ(A,V_pot)+distance]){
+        translate([0,0,lidPositionZ(A,V_pot)+distance+rim_bead_radius/2]){
         rotate ([180,0,0]){    
         lidInterface(inner_rad,inner_rad+wall_thickness,
                     rim_bead_radius);}
-        }          
+            }          
+        }
+    }
 }
 
 
