@@ -8,9 +8,9 @@
 Build  : 12-86e126a7bc4d
 Exec   : transformPoints scale=(0.001 0.001 0.001)
 Date   : Nov 23 2025
-Time   : 16:19:55
+Time   : 21:56:00
 Host   : "Ivan"
-PID    : 4221
+PID    : 2662
 I/O    : uncollated
 Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivanFins
 nProcs : 1

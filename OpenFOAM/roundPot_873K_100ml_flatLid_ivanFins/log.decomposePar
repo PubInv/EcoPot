@@ -1,0 +1,290 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 12-86e126a7bc4d
+Exec   : decomposePar -allRegions
+Date   : Nov 23 2025
+Time   : 21:59:47
+Host   : "Ivan"
+PID    : 2696
+I/O    : uncollated
+Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivanFins
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+air1  Calculating distribution of cells
+air1  
+air1  Selecting decomposer scotch
+air1  
+air1  Finished decomposition in 0.447893 s
+air1  
+air1  Calculating original mesh data
+air1  
+air1  Distributing cells to processors
+air1  
+air1  Distributing faces to processors
+air1  
+air1  Distributing points to processors
+air1  
+air1  Constructing processor meshes
+air1  
+air1  Processor 0
+air1      Number of cells = 112441
+air1      Number of faces shared with processor 1 = 2202
+air1      Number of processor patches = 1
+air1      Number of processor faces = 2202
+air1      Number of boundary faces = 49251
+air1  
+air1  Processor 1
+air1      Number of cells = 113773
+air1      Number of faces shared with processor 0 = 2202
+air1      Number of processor patches = 1
+air1      Number of processor faces = 2202
+air1      Number of boundary faces = 49901
+air1  
+air1  Number of processor faces = 2202
+air1  Max number of cells = 113773 (0.58882297% above average 113107)
+air1  Max number of processor patches = 1 (0% above average 1)
+air1  Max number of faces between processors = 2202 (0% above average 2202)
+      
+air2  Calculating distribution of cells
+air2  
+air2  Selecting decomposer scotch
+air2  
+air2  Finished decomposition in 0.04966 s
+air2  
+air2  Calculating original mesh data
+air2  
+air2  Distributing cells to processors
+air2  
+air2  Distributing faces to processors
+air2  
+air2  Distributing points to processors
+air2  
+air2  Constructing processor meshes
+air2  
+air2  Processor 0
+air2      Number of cells = 10744
+air2      Number of faces shared with processor 1 = 365
+air2      Number of processor patches = 1
+air2      Number of processor faces = 365
+air2      Number of boundary faces = 7706
+air2  
+air2  Processor 1
+air2      Number of cells = 10824
+air2      Number of faces shared with processor 0 = 365
+air2      Number of processor patches = 1
+air2      Number of processor faces = 365
+air2      Number of boundary faces = 7830
+air2  
+air2  Number of processor faces = 365
+air2  Max number of cells = 10824 (0.37091988% above average 10784)
+air2  Max number of processor patches = 1 (0% above average 1)
+air2  Max number of faces between processors = 365 (0% above average 365)
+      
+water Calculating distribution of cells
+water 
+water Selecting decomposer scotch
+water 
+water Finished decomposition in 0.140077 s
+water 
+water Calculating original mesh data
+water 
+water Distributing cells to processors
+water 
+water Distributing faces to processors
+water 
+water Distributing points to processors
+water 
+water Constructing processor meshes
+water 
+water Processor 0
+water     Number of cells = 32385
+water     Number of faces shared with processor 1 = 1008
+water     Number of processor patches = 1
+water     Number of processor faces = 1008
+water     Number of boundary faces = 16185
+water 
+water Processor 1
+water     Number of cells = 32300
+water     Number of faces shared with processor 0 = 1008
+water     Number of processor patches = 1
+water     Number of processor faces = 1008
+water     Number of boundary faces = 16125
+water 
+water Number of processor faces = 1008
+water Max number of cells = 32385 (0.13140604% above average 32342.5)
+water Max number of processor patches = 1 (0% above average 1)
+water Max number of faces between processors = 1008 (0% above average 1008)
+      
+solid Calculating distribution of cells
+solid 
+solid Selecting decomposer scotch
+solid 
+solid Finished decomposition in 0.134808 s
+solid 
+solid Calculating original mesh data
+solid 
+solid Distributing cells to processors
+solid 
+solid Distributing faces to processors
+solid 
+solid Distributing points to processors
+solid 
+solid Constructing processor meshes
+solid 
+solid Processor 0
+solid     Number of cells = 46672
+solid     Number of faces shared with processor 1 = 375
+solid     Number of processor patches = 1
+solid     Number of processor faces = 375
+solid     Number of boundary faces = 50589
+solid 
+solid Processor 1
+solid     Number of cells = 46689
+solid     Number of faces shared with processor 0 = 375
+solid     Number of processor patches = 1
+solid     Number of processor faces = 375
+solid     Number of boundary faces = 50283
+solid 
+solid Number of processor faces = 375
+solid Max number of cells = 46689 (0.018208888% above average 46680.5)
+solid Max number of processor patches = 1 (0% above average 1)
+solid Max number of faces between processors = 375 (0% above average 375)
+      
+lid   Calculating distribution of cells
+lid   
+lid   Selecting decomposer scotch
+lid   
+lid   Finished decomposition in 0.038063 s
+lid   
+lid   Calculating original mesh data
+lid   
+lid   Distributing cells to processors
+lid   
+lid   Distributing faces to processors
+lid   
+lid   Distributing points to processors
+lid   
+lid   Constructing processor meshes
+lid   
+lid   Processor 0
+lid       Number of cells = 8569
+lid       Number of faces shared with processor 1 = 225
+lid       Number of processor patches = 1
+lid       Number of processor faces = 225
+lid       Number of boundary faces = 11959
+lid   
+lid   Processor 1
+lid       Number of cells = 8419
+lid       Number of faces shared with processor 0 = 225
+lid       Number of processor patches = 1
+lid       Number of processor faces = 225
+lid       Number of boundary faces = 11757
+lid   
+lid   Number of processor faces = 225
+lid   Max number of cells = 8569 (0.88297622% above average 8494)
+lid   Max number of processor patches = 1 (0% above average 1)
+lid   Max number of faces between processors = 225 (0% above average 225)
+      
+      Time = 0s
+      
+air1  Decomposing FV fields
+air1  
+air1      Decomposing volScalarFields
+air1  
+air1          alphat
+air1          nut
+air1          p_rgh
+air1          cellToRegion
+air1          p
+air1          T
+air1          k
+air1          epsilon
+air1          omega
+air1  
+air1      Decomposing volVectorFields
+air1  
+air1          U
+air1  
+air1  Decomposing point fields
+air1  
+air1      (no point fields)
+      
+air2  Decomposing FV fields
+air2  
+air2      Decomposing volScalarFields
+air2  
+air2          alphat
+air2          nut
+air2          p_rgh
+air2          cellToRegion
+air2          p
+air2          T
+air2          k
+air2          epsilon
+air2          omega
+air2  
+air2      Decomposing volVectorFields
+air2  
+air2          U
+air2  
+air2  Decomposing point fields
+air2  
+air2      (no point fields)
+      
+water Decomposing FV fields
+water 
+water     Decomposing volScalarFields
+water 
+water         alphat
+water         nut
+water         p_rgh
+water         cellToRegion
+water         p
+water         T
+water         k
+water         epsilon
+water         omega
+water 
+water     Decomposing volVectorFields
+water 
+water         U
+water 
+water Decomposing point fields
+water 
+water     (no point fields)
+      
+solid Decomposing FV fields
+solid 
+solid     Decomposing volScalarFields
+solid 
+solid         T
+solid         cellToRegion
+solid 
+solid Decomposing point fields
+solid 
+solid     (no point fields)
+      
+lid   Decomposing FV fields
+lid   
+lid       Decomposing volScalarFields
+lid   
+lid           T
+lid           cellToRegion
+lid   
+lid   Decomposing point fields
+lid   
+lid       (no point fields)
+      
+      End
+      

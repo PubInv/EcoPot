@@ -8,9 +8,9 @@
 Build  : 12-86e126a7bc4d
 Exec   : foamSetupCHT
 Date   : Nov 23 2025
-Time   : 16:20:02
+Time   : 21:56:07
 Host   : "Ivan"
-PID    : 4223
+PID    : 2664
 I/O    : uncollated
 Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivanFins
 nProcs : 1

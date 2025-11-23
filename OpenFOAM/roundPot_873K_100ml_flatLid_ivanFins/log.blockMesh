@@ -8,9 +8,9 @@
 Build  : 12-86e126a7bc4d
 Exec   : blockMesh
 Date   : Nov 23 2025
-Time   : 16:16:47
+Time   : 21:52:38
 Host   : "Ivan"
-PID    : 4214
+PID    : 2650
 I/O    : uncollated
 Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivanFins
 nProcs : 1

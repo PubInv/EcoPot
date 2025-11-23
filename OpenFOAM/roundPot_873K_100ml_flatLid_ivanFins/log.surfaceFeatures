@@ -8,9 +8,9 @@
 Build  : 12-86e126a7bc4d
 Exec   : surfaceFeatures
 Date   : Nov 23 2025
-Time   : 16:16:48
+Time   : 21:52:39
 Host   : "Ivan"
-PID    : 4215
+PID    : 2651
 I/O    : uncollated
 Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivanFins
 nProcs : 1
@@ -243,7 +243,7 @@ Writing edge directions to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roun
 
 Writing featureEdgeMesh to "constant/geometry/flatLid.eMesh"
 
-ExecutionTime = 0.249906 s  ClockTime = 0 s
+ExecutionTime = 0.288946 s  ClockTime = 0 s
 
 End
 
