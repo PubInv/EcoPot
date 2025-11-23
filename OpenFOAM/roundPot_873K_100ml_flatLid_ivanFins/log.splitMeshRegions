@@ -1,0 +1,217 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 12-86e126a7bc4d
+Exec   : splitMeshRegions -cellZones -overwrite -defaultRegionName air
+Date   : Nov 23 2025
+Time   : 16:19:56
+Host   : "Ivan"
+PID    : 4222
+I/O    : uncollated
+Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivanFins
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Creating single patch per inter-region interface.
+
+Trying to match regions to existing cell zones.
+
+
+Number of regions:5
+
+Writing region per cell file (for manual decomposition) to "constant/cellToRegion"
+
+Writing region per cell as volScalarField to "0/cellToRegion"
+
+Region	Cells
+------	-----
+0	226214
+1	93361
+2	64685
+3	21568
+4	16988
+
+Region	Zone	Name
+------	----	----
+0	-1	air1
+1	0	solid
+2	2	water
+3	-1	air2
+4	1	lid
+
+Sizes of interfaces between regions:
+
+Interface	Region	Region	Faces
+---------	------	------	-----
+0		3	4	10708
+1		0	1	67286
+2		2	3	2508
+3		0	4	11544
+4		1	2	29802
+5		1	3	2320
+6		1	4	1464
+
+Reading geometric fields
+
+Reading volScalarField cellToRegion
+
+
+Adding patches
+
+
+Adding patches
+
+For interface between region air2 and lid added patches
+    3	air2_to_lid
+    4	lid_to_air2
+For interface between region air1 and solid added patches
+    5	air1_to_solid
+    6	solid_to_air1
+For interface between region water and air2 added patches
+    7	water_to_air2
+    8	air2_to_water
+For interface between region air1 and lid added patches
+    9	air1_to_lid
+    10	lid_to_air1
+For interface between region solid and water added patches
+    11	solid_to_water
+    12	water_to_solid
+For interface between region solid and air2 added patches
+    13	solid_to_air2
+    14	air2_to_solid
+For interface between region solid and lid added patches
+    15	solid_to_lid
+    16	lid_to_solid
+
+Region 0
+-------- 
+Creating mesh for region 0 air1
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 778150 outside range 0..773991
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 787454 outside range 0..773991
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 778530 outside range 0..773991
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region0 points back to base mesh.
+Writing map faceRegionAddressing from region0 faces back to base mesh.
+Writing map cellRegionAddressing from region0 cells back to base mesh.
+
+Region 1
+-------- 
+Creating mesh for region 1 solid
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 330978 outside range 0..330962
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 374545 outside range 0..330962
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 331001 outside range 0..330962
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region1 points back to base mesh.
+Writing map faceRegionAddressing from region1 faces back to base mesh.
+Writing map cellRegionAddressing from region1 cells back to base mesh.
+
+Region 2
+-------- 
+Creating mesh for region 2 water
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 223758 outside range 0..223751
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 248920 outside range 0..223751
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 223827 outside range 0..223751
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region2 points back to base mesh.
+Writing map faceRegionAddressing from region2 faces back to base mesh.
+Writing map cellRegionAddressing from region2 cells back to base mesh.
+
+Region 3
+-------- 
+Creating mesh for region 3 air2
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 80706 outside range 0..77115
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 123324 outside range 0..77115
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 87120 outside range 0..77115
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region3 points back to base mesh.
+Writing map faceRegionAddressing from region3 faces back to base mesh.
+Writing map cellRegionAddressing from region3 cells back to base mesh.
+
+Region 4
+-------- 
+Creating mesh for region 4 lid
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 62833 outside range 0..62821
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 72527 outside range 0..62821
+--> FOAM Warning : 
+    From function void Foam::faceZone::checkAddressing() const
+    in file meshes/zones/faceZones/faceZone.C at line 175
+    Illegal face index 62884 outside range 0..62821
+Mapping fields
+Mapping field cellToRegion
+Deleting empty patches
+Writing new mesh
+Writing addressing to base mesh
+Writing map pointRegionAddressing from region4 points back to base mesh.
+Writing map faceRegionAddressing from region4 faces back to base mesh.
+Writing map cellRegionAddressing from region4 cells back to base mesh.
+End
+

@@ -1,0 +1,55 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 12-86e126a7bc4d
+Exec   : foamSetupCHT
+Date   : Nov 23 2025
+Time   : 15:12:55
+Host   : "Ivan"
+PID    : 3559
+I/O    : uncollated
+Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading material properties
+
+
+Region air1:
+	Creating 0/air1 directory
+	Creating constant/air1 directory with air material
+	Creating system/air1 directory
+
+Region air2:
+	Creating 0/air2 directory
+	Creating constant/air2 directory with air material
+	Creating system/air2 directory
+
+Region water:
+	Creating 0/water directory
+	Creating constant/water directory with water material
+	Creating system/water directory
+
+Region solid:
+	Creating 0/solid directory
+	Creating constant/solid directory with aluminium material
+	Creating system/solid directory
+
+Region lid:
+	Creating 0/lid directory
+	Creating constant/lid directory with aluminium material
+	Creating system/lid directory
+
+Writing regionSolvers
+
+End
+

@@ -1,0 +1,249 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 12-86e126a7bc4d
+Exec   : surfaceFeatures
+Date   : Nov 23 2025
+Time   : 15:10:22
+Host   : "Ivan"
+PID    : 3549
+I/O    : uncollated
+Case   : /home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading "surfaceFeaturesDict"
+
+Surface            : "air.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 412
+Vertices     : 208
+Bounding Box : (-50 -50 -25) (50 50 80)
+
+
+Constructing feature set from included angle 2.6179939
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 8
+    feature edges  : 212
+    of which
+        region edges   : 0
+        external edges : 112
+        internal edges : 100
+
+
+Final feature set:
+points      : 208
+edges       : 212
+boundingBox : (-50 -50 -25) (50 50 80)
+point classification :
+    convex feature points          :        8
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :      200
+edge classification :
+    external (convex angle) edges  :      112
+    internal (concave angle) edges :      100
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/air.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air"
+Writing convex feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_convexFeaturePts.obj"
+Writing concave feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_externalEdges.obj"
+Writing internal edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_internalEdges.obj"
+Writing flat edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_flatEdges.obj"
+Writing open edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_openEdges.obj"
+Writing multiple edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_multipleEdges.obj"
+Writing region edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_regionEdges.obj"
+Writing edge directions to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/air_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/air.eMesh"
+
+Surface            : "pot_round.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 4688
+Vertices     : 2342
+Bounding Box : (-36.147591 -49.477337 0.19802119) (36.147591 49.477337 46.642056)
+
+
+Constructing feature set from included angle 3.1415927
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 2342
+    feature edges  : 7032
+    of which
+        region edges   : 0
+        external edges : 3678
+        internal edges : 3354
+
+
+Final feature set:
+points      : 2342
+edges       : 7032
+boundingBox : (-36.147591 -49.477337 0.19802119) (36.147591 49.477337 46.642056)
+point classification :
+    convex feature points          :       19
+    concave feature points         :       22
+    mixed feature points           :     2301
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :     2328
+    internal (concave angle) edges :     1438
+    flat region edges              :     3266
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/pot_round.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round"
+Writing convex feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_convexFeaturePts.obj"
+Writing concave feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_externalEdges.obj"
+Writing internal edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_internalEdges.obj"
+Writing flat edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_flatEdges.obj"
+Writing open edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_openEdges.obj"
+Writing multiple edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_multipleEdges.obj"
+Writing region edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_regionEdges.obj"
+Writing edge directions to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/pot_round_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/pot_round.eMesh"
+
+Surface            : "ecoPotContentNew.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 536
+Vertices     : 270
+Bounding Box : (-34.981541 -34.789909 1.3576844) (34.981541 34.789909 42.833908)
+
+
+Constructing feature set from included angle 1.0471976
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 0
+    feature edges  : 0
+    of which
+        region edges   : 0
+        external edges : 0
+        internal edges : 0
+
+
+Final feature set:
+points      : 0
+edges       : 0
+boundingBox : (0 0 0) (0 0 0)
+point classification :
+    convex feature points          :        0
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :        0
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/ecoPotContentNew.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew"
+Writing convex feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_convexFeaturePts.obj"
+Writing concave feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_externalEdges.obj"
+Writing internal edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_internalEdges.obj"
+Writing flat edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_flatEdges.obj"
+Writing open edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_openEdges.obj"
+Writing multiple edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_multipleEdges.obj"
+Writing region edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_regionEdges.obj"
+Writing edge directions to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/ecoPotContentNew_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/ecoPotContentNew.eMesh"
+
+Surface            : "flatLid.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 11748
+Vertices     : 5876
+Bounding Box : (-34.981541 -34.789909 44.026424) (34.981541 34.789909 58.357769)
+
+
+Constructing feature set from included angle 1.0471976
+Selecting edges purely based on geometric tests: yes
+
+Initial feature set:
+    feature points : 0
+    feature edges  : 0
+    of which
+        region edges   : 0
+        external edges : 0
+        internal edges : 0
+
+
+Final feature set:
+points      : 0
+edges       : 0
+boundingBox : (0 0 0) (0 0 0)
+point classification :
+    convex feature points          :        0
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :        0
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/flatLid.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid"
+Writing convex feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_convexFeaturePts.obj"
+Writing concave feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_concaveFeaturePts.obj"
+Writing mixed feature points to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_mixedFeaturePts.obj"
+Writing mixed feature point structure to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_mixedFeaturePtsStructure.obj"
+Writing external edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_externalEdges.obj"
+Writing internal edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_internalEdges.obj"
+Writing flat edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_flatEdges.obj"
+Writing open edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_openEdges.obj"
+Writing multiple edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_multipleEdges.obj"
+Writing region edges to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_regionEdges.obj"
+Writing edge directions to "/home/ivan/OpenFOAM/ivan-12/run/EcoPot/OpenFOAM/roundPot_873K_100ml_flatLid_ivan/constant/extendedFeatureEdgeMesh/flatLid_edgeDirections.obj"
+
+Writing featureEdgeMesh to "constant/geometry/flatLid.eMesh"
+
+ExecutionTime = 0.098219 s  ClockTime = 0 s
+
+End
+
