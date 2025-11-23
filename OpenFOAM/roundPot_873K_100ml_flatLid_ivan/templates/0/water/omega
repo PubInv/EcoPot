@@ -13,7 +13,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-omegaInlet        0;
+omegaInlet        10;//0;
 mixingLengthInlet 0.0035;
 
 dimensions      [0 0 -1 0 0 0 0];

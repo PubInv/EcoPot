@@ -13,7 +13,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-kInlet          0;
+kInlet          0.00001;
 intensityInlet  0.01;
 
 dimensions      [0 2 -2 0 0 0 0];
