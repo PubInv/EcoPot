@@ -12,17 +12,17 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
-USE_VERTICAL_POT_KNIFE = true;
+USE_VERTICAL_POT_KNIFE = false;
 
 // change these together! 
 POT_BOTTOM_SHAPE_FLAT = false;
 //ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
-ptype = "roundbottom";
+// ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
 //ptype = "roundbottom_with_fins_and_handles";
-//ptype = "none";
+ptype = "none";
 
 // ltype = "none";
 //ltype = "flat_lid"; // -- incorrect!
@@ -40,7 +40,7 @@ ltype="conicalLidIvan";
 // ttype = "printableThreeStone";
 
 adapter_h_mm = 30;
-adapter_r_mm = 10;
+adapter_r_mm = 35/2;
 adapter_w_mm = 2;
 
 // TODO: An Aspect Ratio for flat pots can be less than 1,
