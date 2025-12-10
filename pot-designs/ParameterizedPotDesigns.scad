@@ -21,8 +21,8 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
-//ptype = "roundbottom_with_fins_and_handles";
-ptype = "none";
+ptype = "roundbottom_with_fins_and_handles";
+// ptype = "none";
 
 // ltype = "none";
 //ltype = "flat_lid"; // -- incorrect!
@@ -38,6 +38,22 @@ ltype="conicalLidIvan";
  ttype = "none";
 // ttype = "threestone";
 // ttype = "printableThreeStone";
+
+
+
+// ftype = "thin";
+ftype = "thick";
+fin_sharpness_thin = 1.0;
+fin_sharpness_thick = 8.0;
+
+fin_sharpness = 1.0;
+//if (ftype == "thin") {
+//    fin_sharpness = 1.0; // original
+//} else if (ftype == "thick") {
+//    fin_sharpness = 8.0; // thickness
+//} else {
+// echo("ERRRRRRRROR!");
+//}
 
 adapter_h_mm = 30;
 adapter_r_mm = 35/2;
@@ -821,12 +837,14 @@ module translate_children(){
 
 module triangularFinMK(r,angle){
     radius_mm = radius(A,V_pot);
+    //radius_divisor = 30;
+    radius_divisor = 100;
     //translate([0,-radius_mm,0])
     rotate([0,-90,angle])
     translate([-radius_mm,0,0])
     difference(){
         minkowski(){
-            sphere(radius_mm/30);
+            sphere(radius_mm/radius_divisor);
            sharpFin();
         }
         translate([radius_mm,0,0])
@@ -839,11 +857,16 @@ module triangularFinMK(r,angle){
 //sharpFin();
 //}
 
-
 module sharpFin (){
-    thickener = 1;
+    if (ftype == "thin") {
+        thickener = fin_sharpness_thin;
+    } else {
+        thickener = fin_sharpness_thick;
+    }
+//    thickener = fin_sharpness;
     radius_mm = radius(A,V_pot);
-    fw = finWidth*thickener;
+    fw = finWidth*(
+        (ftype == "thin")? fin_sharpness_thin :            fin_sharpness_thick);
     knife_thickness = radius_mm/2.4;
     z = fw/2+knife_thickness/2;
     //z=30;
