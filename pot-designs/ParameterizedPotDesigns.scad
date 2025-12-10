@@ -12,7 +12,7 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
-USE_VERTICAL_POT_KNIFE = false;
+USE_VERTICAL_POT_KNIFE = true;
 
 // change these together! 
 POT_BOTTOM_SHAPE_FLAT = false;
@@ -41,19 +41,15 @@ ltype="conicalLidIvan";
 
 
 
-// ftype = "thin";
-ftype = "thick";
+ftype = "thin";
+// ftype = "thick";
 fin_sharpness_thin = 1.0;
 fin_sharpness_thick = 8.0;
 
 fin_sharpness = 1.0;
-//if (ftype == "thin") {
-//    fin_sharpness = 1.0; // original
-//} else if (ftype == "thick") {
-//    fin_sharpness = 8.0; // thickness
-//} else {
-// echo("ERRRRRRRROR!");
-//}
+
+HALF_FINS = "true"; // This controls intermediary fins between the main heat transfer fins
+// HALF_FINS = "false";
 
 adapter_h_mm = 30;
 adapter_r_mm = 35/2;
@@ -239,7 +235,12 @@ module legFins(r,num) {
 module triangularFins(r,num) {
     delta = 360 / num;
     for ( i = [0:1:num-1]) {
-       triangularFinMK(r,delta*i);
+       triangularFinMK(r,delta*i,false);
+    }
+    if (HALF_FINS) {
+        for ( i = [0:1:num-1]) {
+           triangularFinMK(r,delta*i+delta/2,true);
+        }
     }
 }
 
@@ -835,7 +836,7 @@ module translate_children(){
 
 
 
-module triangularFinMK(r,angle){
+module triangularFinMK(r,angle,small){
     radius_mm = radius(A,V_pot);
     //radius_divisor = 30;
     radius_divisor = 100;
@@ -844,20 +845,16 @@ module triangularFinMK(r,angle){
     translate([-radius_mm,0,0])
     difference(){
         minkowski(){
-            sphere(radius_mm/radius_divisor);
-           sharpFin();
+           sphere(radius_mm/radius_divisor);
+           sharpFin(small);
         }
         translate([radius_mm,0,0])
         sphere(radius_mm,$fn=24);
     }
 }
 
-//translate_children(){
-//triangularFinMK();
-//sharpFin();
-//}
 
-module sharpFin (){
+module sharpFin (small){
     if (ftype == "thin") {
         thickener = fin_sharpness_thin;
     } else {
@@ -871,18 +868,35 @@ module sharpFin (){
     z = fw/2+knife_thickness/2;
     //z=30;
     theta = atan2(fw/2,radius_mm*sqrt(2));
-    difference(){
-        linear_extrude(height = fw, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
-        offset(r=0)
-        polygon(points=[[0,0],[0,radius_mm],[radius_mm,radius_mm]]);
-        translate([0,0,z])
-        translate([radius_mm,0,0])
-        rotate(theta,[-1,-1,0])
-        cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
-        translate([0,0,-z])
-        translate([radius_mm,0,0])
-        rotate(-theta,[-1,-1,0])
-        cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
+    if (!small) {
+        difference(){
+            linear_extrude(height = fw, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
+            offset(r=0)
+            polygon(points=[[0,0],[0,radius_mm],[radius_mm,radius_mm]]);
+            translate([0,0,z])
+            translate([radius_mm,0,0])
+            rotate(theta,[-1,-1,0])
+            cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
+            translate([0,0,-z])
+            translate([radius_mm,0,0])
+            rotate(-theta,[-1,-1,0])
+            cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
+            }
+    } else {
+        f = 2;
+        difference(){
+            linear_extrude(height = fw/8, center = true, convexity = 10, slices = 20, scale = 1.0, $fn = 16)
+            offset(r=0)
+            polygon(points=[[0,0],[radius_mm/3,radius_mm],[radius_mm,radius_mm]]);
+            translate([0,0,z])
+            translate([radius_mm,0,0])
+            rotate(theta,[-1,-1,0])
+            cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
+            translate([0,0,-z])
+            translate([radius_mm,0,0])
+            rotate(-theta,[-1,-1,0])
+            cube([radius_mm+220,radius_mm+220,knife_thickness],center=true);
+            }
     }
 }
 
