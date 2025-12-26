@@ -21,7 +21,8 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
-ptype = "roundbottom_with_fins_and_handles";
+ ptype = "studs";
+// ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
 // ltype = "none";
@@ -747,6 +748,26 @@ module renderLid(ltype,r) {
      }
 }
 
+//concept
+module studs(A,V){
+    radius_mm = radius(A,V);
+    radius_ball=radius_mm/15;
+ difference () {
+    union() {
+        roundBottomPotWithHandles(A,V_pot);
+        for (theta = [5 :10: 180]) {
+            for (phi = [0 :20: 180]){
+                rotate([0,phi,theta])
+                translate([radius_mm,0,0])
+                sphere(radius_ball);
+                }
+            }
+        }
+        sphere (r = radius_mm);
+    };
+}
+
+
 module renderPotType(ptype) {
     if (ptype == "flatbottom") {
         r = cyl_radius(A,V_pot);
@@ -768,11 +789,15 @@ module renderPotType(ptype) {
         r = radius(A,V_pot);
         renderLid(ltype,r);
         roundBottomPotWithHandles(A,V_pot);
-    } else if (ptype == "roundbottom_with_fins_and_handles"){
+    } else if (ptype ==         "roundbottom_with_fins_and_handles"){
         r = radius(A,V_pot);
         renderLid(ltype,r);
         roundBottomPotWithHandlesAndFins(A,V_pot);    
-    }else if (ptype == "none"){
+    } else if (ptype == "studs") {
+        r = radius(A,V_pot);
+        renderLid(ltype,r);
+        studs(A,V_pot);
+    } else if (ptype == "none"){
         
     }
 
@@ -1031,3 +1056,5 @@ if (ttype == "threestone") {
 
 } else {
 }
+
+
