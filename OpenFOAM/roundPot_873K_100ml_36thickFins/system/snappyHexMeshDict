@@ -1,0 +1,142 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    air
+    {
+        type triSurfaceMesh;
+        file "air.stl";
+
+        regions
+        {
+            inlet	   { name inlet;     }
+            outlet         { name outlet;    }
+            walls          { name walls;     }
+        }
+    }
+
+    solid
+    {
+        type triSurfaceMesh;
+        file "pot_roundfins.stl";
+    }
+    
+    lid
+    {
+        type triSurfaceMesh;
+        file "conicalLid.stl";
+    }
+    
+    water
+    {
+        type triSurfaceMesh;
+        file "ecoPotContentNew.stl";
+    }
+};
+
+castellatedMeshControls
+{
+
+    
+    features
+    (
+        {
+           file "air.eMesh";
+           levels ((2 3));
+        }
+       
+        {
+           file "pot_roundfins.eMesh";
+           levels ((2 3));
+        }
+        
+        {
+           file "conicalLid.eMesh";
+           levels ((2 3));
+        }
+        
+        {
+           file "ecoPotContentNew.eMesh";
+           levels ((2 3));
+        }
+    );
+    
+    refinementSurfaces
+    {
+        air
+        {
+            level (0 0);
+            regions
+            {
+                inlet     { level (0 0); patchInfo { type patch; } }
+                outlet    { level (0 0); patchInfo { type patch; } }
+                walls	  { level (0 0); patchInfo { type wall;  } }
+            }
+        }
+
+        solid
+        {
+            level 	(1 4);
+            faceZone 	solidToWater;
+            cellZone 	solid;
+            mode        insidePoint;
+            insidePoint (0 0 0.5);//(0 0 1);
+        }
+        
+        lid
+        {
+            level 	(1 4);
+            faceZone 	lidToAir;
+            cellZone 	lid;
+            mode        insidePoint;
+            insidePoint (0 0 47);//(0 0 59)
+        }
+        
+        water
+        {
+            level 	(1 4);
+            faceZone 	waterToSolid;
+            cellZone 	water;
+            mode        insidePoint;
+            insidePoint (0 0 10);//(0 0 20)
+        }
+
+    }
+
+    nCellsBetweenLevels 1;
+    //resolveFeatureAngle 90;
+
+    insidePoint (0 0 -10);
+}
+
+addLayersControls
+{
+    relativeSizes       true;
+    minThickness        1;
+    finalLayerThickness 1;
+    expansionRatio      1;
+    layers
+    {}
+}
+
+// ************************************************************************* //
