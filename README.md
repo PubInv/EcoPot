@@ -3,9 +3,9 @@ Project #5: A more efficient pot for those who cook over wood fires and related 
 
 #Status as of September, 2025
 
-We 3D printed a pot without heat transfer fins in the 100ml size. Using the a heat gun strapped
-to a pipe, we were able to boil water efficiently. This is not a scientific test; it is prelude
-to A-B testing. Nonetheless one must sometimes "play" to design the next step.
+We 3D-printed a pot without heat transfer fins in the 100ml size. Using a heat gun strapped
+to a pipe, we were able to boil water efficiently. This is not a scientific test; it is a prelude
+to A-B testing. Nonetheless, one must sometimes "play" to design the next step.
 
 
 ![IMG_1045](https://github.com/user-attachments/assets/13c94d47-ee11-4b70-8cf3-e61ead2679c0)
@@ -13,13 +13,13 @@ to A-B testing. Nonetheless one must sometimes "play" to design the next step.
 
 https://github.com/user-attachments/assets/eb1e9b2b-b452-4a84-bfa1-b5ce4db439bc
 
-We attempted first to use a dryer hose, and that was a complete failure; the heat gun was so hot that 
-it discolored the inside of the dryer hose. It is clear that a great deal of heat was being lost through
-the hose, as the discoloration fades of about 3 feet.
+We attempted first to use a dryer hose, and that was a complete failure. The heat gun was so hot that 
+it discolored the inside of the dryer hose. It is clear that a great deal of heat was lost through
+the hose, as the discoloration faded for about 3 feet.
 
 ![IMG_1047](https://github.com/user-attachments/assets/50165534-cee1-422f-9e66-6b1c08312df6)
 
-BTW, this small pot (we use 100ml standard test size) boils VERY quickly when put over a natural gas 
+By the way, this small pot (we use 100ml standard test size) boils VERY quickly when put over a natural gas 
 burner. We are learning that the temperature of the heating gas is extremely important.
 
 
@@ -42,7 +42,7 @@ Our initial goal is to compare this pot to a cylindrical pot.
 
 # Team Ecopot for Rice University
 
-Team Ecopot, of Rice University, did the initial work on this base on ideas from Public Invention.
+Team Ecopot, of Rice University, did the initial work based on ideas from Public Invention.
 They are:
 
 1. Christopher J Fang
@@ -66,3 +66,17 @@ Joe Alexandersen and Ole Sigmund.
 
 [https://arxiv.org/pdf/2012.04310](https://arxiv.org/pdf/2012.04310)
 
+# Volunteer Opportunities
+
+This project is still active, and the team is looking for additional volunteers with varied experience. Currently, the skillsets and experience that are needed include backgrounds in:
+
+* Heat engineering
+* Machining/making/3D printing
+* Solid modeling/design
+
+Alternatively, if you are new to the technical field but have interest in:
+
+* Performing rigorous experiments, or
+* Managing practical finances.
+
+There is also a place for you on the team. If interested in joining the Ecopot or projects like it, reach out to Inventor Coach [Robert L. Read](read.robert@gmail.com) or Volunteer Coordinator [Miriam Castillo](https://www.linkedin.com/in/cstllgtrrz/). Ultimately, our mission is to further the reach of open-source medical engineering, and invent in the public, for the public. Check out our [Volunteer Page](https://www.pubinv.org/volunteer/) to learn more.
