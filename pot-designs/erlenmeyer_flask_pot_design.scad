@@ -1,3 +1,58 @@
+//added 15th January, 2026
+
+major_radius = 10;
+minor_radius = 1; //radius of base curvature
+base_radius = major_radius + minor_radius; //bottom radius of the erlenmeyer flask
+wall_thickness = 1; //wall thickness
+
+//slicer
+difference () {
+//pot code
+difference () {
+//outer shell of pot
+union () {
+   cylinder (h = 20, r1 = base_radius, r2 = base_radius/2);
+   union () {
+    translate ([0,0,-minor_radius])
+    cylinder (h=minor_radius*2,r = major_radius);
+    
+    translate([0,0,0])
+    rotate_extrude(convexity = 10, $fn=100)
+    translate([major_radius, 0, 0])
+    circle(r = minor_radius, $fn=100);
+    
+                    };
+ };
+ 
+ //inner shell of pot
+ translate ([0,0,wall_thickness/2])
+union () {
+   cylinder (h = 20, r1 = (base_radius-wall_thickness), r2 = ((base_radius-wall_thickness)/2));
+   union () {
+    translate ([0,0,-(minor_radius)])
+    cylinder (h=minor_radius*2,r = (major_radius-wall_thickness));
+    
+    translate([0,0,0])
+    rotate_extrude(convexity = 10, $fn=100)
+    translate([(major_radius-wall_thickness), 0, 0])
+    circle(r = (minor_radius), $fn=100);
+    
+                    };
+ };
+ };
+ translate ([-50,0,-10])
+ cube (200);
+ };
+ 
+
+
+
+
+
+
+
+/*
+
 //the following calculations is to define the pot based on its aspect ratio (height/radius) and volume. It is currently incomplete and incorrect
 V = 100;
 function radius(A,V) = pow(V / (PI *(A - 1/3)),1/3);
@@ -22,7 +77,7 @@ sphere(5);
 //inner shell of pot
 translate ([0,-40,wall_thickness])
 minkowski () {
-cylinder (h=56, r1 = 40, r2 = 15);
+cylinder (h=45, r1 = 40, r2 = 20);
 translate([0,47,0])
 sphere(5);
 };
@@ -32,3 +87,5 @@ sphere(5);
 translate ([-75,0,-50])
 cube (150);
 };
+
+*/
