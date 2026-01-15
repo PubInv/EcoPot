@@ -1,9 +1,10 @@
 //added 15th January, 2026
-
-major_radius = 10;
-minor_radius = 1; //radius of base curvature
+aspect_ratio = 1.5;
+major_radius = 20;
+minor_radius = 2; //radius of base curvature
 base_radius = major_radius + minor_radius; //bottom radius of the erlenmeyer flask
-wall_thickness = 1; //wall thickness
+height = (2*base_radius)*aspect_ratio;
+wall_thickness = base_radius/20; //wall thickness
 
 //slicer
 difference () {
@@ -11,7 +12,7 @@ difference () {
 difference () {
 //outer shell of pot
 union () {
-   cylinder (h = 20, r1 = base_radius, r2 = base_radius/2);
+   cylinder (h = height, r1 = base_radius, r2 = base_radius/2);
    union () {
     translate ([0,0,-minor_radius])
     cylinder (h=minor_radius*2,r = major_radius);
@@ -27,7 +28,7 @@ union () {
  //inner shell of pot
  translate ([0,0,wall_thickness/2])
 union () {
-   cylinder (h = 20, r1 = (base_radius-wall_thickness), r2 = ((base_radius-wall_thickness)/2));
+   cylinder (h = height, r1 = (base_radius-wall_thickness), r2 = ((base_radius-wall_thickness)/2));
    union () {
     translate ([0,0,-(minor_radius)])
     cylinder (h=minor_radius*2,r = (major_radius-wall_thickness));
