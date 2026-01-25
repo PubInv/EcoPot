@@ -1,5 +1,19 @@
-//added 15th January, 2026
-aspect_ratio = 1.5;
+//added 25th January, 2026
+
+//R = base radius
+//r = top radius
+//a = radius factor = r/R (0 < a <1)
+//A = aspect ratio = height / diameter = h/2R
+// V = 1/3*pi*h(R^2 + r^2 + Rr)
+//but h = Ad = A*2R, r = aR
+//V = 1/3*pi*2AR(R^2 +(aR)^2 + aR^2)
+//R = (3V/(2*pi*A(1 + a + a^2))^1/3
+//h = A*2R
+//V_pot = V_water * excess_lip_scale_factor
+//V_ml = 100
+//V_water = V_ml * 1000 (mm^3)
+
+aspect_ratio = 0.5;
 major_radius = 20;
 minor_radius = 2; //radius of base curvature
 base_radius = major_radius + minor_radius; //bottom radius of the erlenmeyer flask
@@ -12,8 +26,8 @@ difference () {
 difference () {
 //outer shell of pot
 union () {
-   cylinder (h = height, r1 = base_radius, r2 = base_radius/2);
-   union () {
+    cylinder (h = height, r1 = base_radius, r2 = base_radius/2);
+    union () {
     translate ([0,0,-minor_radius])
     cylinder (h=minor_radius*2,r = major_radius);
     
@@ -28,7 +42,7 @@ union () {
  //inner shell of pot
  translate ([0,0,wall_thickness/2])
 union () {
-   cylinder (h = height, r1 = (base_radius-wall_thickness), r2 = ((base_radius-wall_thickness)/2));
+    cylinder (h = height, r1 = (base_radius-wall_thickness), r2 = ((base_radius-wall_thickness)/2));
    union () {
     translate ([0,0,-(minor_radius)])
     cylinder (h=minor_radius*2,r = (major_radius-wall_thickness));
