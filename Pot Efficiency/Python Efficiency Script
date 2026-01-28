@@ -1,0 +1,55 @@
+"""
+This file contains the code for calculating the efficiency of the simulated pots for the EcoPot Project
+"""
+import math
+CP_AIR = 1005 #J/(kg*K)
+CP_WATER = 4184 #J/(kg*K)
+INLET_AIR_SPEED = 2 #m/s
+AMBIENT_AIR_TEMP = 298 #K
+SURFACE_AREA_AIR_INLET = 0.0002*3.1415 #m^2
+SIMULATION_TIME = 210 #s
+WATER_DENSITY = 1000 #kg/m^3
+C_TO_K = 273.15
+ML_TO_M_CUBED = 10**(-6)
+
+total_air_energy = 0 #J
+transferred_water_energy = 0 #J
+efficiency = 0 #%
+
+"""
+Air_Joules finds the total joules of energy output from the heat source throughout the simulation
+"""
+def Air_Joules(air_density: float, inlet_temp: float) -> float:
+    total_air_energy = (CP_AIR) * (INLET_AIR_SPEED) * (SURFACE_AREA_AIR_INLET) * (air_density) * (inlet_temp - AMBIENT_AIR_TEMP) * (SIMULATION_TIME)
+    return total_air_energy
+
+"""
+Water_Joules finds the total transferred energy into the water in Joules throughout the simulation
+"""
+def Water_Joules(water_volume: float, final_water_temp: float) -> float:
+    k_final_water_temp = final_water_temp + C_TO_K
+    m_water_volume = water_volume * ML_TO_M_CUBED
+    transferred_water_energy = (CP_WATER) * (m_water_volume) * (WATER_DENSITY) * (k_final_water_temp - AMBIENT_AIR_TEMP)
+    return transferred_water_energy
+
+"""
+Takes the Joules from the Air and Water and divides them, turning it into a percent efficiency
+"""
+def Efficiency(p_type: str, air_density: float, inlet_temp: float, water_volume: float, final_water_temp: float):
+    a_joules = Air_Joules(air_density, inlet_temp)
+    w_joules = Water_Joules(water_volume, final_water_temp)
+    efficiency = round((w_joules/a_joules) * 100, 1)
+    return f"{p_type} = {efficiency}%"
+
+
+# Pot type simulated , air density , Inlet air temperature , water volume, final water temperature
+print(Efficiency('flat_bottom', 0.301,1173,100, 87))
+print(Efficiency('round_bottom', 0.301, 1173, 100, 103.4))
+print(Efficiency('Flat_Lid', 0.4046, 873, 100, 90.6))
+print(Efficiency('Conical_Lid', 0.4046, 873, 100, 92.6))
+print(Efficiency('Pot_Fins', 0.4046, 873, 100, 96.4))
+print(Efficiency('Pot_No_Fins', 0.4046, 873, 100, 90.6))
+print(Efficiency('Conical_1mm_normal_fins', 0.4046, 873, 100, 96.97))
+print(Efficiency('Conical_8mm_normal_fins', 0.4046, 873, 100, 96.9))
+print(Efficiency('Conical_1mm_baby_fins', 0.4046, 873, 100, 100.81))
+print(Efficiency('Conical_8mm_baby_fins', 0.4046, 873, 100, 99.26))
