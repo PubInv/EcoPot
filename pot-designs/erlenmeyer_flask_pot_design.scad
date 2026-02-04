@@ -58,9 +58,10 @@ aspect_ratio = 0.5;
 
 // TODO: Remove the limitation that the major_radius 
 // has to be greater than or equal to the minor_radius
-
-major_radius = 21;
+C = 1.05; //curvature factor  = major_radius/minor_radius. PS: 1.05 was the original setting.
+echo (C);
 minor_radius = 20; //radius of base curvature
+major_radius = C * minor_radius;
 base_radius = major_radius + minor_radius; //bottom radius of the erlenmeyer flask
 height = (2*base_radius)*aspect_ratio;
 wall_thickness = base_radius/20; //wall thickness
@@ -136,6 +137,7 @@ module flask_cone() {
 }
 
 // TODO: don't extrude circle, but extrude a 1/4th of a circle shape
+// Status: completed
 
 module flask_base() {
 
@@ -147,11 +149,25 @@ module flask_base() {
                 translate([(major_radius), 0, 0])
                 // here cut away top and inside 
                 // also cut away inside 
-                circle(r = (minor_radius), $fn=30);
-        
+            difference () {
+                circle (r=minor_radius, $fn=30);
+                translate ([-minor_radius,-0])
+                square (2*minor_radius);
+                translate ([-2*minor_radius,-2*minor_radius])
+                square (2*minor_radius);
+            };
+//                circle(r = (minor_radius), $fn=30);
+//        
                 rotate_extrude(convexity = 10, $fn=30)
                 translate([(major_radius), 0, 0])
-                circle(r = (minor_radius-wall_thickness), $fn=30);
+            difference () {
+                circle (r=minor_radius-wall_thickness, $fn=30);
+                translate ([-(minor_radius-wall_thickness),-0])
+                square (2*(minor_radius-wall_thickness));
+                translate ([-2*minor_radius,-2*(minor_radius-wall_thickness)])
+                square (2*(minor_radius-wall_thickness));
+            };
+//                circle(r = (minor_radius-wall_thickness), $fn=30);
             }
         }
         // top-plane knife
@@ -175,7 +191,7 @@ module flask1() {
 
 if (USE_VERTICAL_KNIFE) {
     difference() {
-        s = major_radius*4;
+        s = base_radius*4;
         flask1(); 
         translate([0,-s/2,0])
        cube(s,center=true); 
