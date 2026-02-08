@@ -1,7 +1,27 @@
 # EcoPot
 Project #5: A more efficient pot for those who cook over wood fires and related technologies
 
-#Status as of September, 2025
+# Test with Mini Pot Holder In January
+
+We have used Computational Fluid Dynamics (OpenFOAM) to simulate a number of designs.
+Round-bottom parts are better than flat-bottomed pots. Heat transfer fins work.
+
+It remains an open question if we can make a "wavy" pot or a pot like an "Erlenmeyer flask" which is better than our
+best pot so far.
+
+
+
+We also have a test apparatus for testing minuature 100 ml pots 3D printed in metal (see below).
+Our next goal is to 3D print our best pots in metal and test them using this apparatus.
+
+![IMG_1470 3](https://github.com/user-attachments/assets/8f9b982f-bf15-431c-b9ea-c04708b0068f)
+![IMG_1471 3](https://github.com/user-attachments/assets/11f43163-81b2-4d9f-8731-df76c8fa706f)
+![IMG_1472 3](https://github.com/user-attachments/assets/c2defa71-b22d-4b1f-a8ff-b605c02ac4c2)
+![IMG_1473 3](https://github.com/user-attachments/assets/3b2aac75-eb58-49f6-8138-06afabf21737)
+
+
+
+# Status as of September, 2025
 
 We 3D printed a pot without heat transfer fins in the 100ml size. Using the a heat gun strapped
 to a pipe, we were able to boil water efficiently. This is not a scientific test; it is prelude
