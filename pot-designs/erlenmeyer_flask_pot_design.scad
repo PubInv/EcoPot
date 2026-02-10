@@ -1,29 +1,23 @@
-//added 25th January, 2026
+//updated 10th February, 2026
 
 
 PI = 3.141592;
 
-//R = base radius
-//r = top radius
-//a = radius factor = r/R (0 < a <1)
-//A = aspect ratio = height / diameter = h/2R
-// V = 1/3*PI*h(R^2 + r^2 + Rr)
-//but h = Ad = A*2R, r = aR
-//V = 1/3*PI*2AR(R^2 +(aR)^2 + aR^2)
-//R = (3V/(2*PI*A(1 + a + a^2))^1/3
-//h = A*2R
+
 //V_pot = V_water * excess_lip_scale_factor
 //V_ml = 100
 //V_water = V_ml * 1000 (mm^3)
 
 // Volume of water in mL
 V_ml = 100;
-V_water = V_ml * 1000;  
+V_water = V_ml * 1000; //cubic millimeters
 
 // Shape ratios
 
-
-A = 1.5;       // A = h / (2*R)
+A_pot = 1.3; //Ratio of pot height to the base radius of pot
+C = 1.05; //curvature factor  = major_radius/minor_radius. PS: 1.05 was the original setting.
+echo (C);
+A = A_pot - (0.5/(C+1));   // A = h / (2*R) this is defined only for the frustrum
 // ratio of baseRadius to minor_radius must be 
 // specified.
 // R = 0.25;  // this is ratio of minor_radius to base_radius
@@ -35,18 +29,18 @@ a = 0.6; // r/R 0 < a <1, r/R radius factor which is a ratio of rim radius to ba
 // base radius R from formula:
 // V = (1/3)*PI*2*A*R*(R^2 + (aR)^2 + R*aR) = (2/3)*PI*A*R^3*(1 + a + a^2)
 // not quite complete.....
-baseRadius = pow( (3*V_water)/(2*PI*A*(1 + a + pow(a, 2))), 1/3 );
+//baseRadius = pow( (3*V_water)/(2*PI*A*(1 + a + pow(a, 2))), 1/3 );
 // TODO: Consider volume of torus (divided by 4),
 // volume of cylinder of height = minor_radius,
 // radius = major_radius - minor_radius
-// That volume formul must use R.
+// That volume formula must use R.
 // minor_radius must be computed from the Volume and R and A.
 
 // Top radius
-topRadius = a * baseRadius;
+//topRadius = a * baseRadius;
 
 // Height
-potHeight = A * 2 * baseRadius;
+//potHeight = A * 2 * baseRadius;
 
 // Pot volume with lip
 V_pot = V_water * excessLipScale;
@@ -58,16 +52,16 @@ aspect_ratio = 0.5;
 
 // TODO: Remove the limitation that the major_radius 
 // has to be greater than or equal to the minor_radius
-C = 1.05; //curvature factor  = major_radius/minor_radius. PS: 1.05 was the original setting.
-echo (C);
-minor_radius = 20; //radius of base curvature
+
+outer_base_radius = pow(((V_pot)/(PI*((((2*A)/3)*(pow(a,2)+a+1))+((pow((C-1),2)+(2*PI*C))/(pow((C+1),3)))))),1/3); //bottom radius of the erlenmeyer flask
+minor_radius = outer_base_radius/(C+1); //radius of base curvature
 major_radius = C * minor_radius;
-base_radius = major_radius + minor_radius; //bottom radius of the erlenmeyer flask
-height = (2*base_radius)*aspect_ratio;
-wall_thickness = base_radius/20; //wall thickness
+
+height = (2*outer_base_radius)*A;
+wall_thickness = outer_base_radius/20; //wall thickness
 
 
-outer_base_radius = major_radius + minor_radius; 
+//outer_base_radius = major_radius + minor_radius; 
 
 
 rim_radius = outer_base_radius*a;
@@ -75,7 +69,9 @@ delta_radius_outer = (1-a)*outer_base_radius;
 inner_height = height-wall_thickness;
 //delta_radius_inner = (inner_height/height)*(delta_radius_outer);
 inner_base_radius = outer_base_radius-wall_thickness;//(outer_base_radius*(height-wall_thickness))/height;
-inner_rim_radius = ((height*(inner_base_radius)-((height-wall_thickness)*(1-a)*outer_base_radius))/height)-wall_thickness;
+
+inner_rim_radius = inner_base_radius - (outer_base_radius*(1-a));
+
 
 USE_VERTICAL_KNIFE = true;
 
@@ -87,7 +83,7 @@ difference () {
 difference () {
 //outer shell of pot
 union () {
-    cylinder (h = height, r1 = base_radius, r2 = base_radius/2);
+    cylinder (h = height, r1 = outer_base_radius, r2 = outer_base_radius*a);
     union () {
     translate ([0,0,-minor_radius])
     cylinder (h=minor_radius*2,r = major_radius);
@@ -103,7 +99,7 @@ union () {
 
  translate ([0,0,wall_thickness/2])
 union () {
-    cylinder (h = height, r1 = (base_radius-wall_thickness), r2 = ((base_radius-wall_thickness)/2));
+    cylinder (h = height, r1 = (outer_base_radius-wall_thickness), r2 = ((outer_base_radius-wall_thickness)/2));
    union () {
     translate ([0,0,-(minor_radius)])
     cylinder (h=minor_radius*2,r = (major_radius-wall_thickness));
@@ -191,7 +187,7 @@ module flask1() {
 
 if (USE_VERTICAL_KNIFE) {
     difference() {
-        s = base_radius*4;
+        s = outer_base_radius*10;
         flask1(); 
         translate([0,-s/2,0])
        cube(s,center=true); 
