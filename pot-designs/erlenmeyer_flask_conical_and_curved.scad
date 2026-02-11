@@ -69,7 +69,7 @@ difference () {
             cylinder (r1 = inner_base_radius, r2 = inner_rim_radius, h = height, $fn=100);
             translate ([0,0,height])
             cylinder (r=inner_rim_radius,h = height);
-                  };
+         };
             //curved base of pot
             difference () {
                 rotate_extrude(convexity = 10, $fn=100)

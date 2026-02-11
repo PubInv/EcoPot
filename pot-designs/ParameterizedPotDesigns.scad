@@ -12,7 +12,7 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
-USE_VERTICAL_POT_KNIFE = true;
+USE_VERTICAL_POT_KNIFE = false;
 
 // change these together! 
 POT_BOTTOM_SHAPE_FLAT = false;
@@ -21,8 +21,8 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
- ptype = "studs";
-// ptype = "roundbottom_with_fins_and_handles";
+// ptype = "studs";
+ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
 // ltype = "none";

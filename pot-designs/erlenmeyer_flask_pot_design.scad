@@ -14,10 +14,14 @@ V_water = V_ml * 1000; //cubic millimeters
 
 // Shape ratios
 
-A_pot = 1.3; //Ratio of pot height to the base radius of pot
-C = 1.05; //curvature factor  = major_radius/minor_radius. PS: 1.05 was the original setting.
+A_pot = 0.9; //Ratio of pot height to the base radius of pot
+// Note: C of less than 0.2 fails in this construction...
+C = 0.4; //curvature factor  = major_radius/minor_radius. PS: 1.05 was the original setting.
+
 echo (C);
 A = A_pot - (0.5/(C+1));   // A = h / (2*R) this is defined only for the frustrum
+echo("A");
+echo(A);
 // ratio of baseRadius to minor_radius must be 
 // specified.
 // R = 0.25;  // this is ratio of minor_radius to base_radius
@@ -76,46 +80,46 @@ inner_rim_radius = inner_base_radius - (outer_base_radius*(1-a));
 USE_VERTICAL_KNIFE = true;
 
 
-module flask0 () {
-//slicer
-difference () {
-//pot code
-difference () {
-//outer shell of pot
-union () {
-    cylinder (h = height, r1 = outer_base_radius, r2 = outer_base_radius*a);
-    union () {
-    translate ([0,0,-minor_radius])
-    cylinder (h=minor_radius*2,r = major_radius);
-    
-    translate([0,0,0])
-    rotate_extrude(convexity = 10, $fn=100)
-    translate([major_radius, 0, 0])
-    circle(r = minor_radius, $fn=100);
-    
-                    };
- };
- 
-
- translate ([0,0,wall_thickness/2])
-union () {
-    cylinder (h = height, r1 = (outer_base_radius-wall_thickness), r2 = ((outer_base_radius-wall_thickness)/2));
-   union () {
-    translate ([0,0,-(minor_radius)])
-    cylinder (h=minor_radius*2,r = (major_radius-wall_thickness));
-    
-    translate([0,0,0])
-    rotate_extrude(convexity = 10, $fn=100)
-    translate([(major_radius-wall_thickness), 0, 0])
-    circle(r = (minor_radius), $fn=100);
-    
-                    };
- };
- };
- translate ([-50,0,-10])
- cube (200);
- };
-}
+//module flask0 () {
+////slicer
+//difference () {
+////pot code
+//difference () {
+////outer shell of pot
+//union () {
+//    cylinder (h = height, r1 = outer_base_radius, r2 = outer_base_radius*a);
+//    union () {
+//    translate ([0,0,-minor_radius])
+//    cylinder (h=minor_radius*2,r = major_radius);
+//    
+//    translate([0,0,0])
+//    rotate_extrude(convexity = 10, $fn=100)
+//    translate([major_radius, 0, 0])
+//    circle(r = minor_radius, $fn=100);
+//    
+//                    };
+// };
+// 
+//
+// translate ([0,0,wall_thickness/2])
+//union () {
+//    cylinder (h = height, r1 = (outer_base_radius-wall_thickness), r2 = ((outer_base_radius-wall_thickness)/2));
+//   union () {
+//    translate ([0,0,-(minor_radius)])
+//    cylinder (h=minor_radius*2,r = (major_radius-wall_thickness));
+//    
+//    translate([0,0,0])
+//    rotate_extrude(convexity = 10, $fn=100)
+//    translate([(major_radius-wall_thickness), 0, 0])
+//    circle(r = (minor_radius), $fn=100);
+//    
+//                    };
+// };
+// };
+// translate ([-50,0,-10])
+// cube (200);
+// };
+//}
 
 
 // flask0();
@@ -125,6 +129,7 @@ module flask_cone() {
         cylinder (r1 = outer_base_radius, r2 = rim_radius, h = height, $fn=100);
 // inner subtracted part
         union () {
+ //           translate([0,0,-1])
             cylinder (r1 = inner_base_radius, r2 = inner_rim_radius, h = height, $fn=100);
             translate ([0,0,height])
             cylinder (r=inner_rim_radius,h = height);
@@ -136,7 +141,6 @@ module flask_cone() {
 // Status: completed
 
 module flask_base() {
-
     difference () {
         union() {
             translate([0,0,0])
@@ -145,25 +149,22 @@ module flask_base() {
                 translate([(major_radius), 0, 0])
                 // here cut away top and inside 
                 // also cut away inside 
-            difference () {
-                circle (r=minor_radius, $fn=30);
-                translate ([-minor_radius,-0])
-                square (2*minor_radius);
-                translate ([-2*minor_radius,-2*minor_radius])
-                square (2*minor_radius);
-            };
-//                circle(r = (minor_radius), $fn=30);
-//        
+                difference () {
+                    circle (r=minor_radius, $fn=30);
+                    translate ([-minor_radius,-0])
+                    square (2*minor_radius);
+                    translate ([-2*minor_radius,-2*minor_radius])
+                    square (2*minor_radius);
+                };     
                 rotate_extrude(convexity = 10, $fn=30)
                 translate([(major_radius), 0, 0])
-            difference () {
-                circle (r=minor_radius-wall_thickness, $fn=30);
-                translate ([-(minor_radius-wall_thickness),-0])
-                square (2*(minor_radius-wall_thickness));
-                translate ([-2*minor_radius,-2*(minor_radius-wall_thickness)])
-                square (2*(minor_radius-wall_thickness));
-            };
-//                circle(r = (minor_radius-wall_thickness), $fn=30);
+                difference () {
+                    circle (r=minor_radius-wall_thickness, $fn=30);
+                    translate ([-(minor_radius-wall_thickness),-0])
+                    square (2*(minor_radius-wall_thickness));
+                    translate ([-2*minor_radius,-2*(minor_radius-wall_thickness)])
+                    square (2*(minor_radius-wall_thickness));
+                };
             }
         }
         // top-plane knife
