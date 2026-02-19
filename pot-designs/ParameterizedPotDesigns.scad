@@ -6,7 +6,7 @@
 // This is an attempt to make a new parametrized experimental apparatus
 // for teting our ferrofluid check valve. It will be similar to the system
 // that Veronica design in SolidWorks, but will use the improved, 360 degree design
-
+VERSION = 1.01;
 
 excess_lip_scale_factor = 1.3;
 
@@ -25,12 +25,12 @@ POT_BOTTOM_SHAPE_FLAT = false;
 ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
-// ltype = "none";
+ ltype = "none";
 //ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
-ltype="conicalLidIvan";
+// ltype="conicalLidIvan";
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
@@ -182,7 +182,7 @@ lid_distance_from_pot = radius_mm/2.8;
 ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
-$fn=30;
+$fn=120;
 
 module roundedFin(Fw,Fl,Fh){
     color ("red")
