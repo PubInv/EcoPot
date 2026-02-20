@@ -3,6 +3,9 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
+# TBD: add a second harmonic when there is room.
+# Figure out how to "close the figure" at the bottom.
+
 # --- Base parameters ---
 R = 2.0
 n0 = 24        # initial number of teeth
