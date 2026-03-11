@@ -10,7 +10,7 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
-USE_VERTICAL_POT_KNIFE = false;
+USE_VERTICAL_POT_KNIFE = true;
 
 // change these together! 
 POT_BOTTOM_SHAPE_FLAT = false;
@@ -25,12 +25,12 @@ ptype = "dimplesWithHandles";
 // ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
-ltype = "none";
+// ltype = "none";
 //ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
-// ltype="conicalLidIvan";
+ ltype="conicalLidIvan";
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.

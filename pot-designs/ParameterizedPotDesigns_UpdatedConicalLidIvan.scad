@@ -10,7 +10,7 @@ excess_lip_scale_factor = 1.3;
 
 PI = 3.141592;
 
-USE_VERTICAL_POT_KNIFE = false;
+USE_VERTICAL_POT_KNIFE = true;
 
 // change these together! 
 POT_BOTTOM_SHAPE_FLAT = false;
@@ -753,7 +753,9 @@ module renderLid(ltype,r) {
         concaveconicalLid(r);
     }
     else if (ltype == "conicalLidIvan"){
+
             rad=lid_radius();
+            translate([0,0,0.02])
             conicalLidIvan(rad,A,V_pot);
      }
 }
