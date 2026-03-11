@@ -12,7 +12,7 @@ n0 = 24        # initial number of teeth
 A0 = 0.4      # initial amplitude
 k0 = 0.5      # initial exponent
 
-theta = np.linspace(0, 2*np.pi, 2500)
+theta_pnts = np.linspace(0, 2*np.pi, 2500)
 
 def radius_shifted_power(k, A, n):
     """
@@ -21,7 +21,7 @@ def radius_shifted_power(k, A, n):
     # parametrized by the height A.
     # r = sqrt(R^2-RL-A)^2) by the Pythagorean Theorem.
     r = math.sqrt(2*R*A - A**2)
-    c = np.cos(n * theta)
+    c = np.cos(n * theta_pnts)
     u = (c + 1.0) / 2.0          # [0, 1]
     Ap = 1.0 - u
     s = 2.0 * (u ** k) - 1.0     # [-1, 1]
@@ -32,8 +32,12 @@ fig = plt.figure(figsize=(6.5, 6.5))
 ax = plt.subplot(111, projection='polar')
 plt.subplots_adjust(bottom=0.30)
 
+print("theta =")
+print(theta_pnts)
+print(np.cos([20,30,40,50,60]))
+
 r0 = radius_shifted_power(k0, A0, n0)
-(line,) = ax.plot(theta, r0, lw=2)
+(line,) = ax.plot(theta_pnts, r0, lw=2)
 
 def update_title(k, A, n):
     ax.set_title(f"R={R},  A={A:.2f},  n={n},  k={k:.2f}")
