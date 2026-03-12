@@ -26,9 +26,10 @@ echo(A);
 // specified.
 // R = 0.25;  // this is ratio of minor_radius to base_radius
 excessLipScale = 1.1; 
+echo ("E =",E); //ExcessLipScale
 
 // ratio of rim radius to base radius
-a = 0.6; // r/R 0 < a <1, r/R radius factor which is a ratio of rim radius to base radius  
+a = 0.5; // r/R 0 < a <1, r/R radius factor which is a ratio of rim radius to base radius  
 
 // base radius R from formula:
 // V = (1/3)*PI*2*A*R*(R^2 + (aR)^2 + R*aR) = (2/3)*PI*A*R^3*(1 + a + a^2)
@@ -69,13 +70,22 @@ wall_thickness = outer_base_radius/20; //wall thickness
 
 
 rim_radius = outer_base_radius*a;
-delta_radius_outer = (1-a)*outer_base_radius;
-inner_height = height-wall_thickness;
-//delta_radius_inner = (inner_height/height)*(delta_radius_outer);
+inner_height = height/excessLipScale;
 inner_base_radius = outer_base_radius-wall_thickness;//(outer_base_radius*(height-wall_thickness))/height;
 
-inner_rim_radius = inner_base_radius - (outer_base_radius*(1-a));
+inner_rim_radius = rim_radius - wall_thickness;
 
+//parameters for water
+V_cone = PI*A*2/3*pow(inner_base_radius,3)*(1+a+pow(a,2));
+V_base = (PI*pow(C-1,2)*pow(inner_base_radius,3)/pow(C+1,3))+(2*pow(PI,2)*C*pow(inner_base_radius,3)/pow(C+1,3));//volume of curved base of pot
+E = excessLipScale;
+water_base_radius = inner_base_radius; 
+water_top_radius = pow(pow(inner_base_radius,3)-(((V_cone + (1-E)*V_base)*(3*outer_base_radius*(1-a)))/(E*PI*height)),1/3);
+water_height = (a==1)? (height/E):((height*(inner_base_radius-water_top_radius))/(inner_base_radius*(1-a))
+    );
+    
+    
+    echo("V_cone", V_cone,"V_base",V_base,"V_pot",V_pot,"inner_base_radius", inner_base_radius,"water_base_radius",water_base_radius,"water_top_radius",water_top_radius,"water_height",water_height);
 
 USE_VERTICAL_KNIFE = true;
 
@@ -145,21 +155,21 @@ module flask_base() {
         union() {
             translate([0,0,0])
             difference() {
-                rotate_extrude(convexity = 10, $fn=30)
+                rotate_extrude(convexity = 10, $fn=100)
                 translate([(major_radius), 0, 0])
                 // here cut away top and inside 
                 // also cut away inside 
                 difference () {
-                    circle (r=minor_radius, $fn=30);
+                    circle (r=minor_radius, $fn=100);
                     translate ([-minor_radius,-0])
                     square (2*minor_radius);
                     translate ([-2*minor_radius,-2*minor_radius])
                     square (2*minor_radius);
                 };     
-                rotate_extrude(convexity = 10, $fn=30)
+                rotate_extrude(convexity = 10, $fn=100)
                 translate([(major_radius), 0, 0])
                 difference () {
-                    circle (r=minor_radius-wall_thickness, $fn=30);
+                    circle (r=minor_radius-wall_thickness, $fn=100);
                     translate ([-(minor_radius-wall_thickness),-0])
                     square (2*(minor_radius-wall_thickness));
                     translate ([-2*minor_radius,-2*(minor_radius-wall_thickness)])
@@ -181,57 +191,80 @@ module flask_base() {
 
 
 
+module water_cone() {
+    cylinder (r1 = water_base_radius, r2 = water_top_radius, h = water_height, $fn=100);
+};
+         
+module water_base() {
+    union() {
+                                  rotate_extrude(convexity = 10, $fn=100)
+                    translate([(major_radius), 0, 0])
+                    difference () {
+                        circle (r=minor_radius-wall_thickness, $fn=100);
+                        translate ([-(minor_radius-wall_thickness),-0])
+                        square (2*(minor_radius-wall_thickness));
+                        translate ([-2*minor_radius,-2*(minor_radius-wall_thickness)])
+                        square (2*(minor_radius-wall_thickness));
+                    }; 
+   
+    translate([0,0,-(minor_radius-wall_thickness)/2])
+    cylinder(h=(minor_radius-wall_thickness),r=major_radius,center=true);
+    };
+};
+
+module water() {
+                water_base();
+                water_cone();
+};
+water();
+
+
+//module water_cone() {
+//
+//            cylinder (r1 = inner_base_radius, r2 = inner_rim_radius, h = height, $fn=100);
+//};
+//         
+//module water_base() {
+//    union() {
+//                                  rotate_extrude(convexity = 10, $fn=30)
+//                    translate([(major_radius), 0, 0])
+//                    difference () {
+//                        circle (r=minor_radius-wall_thickness, $fn=30);
+//                        translate ([-(minor_radius-wall_thickness),-0])
+//                        square (2*(minor_radius-wall_thickness));
+//                        translate ([-2*minor_radius,-2*(minor_radius-wall_thickness)])
+//                        square (2*(minor_radius-wall_thickness));
+//                    }; 
+//   
+//    translate([0,0,-(minor_radius-wall_thickness)/2])
+//    cylinder(h=(minor_radius-wall_thickness),r=major_radius,center=true);
+//    };
+//};
+//
+//module water() {
+//                water_base();
+//                water_cone();
+//};
+
+
 module flask1() {
     flask_cone();
     flask_base();
 }
 
+//water();
 if (USE_VERTICAL_KNIFE) {
     difference() {
         s = outer_base_radius*10;
         flask1(); 
+        water();
         translate([0,-s/2,0])
-       cube(s,center=true); 
+        cube(s,center=true); 
     } 
 } else {
     flask1();
+    water();
 }
 
-/*
 
-//the following calculations is to define the pot based on its aspect ratio (height/radius) and volume. It is currently incomplete and incorrect
-V = 100;
-function radius(A,V) = pow(V / (PI *(A - 1/3)),1/3);
-function height(A,V) = A * radius(A,V);
-wall_thickness = 5;
-//inner_radius = radius (A,V) - wall_thickness;
 
-//module erlenmeyer_flask (radius,) {
-difference () {  //this difference operation is to cut out the pot. 
-
-//the code from lines 12-30 makes the current profile.
-difference () {
-
-//outer shell of pot
-translate ([0,-50,0])
-minkowski () {
-cylinder (h=50, r1 = 50, r2 = 25);
-translate([0,50,0])
-sphere(5);
-};
-
-//inner shell of pot
-translate ([0,-40,wall_thickness])
-minkowski () {
-cylinder (h=45, r1 = 40, r2 = 20);
-translate([0,47,0])
-sphere(5);
-};
-
-};
-
-translate ([-75,0,-50])
-cube (150);
-};
-
-*/
