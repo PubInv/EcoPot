@@ -1,0 +1,8 @@
+regionSolvers
+{
+    air1            fluid;
+    air2            fluid;
+    water           fluid;
+    solid           solid;
+    lid             solid;
+}

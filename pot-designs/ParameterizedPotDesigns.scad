@@ -25,12 +25,16 @@ POT_BOTTOM_SHAPE_FLAT = false;
 ptype = "roundbottom_with_fins_and_handles";
 // ptype = "none";
 
- ltype = "none";
+//ctype = "roundBottomPot_content";
+//ctype = "flatBottomPot_content";
+ctype = "none"; 
+ 
+// ltype = "none";
 //ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
-// ltype="conicalLidIvan";
+ ltype="conicalLidIvan";
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
@@ -159,7 +163,7 @@ lid_handle_scale_factor = 1.2;
 
 
 conical_lid_scale_factor = 0.7;
-conical_lid_height = radius_mm/0.8;
+conical_lid_height =POT_BOTTOM_SHAPE_FLAT ? radius_mm/1.3 : radius_mm/0.8;
 
 conical_end_height = radius_mm/4;
 conical_end_scale_factor = 1.33;
@@ -174,12 +178,6 @@ handle_position = -(radius_mm/6);
 
 // lid_distance_from_pot = radius_mm/1.2;
 lid_distance_from_pot = radius_mm/2.8;
-
-
-
- //ctype = "roundBottomPot_content"; //added by Cleddden for Pot content
-// ctype = "flatBottomPot_content";//added by Cleddden for Pot content
-ctype = "none"; //added by Cleddden for Pot content
 
 // set resolution here
 $fn=120;
@@ -360,7 +358,7 @@ module flatBottomPotWithFins() {
     }
 }
 
-//this module was added by Cledden
+
 module flatBottomPot_content (A,V_pot,V_water) {
     outer_rad = cyl_radius(A,V_pot) + wall_thickness;
     echo("outer_rad");
@@ -376,7 +374,7 @@ module flatBottomPot_content (A,V_pot,V_water) {
         cylinder (h=(water_height-(wall_thickness)),r1 =(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
 }
 
-//this module was added by Cledden
+
 // Take the Volume here to be the true volume of water,
 // which is less than the pot volume
 module roundBottomPot_content(A,V_pot,V_water) {
@@ -573,7 +571,7 @@ function pType(ptype) =
 
 echo("Ivan");
 echo(pType(ptype));
-distance=0.1;  //change
+distance=0.0;  //change
 
 module conical_part (radius,height) {
     
@@ -804,10 +802,10 @@ module renderPotType(ptype) {
 }
 
 
-//this module was added by Cledden
 module renderContentType(ctype) {
     if (ctype == "flatBottomPot_content") {      
-         scale (1)   flatBottomPot_content(A,V_pot,V_water);
+         scale (1) 
+         flatBottomPot_content(A,V_pot,V_water);
     } else  if (ctype == "roundBottomPot_content") {
         scale (1)    roundBottomPot_content(A,V_pot,V_water);
     } else if (ctype == "none"){
@@ -836,7 +834,7 @@ if (USE_VERTICAL_POT_KNIFE) {
 } else {
  renderPotType(ptype);
 }
- renderContentType(ctype);//added by Cledden for the pot content
+ renderContentType(ctype);
 
 
 
