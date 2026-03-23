@@ -10,7 +10,7 @@ from matplotlib.widgets import Slider
 R = 2.0
 n0 = 24        # initial number of teeth
 A0 = 0.4      # initial amplitude
-k0 = 0.5      # initial exponent
+k0 = 1.22      # initial exponent
 
 theta_pnts = np.linspace(0, 2*np.pi, 2500)
 
