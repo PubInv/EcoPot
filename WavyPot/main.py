@@ -20,7 +20,7 @@ def radius_shifted_power(k, A, n):
     # Now compute the radius of the hemisphere
     # parametrized by the height A.
     # r = sqrt(R^2-RL-A)^2) by the Pythagorean Theorem.
-    r = math.sqrt(2*R*A - A**2)
+    r = math.sqrt(R**2 - A**2)
     c = np.cos(n * theta_pnts)
     u = (c + 1.0) / 2.0          # [0, 1]
     Ap = 1.0 - u
