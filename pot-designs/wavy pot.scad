@@ -24,7 +24,7 @@ RADIUS_OF_100_ML_HS = 37.6;
 VOLUME_BUFFER_RATIO = 1.2;
 
 L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius 
-A=6; //amplitude
+A=10; //amplitude
 N=8; //number of waves
 t=1; //thickness
 grid_size=200; //divisons of hemisphere 
