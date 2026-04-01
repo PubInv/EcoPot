@@ -1,6 +1,14 @@
 # EcoPot
 Project #5: A more efficient pot for those who cook over wood fires and related technologies
 
+# Our Latest, Best Pot design...
+
+These hemispherical, finned pots have been measured with a heat gun to be very efficient!
+![IMG_1574 (2)](https://github.com/user-attachments/assets/8ede3e55-0f17-4fc8-8e5d-8d0f7318622e)
+![IMG_1575 (2)](https://github.com/user-attachments/assets/bd875258-1f16-41d4-8046-69df4fe216fe)
+
+
+
 # Test with Mini Pot Holder In January
 
 We have used Computational Fluid Dynamics (OpenFOAM) to simulate a number of designs.
