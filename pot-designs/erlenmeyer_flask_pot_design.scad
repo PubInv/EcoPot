@@ -22,15 +22,15 @@ A = A_pot - (0.5/(C+1));   // A = h / (2*R) this is defined only for the frustru
 echo("A");
 echo(A);
 
-excessLipScale = 1.3; 
+excessLipScale = 1.0; 
 
 a = 0.5; // r/R 0 < a <1, r/R radius factor which is a ratio of rim radius to inner base radius  
 
 // Pot volume with lip
 V_pot = V_water * excessLipScale;
 
-inner_base_radius = pow(((V_pot)/(PI*(((2*A*(1+a+pow(a,2)))/3)+((pow(C,2)*(1+(0.5*PI)))/(pow(C+1,3)))))),1/3);
-//pow(((V_pot)/(PI*((((2*A)/3)*(pow(a,2)+a+1))+((pow((C-1),2)+(2*PI*C))/(pow((C+1),3)))))),1/3); //widest radius of the erlenmeyer flask
+inner_base_radius = pow(((V_pot)/(PI*(((2*A*(1+a+pow(a,2)))/3)+(((2*pow(C,2))+(PI*C))/(2*pow(C+1,3)))))),1/3);
+//pow(((V_pot)/(PI*((((2*A)/3)*(pow(a,2)+a+1))+((pow((1+(0.5*PI)CC-1),2)+(2*PI*C))/(pow((C+1),3)))))),1/3); //widest radius of the erlenmeyer flask
 minor_radius = inner_base_radius/(C+1); //radius of base curvature
 major_radius = C * minor_radius;
 
