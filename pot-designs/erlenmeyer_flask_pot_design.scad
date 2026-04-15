@@ -96,7 +96,7 @@ lid_distance_from_pot = inner_base_radius/2.8;
 rim_bead_radius = inner_base_radius/24;
 //************************************       
     
-USE_VERTICAL_KNIFE = true;
+USE_VERTICAL_KNIFE = false;
 
 
 module flask_cone() {
@@ -186,30 +186,43 @@ module flask1() {
 potInterface(rim_radius,outer_rim_radius, rim_bead_radius);
 }
 
-translate([0,0,minor_radius+wall_thickness])
-flask1();
-translate([0,0,minor_radius+wall_thickness])
-conicalLidIvan(rim_radius,A,V_pot);
-translate([0,0,(minor_radius+wall_thickness+height/1.5)])
-handle(inner_base_radius/1.5);
-translate([0,0,(minor_radius+wall_thickness+height/1.5)])
-handle(-inner_base_radius/1.5);
+module erlenmeyer() {
+    union() {
+        flask1();
+        translate([0,0,(height/1.5)])
+        handle(-inner_base_radius/1.5);
+        translate([0,0,(height/1.5)])
+        handle(inner_base_radius/1.5);
+        
+    }
+}
+//translate([0,0,minor_radius+wall_thickness])
+//erlenmeyer();
+//translate([0,0,minor_radius+wall_thickness])
+//conicalLidIvan(rim_radius,A,V_pot);
 
-/*if (USE_VERTICAL_KNIFE) {
+
+if (USE_VERTICAL_KNIFE) {
     difference() {
         s = outer_base_radius*10;
+        translate([0,0,minor_radius+wall_thickness])
         union(){
-            flask1(); 
+            erlenmeyer(); 
             water();
+            conicalLidIvan(rim_radius,A,V_pot);
         };
         translate([0,-s/2,0])
         cube(s,center=true); 
     } 
 } else {
-    flask1();
-    water();
+    translate([0,0,minor_radius+wall_thickness])
+    union(){
+        erlenmeyer(); 
+        water();
+        conicalLidIvan(rim_radius,A,V_pot);
+    }
 }
-*/
+
 
 module potInterface(ri,ro,rim_bead_radius = 10) {
     difference() {
@@ -246,7 +259,7 @@ distance=0.0;  //change
 
 module conical_part (radius,height) {
     
-    translate([0,0,lid_thickness*0.55+lidPositionZ(A,V_pot)+distance]){
+    translate([0,0,lid_thickness*0.4+lidPositionZ(A,V_pot)+distance]){
     cylinder (h=(height), r1 =(radius) ,r2=(radius*conical_lid_scale_factor));
     }
 }
@@ -295,15 +308,15 @@ module pothandleshell(x) {
 
 module handle(radius){
         difference(){
-            union(){
-                pothandleshell(radius);
-                //pothandleshell(-radius);
-            }
-            translate([0,0,-(minor_radius+wall_thickness+height/2)])
-            flask1();
+//            union(){
+//                //pothandleshell(-radius);
+//            }
+            pothandleshell(radius);
+            translate([0,0,-(height/1.5)])
+            cylinder (r1 = outer_base_radius, r2 = outer_rim_radius, h = height, $fn=100, center=false);
             
             
-        }
+            
+      }  
     }
-
 
