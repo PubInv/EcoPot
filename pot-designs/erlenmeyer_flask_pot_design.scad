@@ -14,9 +14,9 @@ V_water = V_ml * 1000; //cubic millimeters
 
 // Shape ratios
 
-A_pot = 1; //Ratio of pot height to the base radius of pot
+A_pot = 0.7; //Ratio of pot height to the base radius of pot
 // Note: C of less than 0.2 fails in this construction...
-C = 0.5; //curvature factor  = major_radius/minor_radius. PS: 1.05 was the original setting.
+C = 2.5; //curvature factor  = major_radius/minor_radius. PS: 1.05 was the original setting.
 
 A = A_pot - (0.5/(C+1));   // A = h / (2*R) this is defined only for the frustrum
 echo("A");
@@ -35,7 +35,7 @@ minor_radius = inner_base_radius/(C+1); //radius of base curvature
 major_radius = C * minor_radius;
 
 height = (2*inner_base_radius)*A;
-wall_thickness = inner_base_radius/20; //wall thickness
+wall_thickness = 1.6605*pow(10,-5)*V_water; //wall thickness
 
 
 //outer_base_radius = major_radius + minor_radius; 
@@ -57,7 +57,7 @@ V_water_base = V_base;
 V_water_cone = PI*water_height*(1/3)*(pow(inner_base_radius,2) + (inner_base_radius * water_top_radius)+(pow(water_top_radius,2)));
 V_water_model = V_water_base + V_water_cone;
 V_pot_model = V_base + V_cone;
-    echo("V_water_model",V_water_model,"V_pot_model", V_cone+V_base,"V_base",V_base,"V_pot",V_pot,"Difference",V_pot-V_pot_model,"inner_base_radius", inner_base_radius,"water_base_radius",water_base_radius,"water_top_radius",water_top_radius,"rim_radius",rim_radius,"water_height",water_height,"height",height,"A_pot",(height+minor_radius)/(2*inner_base_radius));
+    echo("V_water_model",V_water_model,"V_pot_model", V_cone+V_base,"V_base",V_base,"V_pot",V_pot,"Difference",V_pot-V_pot_model,"inner_base_radius", inner_base_radius,"water_base_radius",water_base_radius,"water_top_radius",water_top_radius,"rim_radius",rim_radius,"water_height",water_height,"height",height,"A_pot",(height+minor_radius)/(2*inner_base_radius),"wall_thickness",wall_thickness);
 
 //*******Lid Related Parameters*******
 
@@ -78,18 +78,16 @@ lid_handle_thickness = inner_base_radius/6;
 lid_handle_wall_thickness = inner_base_radius/40;
 lid_handle_scale_factor = 1.2;
 
-POT_BOTTOM_SHAPE_FLAT = true;
-conical_lid_scale_factor = 0.7;
-conical_lid_height =POT_BOTTOM_SHAPE_FLAT ? inner_base_radius/1.3 : inner_base_radius/0.8;
+
+conical_lid_scale_factor = 0.6;
+conical_lid_height = inner_base_radius/0.9;
 
 conical_end_height = inner_base_radius/4;
 conical_end_scale_factor = 1.33;
 
 
-pot_handle_radius = POT_BOTTOM_SHAPE_FLAT ? inner_base_radius/3 : inner_base_radius/2.4;
-pot_handle_thickness = POT_BOTTOM_SHAPE_FLAT ? inner_base_radius/8 : inner_base_radius/6;
-
-
+pot_handle_radius = inner_base_radius/2.2;
+pot_handle_thickness = inner_base_radius/6;
 pot_handle_wall_thickness = inner_base_radius/40;
 handle_position = -(inner_base_radius/6);
 
@@ -184,10 +182,20 @@ module water() {
 module flask1() {
     flask_cone();
     flask_base();
+    translate ([0,0,height-(rim_bead_radius)])
+potInterface(rim_radius,outer_rim_radius, rim_bead_radius);
 }
 
+translate([0,0,minor_radius+wall_thickness])
+flask1();
+translate([0,0,minor_radius+wall_thickness])
+conicalLidIvan(rim_radius,A,V_pot);
+translate([0,0,(minor_radius+wall_thickness+height/1.5)])
+handle(inner_base_radius/1.5);
+translate([0,0,(minor_radius+wall_thickness+height/1.5)])
+handle(-inner_base_radius/1.5);
 
-if (USE_VERTICAL_KNIFE) {
+/*if (USE_VERTICAL_KNIFE) {
     difference() {
         s = outer_base_radius*10;
         union(){
@@ -201,7 +209,7 @@ if (USE_VERTICAL_KNIFE) {
     flask1();
     water();
 }
-
+*/
 
 module potInterface(ri,ro,rim_bead_radius = 10) {
     difference() {
@@ -209,27 +217,30 @@ module potInterface(ri,ro,rim_bead_radius = 10) {
         translate([ri, 0])
         circle(r = rim_bead_radius);
       // now cutaway a cylinder of radius rotate
+        translate([0,0,-height+rim_bead_radius])
         difference() {
-            %cylinder(h=80,r1=ro+rim_bead_radius,r2=a*(ro+rim_bead_radius),center=true);
-            %cylinder(h=100,r1=ri,r2=a*ri,center=true);
+            cylinder(h=height+5,r1=outer_base_radius,r2=outer_rim_radius -((5/height)*(outer_base_radius-outer_rim_radius)),center=false);
+            cylinder(h=height+5,r1=inner_base_radius,r2= rim_radius -((5/height)*(inner_base_radius-rim_radius)),center=false);
         }
     }
 }
-translate ([0,0,height-(rim_bead_radius/1)])
-potInterface(rim_radius,outer_rim_radius, rim_bead_radius);
-module lidInterface(ri,ro,rim_bead_radius = 10) {
+
+
+module lidInterface(ri,ro,rim_bead_radius = 20) {
     difference() {
-        rotate_extrude(angle = 360, convexity = 2) 
-        translate([ri-rim_bead_radius, 0])
+        rotate_extrude(convexity = 10,$fn=100) 
+        translate([ri-rim_bead_radius,0])
         circle(r = rim_bead_radius);
       // now cutaway a cylinder of radius rotate
         translate([0,0,rim_bead_radius])
-        rotate_extrude(angle = 360, convexity = 2) 
+        rotate_extrude(convexity = 10,$fn=100) 
         translate([ri, 0])
         circle(r = rim_bead_radius);
     }  
 }
 
+
+//lidInterface(rim_radius,outer_rim_radius,rim_bead_radius);
 //Ivan
 distance=0.0;  //change
 
@@ -239,13 +250,13 @@ module conical_part (radius,height) {
     cylinder (h=(height), r1 =(radius) ,r2=(radius*conical_lid_scale_factor));
     }
 }
-function lidPositionZ(A,V_pot) =
-    pType(ptype)
-    ? side(A,V_pot)  
-    : cyl_height(A,V_pot)/2; 
+function lidPositionZ(A,V_pot) = height;
+//    pType(ptype)
+//    ? side(A,V_pot)  
+//    : cyl_height(A,V_pot)/2; 
 
 function lid_radius()=
-     inner_base_radius;
+     rim_radius;
 
 echo("Ivan");
 echo(lid_radius());
@@ -272,63 +283,27 @@ module conicalLidIvan(inner_rad,A,V_pot){
 
 
 
-//***********Lid Modules***************
-
-
-// This is our main pot lid.
-module concaveconicalLid(inner_rad){
-    outer_rad = inner_rad+wall_thickness;
-    inner_base_radius = radius(A,V_pot);
+//***********Handle Modules***********
+module pothandleshell(x) {
+  translate([0, x, 0])
+  rotate_extrude(angle = 360) {
     
-    union(){
-        difference(){
-            union () {
-                difference(){
-                    scale([1,1,lid_scale_factor])
-                        sphere(inner_base_radius*conical_lid_scale_factor);
-                    translate([0,0,-inner_base_radius*conical_lid_scale_factor])
-                    cube((inner_base_radius*conical_lid_scale_factor)*2, center = true);
-                }
-                difference(){
-                    cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));
-                    translate([0,0,lid_thickness*0.55])
-                    // this cuts away a portion of the lid..
-                    cylinder (h=conical_lid_height-lid_wall_size, r1=(outer_rad*conical_lid_scale_factor)-(lid_wall_size), r2 =(outer_rad)-(lid_wall_size));
-                }
-                translate([0,0,conical_lid_height])
-                // This is actually the inner part of the rim that
-                // fits inside the male part of the pot.
-                lidInterface(inner_base_radius,inner_base_radius+wall_thickness,
-                    rim_bead_radius);
-            }
-            scale([1,1,lid_scale_factor])
-                sphere((inner_base_radius*conical_lid_scale_factor)-lid_wall_size);
-        }
-        
-        // This is the handle
+      translate([pot_handle_radius - pot_handle_thickness / 2, 0])
+      circle(d = pot_handle_thickness);
+  }
+}
+
+module handle(radius){
         difference(){
             union(){
-                rotate([0,90,0])
-                scale([lid_handle_scale_factor,1,1])
-                translate([-(inner_base_radius*conical_lid_scale_factor)/2,0,0])
-                lidhandleshell();
-                translate([0,-(inner_base_radius*conical_lid_scale_factor)/1.8,0])
-                rotate([25,0,0])
-                cylinder(conical_end_height,lid_handle_thickness/2.1,(lid_handle_thickness/2)*conical_end_scale_factor);
-               translate([0,(inner_base_radius*conical_lid_scale_factor)/1.8,0])
-                rotate([-25,0,0])
-                cylinder(conical_end_height,lid_handle_thickness/2.1,(lid_handle_thickness/2)*conical_end_scale_factor);
+                pothandleshell(radius);
+                //pothandleshell(-radius);
             }
-            difference(){
-                cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));  
-                scale([1,1,lid_scale_factor])
-                sphere(inner_base_radius*conical_lid_scale_factor);
-                scale([1,1,lid_scale_factor])
-                sphere((inner_base_radius*conical_lid_scale_factor)-lid_wall_size);
-                    translate([0,0,-inner_base_radius*conical_lid_scale_factor])
-                    cube((inner_base_radius*conical_lid_scale_factor)*2, center = true);
-            }
+            translate([0,0,-(minor_radius+wall_thickness+height/2)])
+            flask1();
+            
+            
         }
-
     }
-}
+
+
