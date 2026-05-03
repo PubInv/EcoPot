@@ -10,7 +10,7 @@ VERSION = 1.01;
 
 excess_lip_scale_factor = 1.3;
 
-PI = 3.141592;
+// PI = 3.141592;
 
 USE_VERTICAL_POT_KNIFE = false;
 
@@ -23,7 +23,7 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "roundbottom_with_handles";
 // ptype = "studs";
 // ptype = "roundbottom_with_fins_and_handles";
-ptype = "wavy";
+ ptype = "wavy";
 // ptype = "none";
 
 //ctype = "roundBottomPot_content";
@@ -781,7 +781,7 @@ VOLUME_BUFFER_RATIO = 1.0;
 L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius 
 Amp=10; //amplitude
 N=8; //number of waves
-t=10; //thickness
+t=2; //thickness
 grid_size=100; //divisons of hemisphere 
 
 //desmos equation
@@ -794,6 +794,7 @@ function phi_inner(x,y)=atan(sqrt(x*x+y*y)/(z1_inner(x,y)+0.0001));
 function F_full_outer(x,y)=(L+Amp*sin(N*theta(x,y))*sin(z1_outer(x,y)*180/L))*cos(phi_outer(x,y));
 function F_full_inner(x,y)=((L-t)+Amp*sin(N*theta(x,y))*sin(z1_inner(x,y)*180/(L-t)))*cos(phi_inner(x,y));
 
+
 //divides each cell into dx and dy 
 dx=(2*L)/grid_size; //Divides the square area into small tiles.
 dy=(2*L)/grid_size;
@@ -805,6 +806,37 @@ prism_faces_2=[[4,5,1],[2,0,3],[5,4,2],[2,3,5],[4,1,0],[0,2,4],[1,5,3],[3,0,1]];
 
 //loops over every grid
 //combines all prisms in the grid to get a full wavy hemisphere shell with thickness
+
+// Recursive function to sum the volume list
+function sum_list(list, index=0, total=0) = 
+    index >= len(list) ? total : sum_list(list, index + 1, total + list[index]);
+    
+function volume()= 
+let(
+    cell_volumes = [for(i=[0:grid_size-1], j=[0:grid_size-1])
+        let(
+            x = -L + i*dx, 
+            y = -L + j*dy, 
+            x2 = x + dx, 
+            y2 = y + dy
+        )
+        (sqrt(x*x + y*y) <= L) ? 
+            let(
+                //volume of triangle 1 
+                v1 = 0.5 * dx * dy * ((F_full_inner(x,y) + F_full_inner(x2,y) + F_full_inner(x2,y2))/3),
+                //triangle two volume
+                v2 = 0.5 * dx * dy * ((F_full_inner(x,y) + F_full_inner(x,y2) + F_full_inner(x2,y2))/3)
+            )
+            (v1 + v2) : 0
+    ],
+    // sum
+    total_volume = sum_list(cell_volumes)
+    )
+    total_volume;
+echo("L");
+echo(L);
+echo("volume");
+echo(volume());
 module wavy_pot() {
     rotate([180,0,0])
     union(){
