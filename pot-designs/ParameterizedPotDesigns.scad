@@ -780,19 +780,53 @@ VOLUME_BUFFER_RATIO = 1.0;
 
 L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius 
 Amp=10; //amplitude
-N=8; //number of waves
+N=6; //number of waves
 t=2; //thickness
 grid_size=100; //divisons of hemisphere 
 
-//desmos equation
+//desmos equation (Gianluca's original math)
 
-function z1_outer(x,y)=sqrt(max(0,L*L-x*x-y*y)); //height of cylinder 
-function z1_inner(x,y)=sqrt(max(0,(L-t)*(L-t)-x*x-y*y)); //height of cylinder for t thickness 
-function theta(x,y)=atan2(y,x);
-function phi_outer(x,y)=atan(sqrt(x*x+y*y)/(z1_outer(x,y)+0.0001));
-function phi_inner(x,y)=atan(sqrt(x*x+y*y)/(z1_inner(x,y)+0.0001));
-function F_full_outer(x,y)=(L+Amp*sin(N*theta(x,y))*sin(z1_outer(x,y)*180/L))*cos(phi_outer(x,y));
-function F_full_inner(x,y)=((L-t)+Amp*sin(N*theta(x,y))*sin(z1_inner(x,y)*180/(L-t)))*cos(phi_inner(x,y));
+//function z1_outer(x,y)=sqrt(max(0,L*L-x*x-y*y)); //height of cylinder 
+//function z1_inner(x,y)=sqrt(max(0,(L-t)*(L-t)-x*x-y*y)); //height of cylinder for t thickness 
+//function theta(x,y)=atan2(y,x);
+//function phi_outer(x,y)=atan(sqrt(x*x+y*y)/(z1_outer(x,y)+0.0001));
+//function phi_inner(x,y)=atan(sqrt(x*x+y*y)/(z1_inner(x,y)+0.0001));
+//function F_full_outer(x,y)=(L+Amp*sin(N*theta(x,y))*sin(z1_outer(x,y)*180/L))*cos(phi_outer(x,y));
+//function F_full_inner(x,y)=((L-t)+Amp*sin(N*theta(x,y))*sin(z1_inner(x,y)*180/(L-t)))*cos(phi_inner(x,y));
+
+H = radius_mm;
+WALL = wall_thickness;
+
+v_exp = 0.2; 
+thickness = 1; 
+scale_coeff = 1.1; 
+
+
+// L = radius_mm;
+// desmos math (Rob's improvements
+function r(x,y) = sqrt(x*x + y*y);
+function theta(x,y) = atan2(y,x);
+function z_outer(x,y) = sqrt(max(0, pow(H+WALL, 2) - x*x - y*y));
+function z_inner(x,y) = sqrt(max(0, pow(H, 2) - x*x - y*y));
+function q(z, L) = sqrt(max(0, pow(L, 2) - pow(L - z, 2))) / L;
+
+function calc_radius(x, y, z, L, A, N_val) = 
+    let(
+        current_theta = theta(x, y),
+        raw_sine = sin(2 * N_val * current_theta) * sin(z * 180 / L),
+        fat_sine = sign(raw_sine) * pow(abs(raw_sine), thickness)
+    )
+    scale_coeff * (L + A * fat_sine) * pow(q(z, L), v_exp);
+
+function phi_angle(x, y, z) = atan(r(x,y) / (z + 0.01));
+
+function F_full_outer(x, y) = 
+    let(z = z_outer(x, y), L_outer = H + WALL)
+    calc_radius(x, y, z, L_outer, Amp, N) * cos(phi_angle(x, y, z));
+
+function F_full_inner(x, y) = 
+    let(z = z_inner(x, y), L_inner = H)
+    calc_radius(x, y, z, L_inner, Amp, N) * cos(phi_angle(x, y, z));
 
 
 //divides each cell into dx and dy 
