@@ -830,11 +830,21 @@ module wavy_pot(){
             let(x=-OUTER_R + i*dx, y=-OUTER_R + j*dy, x2=x+dx, y2=y+dy)
             if(r(x,y) <= OUTER_R && r(x,y) > 0.5){
                 polyhedron(
-                    points=[[x,y,F_inner(x,y)], [x2,y,F_inner(x2,y)], [x,y,F_outer(x,y)], [x2,y,F_outer(x2,y)], [x2,y2,F_inner(x2,y2)], [x2,y2,F_outer(x2,y2)]], 
+                    points=[[x,y,F_inner(x,y)], 
+                    [x2,y,F_inner(x2,y)], 
+                    [x,y,F_outer(x,y)], 
+                    [x2,y,F_outer(x2,y)], 
+                    [x2,y2,F_inner(x2,y2)], [
+                    x2,y2,F_outer(x2,y2)]], 
                     faces=faces_a
                 );
                 polyhedron(
-                    points=[[x,y,F_inner(x,y)], [x,y,F_outer(x,y)], [x,y2,F_inner(x,y2)], [x2,y2,F_inner(x2,y2)], [x,y2,F_outer(x2,y2)], [x2,y2,F_outer(x2,y2)]], 
+                    points=[[x,y,F_inner(x,y)], 
+                    [x,y,F_outer(x,y)], 
+                    [x,y2,F_inner(x,y2)], 
+                    [x2,y2,F_inner(x2,y2)], 
+                    [x,y2,F_outer(x,y2)], 
+                    [x2,y2,F_outer(x2,y2)]], 
                     faces=faces_b
                 );
             }
