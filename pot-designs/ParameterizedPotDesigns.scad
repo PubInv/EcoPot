@@ -822,7 +822,7 @@ function calc_radius(x, y, z, L, A, N_val) =
 //        fat_sine = sign(raw_sine) * pow(raw_sine, thickness)
 //        fat_sine = sign(raw_sine) * pow(raw_sine, thickness)
     )
-    scale_coeff * (WAVINESS + A * raw_sine) * pow(q(z, L), v_exp);
+    scale_coeff * (L + A * raw_sine) * pow(q(z, L), v_exp);
 
 function phi_angle(x, y, z) = atan(r(x,y) / (z + 0.01));
 
