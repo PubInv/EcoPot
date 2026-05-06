@@ -30,12 +30,12 @@ POT_BOTTOM_SHAPE_FLAT = false;
 //ctype = "flatBottomPot_content";
 ctype = "none"; 
  
-// ltype = "none";
+ ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
- ltype="conicalLidIvan";
+// ltype="conicalLidIvan";
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
@@ -795,11 +795,15 @@ grid_size=100; //divisons of hemisphere
 //function F_full_inner(x,y)=((L-t)+Amp*sin(N*theta(x,y))*sin(z1_inner(x,y)*180/(L-t)))*cos(phi_inner(x,y));
 
 H = radius_mm;
+echo("H");
+echo(H);
 WALL = wall_thickness;
+
+WAVINESS = 4;
 
 v_exp = 0.2; 
 thickness = 1; 
-scale_coeff = 1.1; 
+scale_coeff = 0.8; 
 
 
 // L = radius_mm;
@@ -814,13 +818,15 @@ function calc_radius(x, y, z, L, A, N_val) =
     let(
         current_theta = theta(x, y),
         raw_sine = sin(2 * N_val * current_theta) * sin(z * 180 / L),
-        fat_sine = sign(raw_sine) * pow(abs(raw_sine), thickness)
+//        fat_sine = sign(raw_sine) * pow(abs(raw_sine), thickness)
+//        fat_sine = sign(raw_sine) * pow(raw_sine, thickness)
+//        fat_sine = sign(raw_sine) * pow(raw_sine, thickness)
     )
-    scale_coeff * (L + A * fat_sine) * pow(q(z, L), v_exp);
+    scale_coeff * (WAVINESS + A * raw_sine) * pow(q(z, L), v_exp);
 
 function phi_angle(x, y, z) = atan(r(x,y) / (z + 0.01));
 
-function F_full_outer(x, y) = let(z = z_outer(x, y), L_outer = H + WALL) calc_radius(x, y, z, L_outer, Amp, N)* (0.000099*cos(phi_angle(x, y, z)));
+function F_full_outer(x, y) = let(z = z_outer(x, y), L_outer = H + WALL) calc_radius(x, y, z, L_outer, Amp, N)* cos(phi_angle(x, y, z));
 
 function F_full_inner(x, y) = 
     let(z = z_inner(x, y), L_inner = H)
@@ -867,6 +873,8 @@ let(
     total_volume;
 echo("L");
 echo(L);
+echo("dx");
+echo(dx);
 echo("volume");
 echo(volume());
 module wavy_pot() {
@@ -878,10 +886,11 @@ module wavy_pot() {
                     x=-L+i*dx,
                     y=-L+j*dy,
                     x2=x+dx,
-                    y2=y+dy //Defines the four corners of one grid square.
+                    y2=y+dy, //Defines the four corners of one grid square.
+                    maxx=max(x,x2),
+                    maxy=max(y,y2)
                 )
-                if(sqrt(x*x+y*y)<=L){ //cuts away the square corners
-
+                if(sqrt(maxx*maxx+maxy*maxy)<=(L)){ //cuts away the square corners
                     polyhedron(
                         points=[ 
                             [x,y,F_full_inner(x,y)],
