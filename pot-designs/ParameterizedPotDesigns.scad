@@ -14,7 +14,7 @@ excess_lip_scale_factor = 1.3;
 
 USE_VERTICAL_POT_KNIFE = false;
 
-// change these together! 
+// change these together!
 POT_BOTTOM_SHAPE_FLAT = false;
 //ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
@@ -28,12 +28,12 @@ POT_BOTTOM_SHAPE_FLAT = false;
 
 //ctype = "roundBottomPot_content";
 //ctype = "flatBottomPot_content";
-ctype = "none"; 
- 
+ctype = "none";
+
  ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
-// ltype = "hollowconical"; 
+// ltype = "hollowconical";
 // ltype = "hollowconicalwithconcavelid";
 // ltype="conicalLidIvan";
 
@@ -62,7 +62,7 @@ adapter_r_mm = 35/2;
 adapter_w_mm = 2;
 
 // TODO: An Aspect Ratio for flat pots can be less than 1,
-// but not for round-bottomed pots. We should reorganize 
+// but not for round-bottomed pots. We should reorganize
 // the code to take that into account.
 
 
@@ -77,7 +77,7 @@ A = POT_BOTTOM_SHAPE_FLAT ? 0.6 : 1.3;
 echo("A");
 echo(A);
 
-V_ml = 100; 
+V_ml = 100;
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
 V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a mililter)
@@ -85,7 +85,7 @@ V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths
 
 // This math done by Cledden...
 // H = heigh will be a computed value
-// S = height of the side 
+// S = height of the side
 
 // R = radius of the pot (mm)
 // D = diaeter of the pot
@@ -114,7 +114,7 @@ function side(A,V) = height(A,V) - radius(A,V);
 
 
 // In this case, A = H / (2R)
-// V = H * PI * R^2 
+// V = H * PI * R^2
 // V = (A * 2R ) PI * R^2 =  2 * PI * AR^3
 // R = pow(V / ( 2 * PI * A), 1/3);
 
@@ -254,8 +254,8 @@ module roundBottomOutside(A,V) {
             translate([0,0,radius_mm*2])
             cube(radius_mm*4,center=true);
         }
-        
-        // now we add the rim and cut away a cone to make a 
+
+        // now we add the rim and cut away a cone to make a
         // Conical fit for the rim.
         color("blue")
         difference() {
@@ -270,12 +270,12 @@ module roundBottomPot(A,V) {
    radius_mm = radius(A,V);
    side_h = side(A,V);
     union() {
-       difference() {    
+       difference() {
             roundBottomOutside(A,V);
             union () {
                 sphere (r = radius_mm);
                 translate([0,0,1])
-                cylinder (h=side_h+1,r1 =radius_mm, 
+                cylinder (h=side_h+1,r1 =radius_mm,
                 r2= radius_mm);
             }
         }
@@ -302,19 +302,19 @@ module roundBottomPotWithHandles(A,V){
     radius_mm = radius(A,V);
     side_h = side(A,V);
     roundBottomPot(A,V);
-    
+
     union(){
         roundBottomPot(A,V);
-        
+
     handle(A,V,ptype,radius_mm);
     handle(A,V,ptype,-radius_mm);
-    }    
+    }
 }
 module roundBottomPotWithHandlesAndFins(A,V){
     radius_mm = radius(A,V);
      side_h = side(A,V);
     roundBottomPotWithFins(A,V);
-    
+
     union(){
         roundBottomPotWithFins(A,V);
         handle(A,V,ptype,radius_mm);
@@ -335,7 +335,7 @@ module flatBottomPot (A,V) {
             cylinder (h=    pot_height, r=outer_rad, center = true);
             translate ([0,0,(wall_thickness+(extra_height/2))])
             cylinder (h=pot_height+extra_height, r1=(outer_rad-wall_thickness), r2 =(outer_rad-wall_thickness), center=true);
-        
+
     }
     translate([0,0,pot_height/4]) {
         union() {
@@ -343,7 +343,7 @@ module flatBottomPot (A,V) {
             handle(A,V,ptype,-radius_mm);
         }
     }
-}    
+}
 }
 
 module flatBottomPotOutside () {
@@ -364,11 +364,11 @@ module flatBottomPot_content (A,V_pot,V_water) {
     outer_rad = cyl_radius(A,V_pot) + wall_thickness;
     echo("outer_rad");
     echo(outer_rad);
-    // I think this is wrong...we want to use 
+    // I think this is wrong...we want to use
     // the cyl_radius to compute the water...
     pot_height = cyl_height(A,V_pot);
     water_height = pot_height * V_water/V_pot;
-    
+
         translate ([0,0,wall_thickness/2])
     translate([0,0,-(pot_height - water_height)/2])
     color ("blue")
@@ -383,12 +383,12 @@ module roundBottomPot_content(A,V_pot,V_water) {
     // for the excessive lip factor.
     // The radius must be computed from the pot volume
    radius_mm = radius(A,V_pot);
-    
+
    side_water_h = height(A,V_water) - radius(A,V_pot);
    side_h = side(A,V_water);
-    // if the side_h is not positive here, we likely 
+    // if the side_h is not positive here, we likely
     // have a serious problem...we need to rethink this..
-    
+
     echo("side_h");
     echo(side_h);
     echo("side_water__h");
@@ -397,7 +397,7 @@ module roundBottomPot_content(A,V_pot,V_water) {
         union () {
             sphere (r = radius_mm);
             translate([0,0,0])
-            cylinder (h=side_water_h,r1 =radius_mm, 
+            cylinder (h=side_water_h,r1 =radius_mm,
             r2= radius_mm);
         }
         translate ([-radius_mm,-radius_mm,side_water_h])
@@ -441,7 +441,7 @@ module lidhookconnector() {
             cylinder(h = lid_hook_connector_height*6, r = (radius_mm - lid_hook_gap_tolerance)*lid_extender_angle_scale,center=true);
     }
 }
-// I think the idea here is to build up 
+// I think the idea here is to build up
 module lidhook(){
     union() {
         lidhookextender();
@@ -459,7 +459,7 @@ module lidhook(){
 // ro = pot outer radius
 module potInterface(ri,ro,rim_bead_radius = 10) {
     difference() {
-        rotate_extrude(angle = 360, convexity = 2) 
+        rotate_extrude(angle = 360, convexity = 2)
         translate([ri, 0])
         circle(r = rim_bead_radius);
       // now cutaway a cylinder of radius rotate
@@ -476,15 +476,15 @@ module potInterface(ri,ro,rim_bead_radius = 10) {
 // ro is the outer radius
 module lidInterface(ri,ro,rim_bead_radius = 10) {
     difference() {
-        rotate_extrude(angle = 360, convexity = 2) 
+        rotate_extrude(angle = 360, convexity = 2)
         translate([ri-rim_bead_radius, 0])
         circle(r = rim_bead_radius);
       // now cutaway a cylinder of radius rotate
         translate([0,0,rim_bead_radius])
-        rotate_extrude(angle = 360, convexity = 2) 
+        rotate_extrude(angle = 360, convexity = 2)
         translate([ri, 0])
         circle(r = rim_bead_radius);
-    }  
+    }
 }
 
 
@@ -505,9 +505,9 @@ module flatLid (inner_rad) {
             translate([0,0,-rim_bead_radius/8])
             cylinder(h=outer_rad*10, r = inner_rad - rim_bead_radius/2);
          };
-            
-        translate([0,0,-(-0.5 + cr-y)])       
-        conicalknob();     
+
+        translate([0,0,-(-0.5 + cr-y)])
+        conicalknob();
         lidInterface(inner_rad,inner_rad+wall_thickness,
                     rim_bead_radius);
                     };
@@ -526,8 +526,8 @@ module flatLidOrig (inner_rad) {
 translate ([-outer_rad/2,-outer_rad/2,-outer_rad/8])
 cube (outer_rad); }
                 }
-                
-    
+
+
     /*outer_rad = inner_rad+wall_thickness;
     union () {
         cylinder (h= lid_thickness, r=outer_rad, center = true);*/
@@ -542,10 +542,10 @@ module solidconicalLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
     union () {
           conicalknob();
-          cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));  
+          cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));
           translate([0,0,conical_lid_height])
-          lidhook(); 
-     } 
+          lidhook();
+     }
 }
 
 
@@ -567,7 +567,7 @@ module hollowconicalLid (inner_rad) {
 
 
 //Ivan
-function pType(ptype) = 
+function pType(ptype) =
     ptype != "flatbottom";
 
 echo("Ivan");
@@ -575,20 +575,20 @@ echo(pType(ptype));
 distance=0.0;  //change
 
 module conical_part (radius,height) {
-    
+
     translate([0,0,lid_thickness*0.55+lidPositionZ(A,V_pot)+distance]){
     cylinder (h=(height), r1 =(radius) ,r2=(radius*conical_lid_scale_factor));
     }
 }
 function lidPositionZ(A,V_pot) =
     pType(ptype)
-    ? side(A,V_pot)  
-    : cyl_height(A,V_pot)/2; 
+    ? side(A,V_pot)
+    : cyl_height(A,V_pot)/2;
 
 function lid_radius()=
     pType(ptype)
     ? radius_mm
-    : cyl_radius(A,V_pot); 
+    : cyl_radius(A,V_pot);
 
 echo("Ivan");
 echo(lid_radius());
@@ -596,19 +596,19 @@ echo(lid_radius());
 module conicalLidIvan(inner_rad,A,V_pot){
       outer_rad = inner_rad + lid_thickness;
     translate([0,0,-rim_bead_radius/2]){
-    union(){  
+    union(){
     difference(){
             conical_part(outer_rad,conical_lid_height);
             translate([0,0,wall_thickness]){
             conical_part(inner_rad,conical_lid_height-wall_thickness+0.001);
             }
         }
-        
+
         translate([0,0,lidPositionZ(A,V_pot)+distance+rim_bead_radius/2]){
-        rotate ([180,0,0]){    
+        rotate ([180,0,0]){
         lidInterface(inner_rad,inner_rad+wall_thickness,
                     rim_bead_radius);}
-            }          
+            }
         }
     }
 }
@@ -621,7 +621,7 @@ module conicalLidIvan(inner_rad,A,V_pot){
 module concaveconicalLid(inner_rad){
     outer_rad = inner_rad+wall_thickness;
     radius_mm = radius(A,V_pot);
-    
+
     union(){
         difference(){
             union () {
@@ -646,7 +646,7 @@ module concaveconicalLid(inner_rad){
             scale([1,1,lid_scale_factor])
                 sphere((radius_mm*conical_lid_scale_factor)-lid_wall_size);
         }
-        
+
         // This is the handle
         difference(){
             union(){
@@ -662,7 +662,7 @@ module concaveconicalLid(inner_rad){
                 cylinder(conical_end_height,lid_handle_thickness/2.1,(lid_handle_thickness/2)*conical_end_scale_factor);
             }
             difference(){
-                cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));  
+                cylinder (h=conical_lid_height, r1=(outer_rad*conical_lid_scale_factor), r2 =(outer_rad));
                 scale([1,1,lid_scale_factor])
                 sphere(radius_mm*conical_lid_scale_factor);
                 scale([1,1,lid_scale_factor])
@@ -689,12 +689,12 @@ module lidhandleshell (){
 }
 
 
-//Ivan 
+//Ivan
 
 module pothandleshell(x) {
   translate([0, x, 0])
   rotate_extrude(angle = 360) {
-    
+
       translate([pot_handle_radius - pot_handle_thickness / 2, 0])
       circle(d = pot_handle_thickness);
   }
@@ -715,8 +715,8 @@ module handle(A,V,ptype,radius){
                 //pothandleshell(-radius);
             }
             roundBottomOutside(A,V);
-            
-            
+
+
         }
     }
 }
@@ -731,7 +731,7 @@ module renderLid(ltype,r) {
     } else  if (ltype == "solidconical") {
         translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
-        solidconicalLid(r);  
+        solidconicalLid(r);
     } else if (ltype == "hollowconical"){
         translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
         rotate ([180,0,0])
@@ -772,22 +772,22 @@ module studs(A,V){
 // 2) Move all of these paramaters to the top of the file
 // 3) Rename these parametes so they code they don't collide
 // 4) Add a rim so that it fits our pots perfectly.
-// 5) Make it possible to lenghen height of pot to 
+// 5) Make it possible to lenghen height of pot to
 // adjust volume keeping the rim the same.
 
 RADIUS_OF_100_ML_HS = radius(A,V_pot);;
 VOLUME_BUFFER_RATIO = 1.0;
 
-L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius 
+L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius
 Amp=10; //amplitude
 N=6; //number of waves
 t=2; //thickness
-grid_size=100; //divisons of hemisphere 
+grid_size=20; //divisons of hemisphere
 
 //desmos equation (Gianluca's original math)
 
-//function z1_outer(x,y)=sqrt(max(0,L*L-x*x-y*y)); //height of cylinder 
-//function z1_inner(x,y)=sqrt(max(0,(L-t)*(L-t)-x*x-y*y)); //height of cylinder for t thickness 
+//function z1_outer(x,y)=sqrt(max(0,L*L-x*x-y*y)); //height of cylinder
+//function z1_inner(x,y)=sqrt(max(0,(L-t)*(L-t)-x*x-y*y)); //height of cylinder for t thickness
 //function theta(x,y)=atan2(y,x);
 //function phi_outer(x,y)=atan(sqrt(x*x+y*y)/(z1_outer(x,y)+0.0001));
 //function phi_inner(x,y)=atan(sqrt(x*x+y*y)/(z1_inner(x,y)+0.0001));
@@ -801,9 +801,9 @@ WALL = wall_thickness;
 
 WAVINESS = 4;
 
-v_exp = 0.2; 
-thickness = 1; 
-scale_coeff = 0.8; 
+v_exp = 0.2;
+thickness = 1;
+scale_coeff = 0.8;
 
 
 // L = radius_mm;
@@ -814,7 +814,7 @@ function z_outer(x,y) = sqrt(max(0, pow(H+WALL, 2) - x*x - y*y));
 function z_inner(x,y) = sqrt(max(0, pow(H, 2) - x*x - y*y));
 function q(z, L) = sqrt(max(0, pow(L, 2) - pow(L - z, 2))) / L;
 
-function calc_radius(x, y, z, L, A, N_val) = 
+function calc_radius(x, y, z, L, A, N_val) =
     let(
         current_theta = theta(x, y),
         raw_sine = sin(2 * N_val * current_theta) * sin(z * 180 / L),
@@ -828,14 +828,15 @@ function phi_angle(x, y, z) = atan(r(x,y) / (z + 0.01));
 
 function F_full_outer(x, y) = let(z = z_outer(x, y), L_outer = H + WALL) calc_radius(x, y, z, L_outer, Amp, N)* cos(phi_angle(x, y, z));
 
-function F_full_inner(x, y) = 
+function F_full_inner(x, y) =
     let(z = z_inner(x, y), L_inner = H)
     calc_radius(x, y, z, L_inner, Amp, N) * cos(phi_angle(x, y, z));
 
 
-//divides each cell into dx and dy 
-dx=(2*L)/grid_size; //Divides the square area into small tiles.
-dy=(2*L)/grid_size;
+//divides each cell into dx and dy
+OVERSIZE_GRID_FACTOR = 1.2;
+dx=(2*(L*OVERSIZE_GRID_FACTOR))/grid_size; //Divides the square area into small tiles.
+dy=(2*(L*OVERSIZE_GRID_FACTOR))/grid_size;
 
 //first triangle in the square grid cell + second triangle completing the cell
 //Each grid square: split into two prisms
@@ -846,21 +847,21 @@ prism_faces_2=[[4,5,1],[2,0,3],[5,4,2],[2,3,5],[4,1,0],[0,2,4],[1,5,3],[3,0,1]];
 //combines all prisms in the grid to get a full wavy hemisphere shell with thickness
 
 // Recursive function to sum the volume list
-function sum_list(list, index=0, total=0) = 
+function sum_list(list, index=0, total=0) =
     index >= len(list) ? total : sum_list(list, index + 1, total + list[index]);
-    
-function volume()= 
+
+function volume()=
 let(
     cell_volumes = [for(i=[0:grid_size-1], j=[0:grid_size-1])
         let(
-            x = -L + i*dx, 
-            y = -L + j*dy, 
-            x2 = x + dx, 
+            x = -L + i*dx,
+            y = -L + j*dy,
+            x2 = x + dx,
             y2 = y + dy
         )
-        (sqrt(x*x + y*y) <= L) ? 
+        (sqrt(x*x + y*y) <= L) ?
             let(
-                //volume of triangle 1 
+                //volume of triangle 1
                 v1 = 0.5 * dx * dy * ((F_full_inner(x,y) + F_full_inner(x2,y) + F_full_inner(x2,y2))/3),
                 //triangle two volume
                 v2 = 0.5 * dx * dy * ((F_full_inner(x,y) + F_full_inner(x,y2) + F_full_inner(x2,y2))/3)
@@ -883,37 +884,36 @@ module wavy_pot() {
         for(i=[0:grid_size-1]){
             for(j=[0:grid_size-1]){
                 let(
-                    x=-L+i*dx,
-                    y=-L+j*dy,
+                    x=-L*OVERSIZE_GRID_FACTOR+i*dx,
+                    y=-L*OVERSIZE_GRID_FACTOR+j*dy,
                     x2=x+dx,
                     y2=y+dy, //Defines the four corners of one grid square.
                     maxx=max(x,x2),
                     maxy=max(y,y2)
-                )
-                if(sqrt(maxx*maxx+maxy*maxy)<=(L)){ //cuts away the square corners
-                    polyhedron(
-                        points=[ 
-                            [x,y,F_full_inner(x,y)],
-                            [x2,y,F_full_inner(x2,y)],
-                            [x,y,F_full_outer(x,y)],
-                            [x2,y,F_full_outer(x2,y)],
-                            [x2,y2,F_full_inner(x2,y2)],
-                            [x2,y2,F_full_outer(x2,y2)]
-                        ],
-                        faces=prism_faces_1
-                    ); //Creates half of the square cell with thickness
+                ) {
+                polyhedron(
+                    points=[
+                        [x,y,F_full_inner(x,y)],
+                        [x2,y,F_full_inner(x2,y)],
+                        [x,y,F_full_outer(x,y)],
+                        [x2,y,F_full_outer(x2,y)],
+                        [x2,y2,F_full_inner(x2,y2)],
+                        [x2,y2,F_full_outer(x2,y2)]
+                    ],
+                    faces=prism_faces_1
+                ); //Creates half of the square cell with thickness
 
-                    polyhedron(
-                        points=[
-                            [x,y,F_full_inner(x,y)],
-                            [x,y,F_full_outer(x,y)],
-                            [x,y2,F_full_inner(x,y2)],
-                            [x2,y2,F_full_inner(x2,y2)],
-                            [x,y2,F_full_outer(x,y2)],
-                            [x2,y2,F_full_outer(x2,y2)]
-                        ],
-                        faces=prism_faces_2 //Completes the square by filling the other triangle.
-                    );
+                polyhedron(
+                    points=[
+                        [x,y,F_full_inner(x,y)],
+                        [x,y,F_full_outer(x,y)],
+                        [x,y2,F_full_inner(x,y2)],
+                        [x2,y2,F_full_inner(x2,y2)],
+                        [x,y2,F_full_outer(x,y2)],
+                        [x2,y2,F_full_outer(x2,y2)]
+                    ],
+                    faces=prism_faces_2 //Completes the square by filling the other triangle.
+                );
                 }
             }
         }
@@ -951,7 +951,7 @@ module renderPotType(ptype) {
     } else if (ptype ==         "roundbottom_with_fins_and_handles"){
         r = radius(A,V_pot);
         renderLid(ltype,r);
-        roundBottomPotWithHandlesAndFins(A,V_pot);    
+        roundBottomPotWithHandlesAndFins(A,V_pot);
     } else if (ptype == "studs") {
         r = radius(A,V_pot);
         renderLid(ltype,r);
@@ -959,20 +959,20 @@ module renderPotType(ptype) {
     } else if (ptype =="wavy") {
         wavy_pot();
     } else if (ptype == "none"){
-        
+
     }
 
 }
 
 
 module renderContentType(ctype) {
-    if (ctype == "flatBottomPot_content") {      
-         scale (1) 
+    if (ctype == "flatBottomPot_content") {
+         scale (1)
          flatBottomPot_content(A,V_pot,V_water);
     } else  if (ctype == "roundBottomPot_content") {
         scale (1)    roundBottomPot_content(A,V_pot,V_water);
     } else if (ctype == "none"){
-            
+
     }
 }
 
@@ -986,8 +986,8 @@ if (USE_VERTICAL_POT_KNIFE) {
 } else {
  renderLid(ltype,radius(A,V_pot));
 }
- 
- 
+
+
 if (USE_VERTICAL_POT_KNIFE) {
     difference() {
         renderPotType(ptype);
@@ -1010,7 +1010,7 @@ module triangularFin(){
             translate([0,100,0])
             circle(100,$fn=64);
         }
-    
+
 }
 
 module translate_children(){
@@ -1018,7 +1018,7 @@ module translate_children(){
         translate([200,0,0])
         children(i);
     }
-    
+
 
 
 
@@ -1119,22 +1119,22 @@ if (ttype == "threestone") {
     brace_mm = 100;
     brace_w_mm = 15;
     translate([0,0,-tester_mm/2])
-    
+
     difference() {
         union() {
             union() {
                     translate([0,-(adapter_r_mm+brace_mm/2),0])
                     cube([brace_w_mm,brace_mm,brace_w_mm],center=true);
-                                     
+
                     rotate([0,0,120])
                     translate([0,-(adapter_r_mm+brace_mm/2),0])
                     cube([brace_w_mm,brace_mm,brace_w_mm],center=true);
-                    
+
                     rotate([0,0,-120])
                     translate([0,-(adapter_r_mm+brace_mm/2),0])
-                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);       
+                    cube([brace_w_mm,brace_mm,brace_w_mm],center=true);
             }
-           
+
             difference() {
                 cylinder(adapter_h_mm,
                         adapter_r_mm+adapter_w_mm,
@@ -1147,19 +1147,19 @@ if (ttype == "threestone") {
             }
             intersection() {
                 cylinder(h=tester_mm*10,r=tester_mm,center=true);
-                
+
                 color("brown")
                 union() {
                     translate([0,-stone_center_r,0])
                     sphere(r = tester_mm*fill_factor);
-                    
+
                     rotate([0,0,120])
                     translate([0,-stone_center_r,0])
                     sphere(r = tester_mm*fill_factor);
-                    
+
                     rotate([0,0,-120])
                     translate([0,-stone_center_r,0])
-                    sphere(r = tester_mm*fill_factor);       
+                    sphere(r = tester_mm*fill_factor);
                 }
             }
         }
@@ -1168,11 +1168,11 @@ if (ttype == "threestone") {
     }
 
     // This is the radius to hold the heat gun.
-    // adapter_mm 
-    
+    // adapter_mm
+
 } else if (ttype =="printableThreeStone") {
 // I'm now going to attempt to make a cone on top of a cylinder
-// with three radial cuts for the purpose of attempting to make 
+// with three radial cuts for the purpose of attempting to make
 // 3D-printable test apparatus.
 // I will add the heatgun adapter as module separately....
     cylinder_inner_radius_mm = 20;
@@ -1181,7 +1181,7 @@ if (ttype == "threestone") {
     cone_large_radius_mm = 30;
     cone_height_mm = 30;
     cone_wall_mm = 2;
-    
+
     difference() {
     // first, put the cylinder with its top at the origin.
     union() {
@@ -1197,7 +1197,7 @@ if (ttype == "threestone") {
                         cylinder_inner_radius_mm,
                         center=true);
             }
-     translate([0,0,cone_height_mm/2])      
+     translate([0,0,cone_height_mm/2])
      difference() {
                 cylinder(cone_height_mm,
                         cylinder_inner_radius_mm+cylinder_wall_mm,
@@ -1210,14 +1210,10 @@ if (ttype == "threestone") {
      }
      }
      color("red")
-    cylinder(h = cone_height_mm+1, 
+    cylinder(h = cone_height_mm+1,
             r1 = 1.5*cylinder_inner_radius_mm+1, r2=cone_large_radius_mm *2 +1, $fn = 3);
             }
- 
+
 
 } else {
 }
-
-
-
-
