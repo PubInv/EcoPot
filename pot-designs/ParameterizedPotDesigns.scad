@@ -781,8 +781,8 @@ VOLUME_BUFFER_RATIO = 1.0;
 L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius
 Amp=10; //amplitude
 N=6; //number of waves
-t=2; //thickness
-grid_size=20; //divisons of hemisphere
+// t=2; //thickness
+grid_size=80; //divisons of hemisphere
 
 //desmos equation (Gianluca's original math)
 
@@ -826,11 +826,15 @@ function calc_radius(x, y, z, L, A, N_val) =
 
 function phi_angle(x, y, z) = atan(r(x,y) / (z + 0.01));
 
-function F_full_outer(x, y) = let(z = z_outer(x, y), L_outer = H + WALL) calc_radius(x, y, z, L_outer, Amp, N)* cos(phi_angle(x, y, z));
+function F_full_outer(x, y) = 
+let(z = z_outer(x, y), 
+    L_outer = H + WALL) 
+        calc_radius(x, y, z, L_outer, Amp, N)* cos(phi_angle(x, y, z));
 
 function F_full_inner(x, y) =
-    let(z = z_inner(x, y), L_inner = H)
-    calc_radius(x, y, z, L_inner, Amp, N) * cos(phi_angle(x, y, z));
+let(z = z_inner(x, y), 
+    L_inner = H)
+        calc_radius(x, y, z, L_inner, Amp, N) * cos(phi_angle(x, y, z));
 
 
 //divides each cell into dx and dy
