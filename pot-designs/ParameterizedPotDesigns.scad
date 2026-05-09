@@ -23,19 +23,23 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "roundbottom_with_handles";
 // ptype = "studs";
 // ptype = "roundbottom_with_fins_and_handles";
- ptype = "wavy";
+// ptype = "wavy";
+ ptype = "erlenmeyer";
 // ptype = "none";
 
 //ctype = "roundBottomPot_content";
 //ctype = "flatBottomPot_content";
-ctype = "none";
-
- ltype = "none";
+ctype = "erlenmeyer_content";
+//ctype = "none"; 
+ 
+// ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
-// ltype = "hollowconical";
+// ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
-// ltype="conicalLidIvan";
+ ltype="conicalLidErlenmeyer";
+ //ltype="conicalLidIvan";
+
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
@@ -72,8 +76,11 @@ adapter_w_mm = 2;
 //} else {
 //    A = 1.3; // aspect ratio (pure number) for rounded pots
 //}
-A = POT_BOTTOM_SHAPE_FLAT ? 0.6 : 1.3;
-
+C = 2.5; //curvature factor  = major_radius/minor_radius. For Erlenmeyer Pot
+//A = POT_BOTTOM_SHAPE_FLAT ? 0.7 : 1.3;
+A=0.7;// for erlenmeyer Pot
+A_cone = A - (0.5/(C+1));
+a = 0.5; // r/R 0 < a <1, r/R radius factor which is a ratio of rim radius to inner base radius
 echo("A");
 echo(A);
 
@@ -121,6 +128,14 @@ function side(A,V) = height(A,V) - radius(A,V);
 function cyl_radius(A,V) = pow(V / ( 2 * PI * A), 1/3);
 function cyl_height(A,V) = A*(2*cyl_radius(A,V));
 
+inner_base_radius = pow(((V_pot)/(PI*(((2*A_cone*(1+a+pow(a,2)))/3)+(((2*pow(C,2))+(PI*C))/(2*pow(C+1,3)))))),1/3);
+
+minor_radius = inner_base_radius/(C+1); //radius of base curvature
+major_radius = C * minor_radius;
+
+height_cone = (2*inner_base_radius)*A_cone;
+
+
 echo(radius(A,V_pot));
 echo(height(A,V_pot));
 
@@ -129,7 +144,7 @@ echo(cyl_radius(A,V_pot));
 echo("cyl height");
 echo(cyl_height(A,V_pot));
 
-radius_mm = radius(A,V_pot);
+radius_mm = ptype == "erlenmeyer"?inner_base_radius: radius(A,V_pot);
 
 tester_mm = radius_mm*2;
 
@@ -139,7 +154,22 @@ adapter_mm = 60;
 rim_bead_radius = radius_mm/24;
 
 // wall_thickness = radius_mm/20;
-wall_thickness = radius_mm/30;
+wall_thickness = ptype == "erlenmeyer" ? 1.16605*pow(10,-5)*V_water  : radius_mm/30;
+rim_radius = inner_base_radius*a;
+outer_base_radius = inner_base_radius + wall_thickness;
+
+outer_rim_radius = rim_radius + wall_thickness;
+
+//parameters for erlenmeyer content
+V_cone = PI*height_cone*(1/3)*(pow(inner_base_radius,2)+(inner_base_radius*rim_radius)+pow(rim_radius,2));
+V_base = (C==0)? (1/4*PI*pow(minor_radius,2)) : (PI*((pow(major_radius,2)*(minor_radius))+(0.5*PI*major_radius*pow(minor_radius,2)))); 
+E = excess_lip_scale_factor;
+water_base_radius = inner_base_radius; 
+water_top_radius = pow((pow(inner_base_radius,3))-((3*(V_water-V_base)*(inner_base_radius-rim_radius))/(PI*height_cone)),1/3);
+water_height = (a==1)? (height_cone/E):((height_cone*(inner_base_radius-water_top_radius))/(inner_base_radius-rim_radius));
+V_water_base = V_base;
+V_water_cone = PI*water_height*(1/3)*(pow(inner_base_radius,2) + (inner_base_radius * water_top_radius)+(pow(water_top_radius,2)));
+
 
 base_scale_factor = 2;
 height_scale_factor = 0.5;
@@ -359,6 +389,68 @@ module flatBottomPotWithFins() {
     }
 }
 
+module flask_cone() {
+    difference() {
+        cylinder (r1 = outer_base_radius, r2 = outer_rim_radius, h = height_cone);
+// inner subtracted part
+        union () {
+ //           translate([0,0,-1])
+            cylinder (r1 = inner_base_radius, r2 = rim_radius, h = height_cone);
+         };
+    }
+}
+
+module flask_base() {
+    difference () {
+        union() {
+            translate([0,0,0])
+            difference() {
+                rotate_extrude(convexity = 10)
+                translate([(major_radius), 0, 0])
+                
+                difference () {
+                    circle (r=minor_radius+wall_thickness);
+                    translate ([-(minor_radius+wall_thickness),0])
+                   square (2*(minor_radius+wall_thickness));
+                    translate ([-2*(minor_radius+wall_thickness),-2*(minor_radius+wall_thickness)])
+                    square (2*(minor_radius+wall_thickness));
+                };   
+                
+               rotate_extrude(convexity = 10)
+                translate([(major_radius), 0, 0])
+                difference () {
+                    circle (r=minor_radius);
+                    translate ([-(minor_radius),-0])
+                    square (2*(minor_radius));
+                    translate ([-2*minor_radius,-2*minor_radius])
+                    square (2*(minor_radius));
+                };
+            }
+        }
+        
+    }
+    translate([0,0,-(minor_radius+(wall_thickness/2))])
+    cylinder(h=wall_thickness,r=major_radius,center=true);
+}
+
+module flask1() {
+    flask_cone();
+    flask_base();
+    translate ([0,0,height_cone-(rim_bead_radius)])
+potInterface_erlenmeyer(rim_radius,outer_rim_radius, rim_bead_radius);
+}
+
+module erlenmeyer() {
+    union() {
+        flask1();
+        translate([0,0,(height_cone/1.5)])
+        handle_erlenmeyer(-inner_base_radius/1.5);
+        translate([0,0,(height_cone/1.5)])
+        handle_erlenmeyer(inner_base_radius/1.5);
+        
+    }
+}
+
 
 module flatBottomPot_content (A,V_pot,V_water) {
     outer_rad = cyl_radius(A,V_pot) + wall_thickness;
@@ -404,6 +496,32 @@ module roundBottomPot_content(A,V_pot,V_water) {
         cube (size = radius_mm*2, center =false);
     }
 }
+
+module water_cone() {
+    cylinder (r1 = water_base_radius, r2 = water_top_radius, h = water_height);
+}
+         
+module water_base() {
+    union() {
+                                  rotate_extrude(convexity = 10)
+                    translate([(major_radius), 0, 0])
+                    difference () {
+                        circle (r=minor_radius);
+                        translate ([-(minor_radius),-0])
+                        square (2*(minor_radius));
+                        translate ([-2*minor_radius,-2*(minor_radius)])
+                        square (2*(minor_radius));
+                    }; 
+   
+    translate([0,0,-(minor_radius)/2])
+    cylinder(h=(minor_radius),r=major_radius,center=true);
+    };
+}
+
+module erlenmeyer_content() {
+                water_base();
+                water_cone();
+};
 
 module concavehandleshell (){
     radius_mm = radius(A,V_pot);
@@ -470,6 +588,20 @@ module potInterface(ri,ro,rim_bead_radius = 10) {
     }
 }
 
+module potInterface_erlenmeyer(ri,ro,rim_bead_radius = 10) {
+    difference() {
+        rotate_extrude(angle = 360, convexity = 10) 
+        translate([ri, 0])
+        circle(r = rim_bead_radius);
+      // now cutaway a cylinder of radius rotate
+        translate([0,0,-height_cone+rim_bead_radius])
+        difference() {
+            cylinder(h=height_cone+5,r1=outer_base_radius,r2=outer_rim_radius -((5/height_cone)*(outer_base_radius-outer_rim_radius)),center=false);
+            cylinder(h=height_cone+5,r1=inner_base_radius,r2= rim_radius -((5/height_cone)*(inner_base_radius-rim_radius)),center=false);
+        }
+    }
+}
+
 // this is the part of the lid that strengthens the rim
 // and makes a seal with the pot
 // ri is the innner radius of the pot rim,
@@ -487,6 +619,18 @@ module lidInterface(ri,ro,rim_bead_radius = 10) {
     }
 }
 
+module lidInterface_erlenmeyer(ri,ro,rim_bead_radius = 20) {
+    difference() {
+        rotate_extrude(convexity = 10) 
+        translate([ri-rim_bead_radius,0])
+        circle(r = rim_bead_radius);
+      // now cutaway a cylinder of radius rotate
+        translate([0,0,rim_bead_radius])
+        rotate_extrude(convexity = 10) 
+        translate([ri, 0])
+        circle(r = rim_bead_radius);
+    }  
+}
 
 module flatLid (inner_rad) {
     outer_rad = inner_rad+wall_thickness;
@@ -572,7 +716,7 @@ function pType(ptype) =
 
 echo("Ivan");
 echo(pType(ptype));
-distance=0.0;  //change
+distance=10.0;  //change
 
 module conical_part (radius,height) {
 
@@ -614,7 +758,36 @@ module conicalLidIvan(inner_rad,A,V_pot){
 }
 
 
+module conical_part_erlenmeyer (radius,height) {
+    
+    translate([0,0,lidPositionZ_erlenmeyer(A,V_pot)+distance]){
+    cylinder (h=(height_cone), r1 =(radius) ,r2=(radius*conical_lid_scale_factor));
+    }
+}
+function lidPositionZ_erlenmeyer(A,V_pot) = height_cone;
 
+function lid_radius_erlenmeyer()=
+     rim_radius;
+
+module conicalLidIvan_erlenmeyer(inner_rad,A,V_pot){
+      outer_rad = inner_rad + lid_thickness;
+    translate([0,0,-rim_bead_radius/4]){
+    union(){  
+    difference(){
+            conical_part_erlenmeyer(outer_rad,conical_lid_height);
+            translate([0,0,lid_thickness]){
+            conical_part_erlenmeyer(inner_rad,conical_lid_height-wall_thickness+0.001);
+            }
+        }
+        
+        translate([0,0,lidPositionZ_erlenmeyer(A,V_pot)+distance+rim_bead_radius/8]){
+        rotate ([180,0,0]){    
+        lidInterface_erlenmeyer(inner_rad,inner_rad+wall_thickness,
+                    rim_bead_radius);}
+            }          
+        }
+    }
+}
 
 
 // This is our main pot lid.
@@ -721,6 +894,29 @@ module handle(A,V,ptype,radius){
     }
 }
 
+module pothandleshell_erlenmeyer(x) {
+  translate([0, x, 0])
+  rotate_extrude(angle = 360) {
+    
+      translate([pot_handle_radius - pot_handle_thickness / 2, 0])
+      circle(d = pot_handle_thickness);
+  }
+}
+
+module handle_erlenmeyer(radius){
+        difference(){
+//            union(){
+//                //pothandleshell_erlenmeyer(-radius);
+//            }
+            pothandleshell_erlenmeyer(radius);
+            translate([0,0,-(height_cone/1.5)])
+            cylinder (r1 = outer_base_radius, r2 = outer_rim_radius, h = height_cone, center=false);
+            
+            
+            
+      }  
+    }
+
 
 module renderLid(ltype,r) {
     if (ltype == "flat_lid") {
@@ -744,6 +940,10 @@ module renderLid(ltype,r) {
     else if (ltype == "conicalLidIvan"){
             rad=lid_radius();
             conicalLidIvan(rad,A,V_pot);
+     }
+    else if (ltype == "conicalLidErlenmeyer"){
+            rad=lid_radius_erlenmeyer();
+            conicalLidIvan_erlenmeyer(rad,A,V_pot);
      }
 }
 
@@ -962,6 +1162,8 @@ module renderPotType(ptype) {
         studs(A,V_pot);
     } else if (ptype =="wavy") {
         wavy_pot();
+    } else if (ptype =="erlenmeyer") {
+        erlenmeyer();
     } else if (ptype == "none"){
 
     }
@@ -975,7 +1177,10 @@ module renderContentType(ctype) {
          flatBottomPot_content(A,V_pot,V_water);
     } else  if (ctype == "roundBottomPot_content") {
         scale (1)    roundBottomPot_content(A,V_pot,V_water);
-    } else if (ctype == "none"){
+    }  else  if (ctype == "erlenmeyer_content") {
+    erlenmeyer_content();
+      
+    }  else if (ctype == "none"){
 
     }
 }
