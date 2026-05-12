@@ -180,6 +180,11 @@ handle_position = -(radius_mm/6);
 // lid_distance_from_pot = radius_mm/1.2;
 lid_distance_from_pot = radius_mm/2.8;
 
+// WAVY_POT
+
+WAVY_LOBE = 6;
+WAVY_AMPLITUDE_FACTOR = 0.2;
+
 // set resolution here
 $fn=120;
 
@@ -715,8 +720,6 @@ module handle(A,V,ptype,radius){
                 //pothandleshell(-radius);
             }
             roundBottomOutside(A,V);
-
-
         }
     }
 }
@@ -775,159 +778,87 @@ module studs(A,V){
 // 5) Make it possible to lenghen height of pot to
 // adjust volume keeping the rim the same.
 
-RADIUS_OF_100_ML_HS = radius(A,V_pot);;
-VOLUME_BUFFER_RATIO = 1.0;
+function x(r,theta,phi)= r*sin(theta*180/PI)*cos(phi*180/PI);
+function y(r,theta,phi)= r*sin(theta*180/PI)*sin(phi*180/PI);
+function z(r,theta)= r*cos(theta*180/PI);
+function cartesian(theta,phi,rho) =
+    [x(rho, theta, phi),
+     y(rho, theta, phi),
+     z(rho, theta)];
 
-L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius
-Amp=10; //amplitude
-N=6; //number of waves
-// t=2; //thickness
-grid_size=80; //divisons of hemisphere
+module wavy_pot(r,n,f,t) {
+    // t=2; //thickness
+    grid_size=200; //divisons of hemisphere
+    g = 3.0; //becomes more square as it increases 
 
-//desmos equation (Gianluca's original math)
+    // We'll use the convention from here:
+    // https://en.wikipedia.org/wiki/Spherical_coordinate_system
+    // theta is the angle with the polar axis z
+    // phi is the rotation around the polar axis z
+    dtheta = (PI/2)/grid_size; //0 to 90 degrees
+    dphi = (2*PI)/grid_size; //0 to 180 degrees
 
-//function z1_outer(x,y)=sqrt(max(0,L*L-x*x-y*y)); //height of cylinder
-//function z1_inner(x,y)=sqrt(max(0,(L-t)*(L-t)-x*x-y*y)); //height of cylinder for t thickness
-//function theta(x,y)=atan2(y,x);
-//function phi_outer(x,y)=atan(sqrt(x*x+y*y)/(z1_outer(x,y)+0.0001));
-//function phi_inner(x,y)=atan(sqrt(x*x+y*y)/(z1_inner(x,y)+0.0001));
-//function F_full_outer(x,y)=(L+Amp*sin(N*theta(x,y))*sin(z1_outer(x,y)*180/L))*cos(phi_outer(x,y));
-//function F_full_inner(x,y)=((L-t)+Amp*sin(N*theta(x,y))*sin(z1_inner(x,y)*180/(L-t)))*cos(phi_inner(x,y));
+    function wavy_pot_inner_norm(theta,phi) = 
+        (1 + f*cos(n*phi*180/PI)* pow(sin(2*theta*180/PI), g));
+    function wavy_pot_outer(theta,phi) = 
+        (r+t)*wavy_pot_inner_norm(theta,phi); 
+    function wavy_pot_inner(theta,phi) = 
+        (r)*wavy_pot_inner_norm(theta,phi);
+        
+    function x(r,theta,phi)= r*sin(theta*180/PI)*cos(phi*180/PI);
+    function y(r,theta,phi)= r*sin(theta*180/PI)*sin(phi*180/PI);
+    function z(r,theta)= r*cos(theta*180/PI);
 
-H = radius_mm;
-echo("H");
-echo(H);
-WALL = wall_thickness;
+    prism_faces_1 = [[3,2,5],[4,0,1],[0,2,1],[2,3,1],[1,3,4],[3,5,4],[5,2,4],[2,0,4]];
+    prism_faces_2 = [[4,5,1],[2,0,3],[5,4,2],[2,3,5],[4,1,0],[0,2,4],[1,5,3],[3,0,1]];
+         
+    union() {
+        for(i = [0 : grid_size - 1]) {
+            for(j = [0 : grid_size - 1]) {
+            
+                theta0 = i*dtheta;
+                phi0 = j*dphi;
+                theta1 = (i + 1)*dtheta;
+                phi1 = (j + 1)*dphi;
 
-WAVINESS = 4;
-
-v_exp = 0.2;
-thickness = 1;
-scale_coeff = 0.8;
-
-
-// L = radius_mm;
-// desmos math (Rob's improvements
-function r(x,y) = sqrt(x*x + y*y);
-function theta(x,y) = atan2(y,x);
-function z_outer(x,y) = sqrt(max(0, pow(H+WALL, 2) - x*x - y*y));
-function z_inner(x,y) = sqrt(max(0, pow(H, 2) - x*x - y*y));
-function q(z, L) = sqrt(max(0, pow(L, 2) - pow(L - z, 2))) / L;
-
-function calc_radius(x, y, z, L, A, N_val) =
-    let(
-        current_theta = theta(x, y),
-        raw_sine = sin(2 * N_val * current_theta) * sin(z * 180 / L),
-//        fat_sine = sign(raw_sine) * pow(abs(raw_sine), thickness)
-//        fat_sine = sign(raw_sine) * pow(raw_sine, thickness)
-//        fat_sine = sign(raw_sine) * pow(raw_sine, thickness)
-    )
-    scale_coeff * (L + A * raw_sine) * pow(q(z, L), v_exp);
-
-function phi_angle(x, y, z) = atan(r(x,y) / (z + 0.01));
-
-function F_full_outer(x, y) = 
-let(z = z_outer(x, y), 
-    L_outer = H + WALL) 
-        calc_radius(x, y, z, L_outer, Amp, N)* cos(phi_angle(x, y, z));
-
-function F_full_inner(x, y) =
-let(z = z_inner(x, y), 
-    L_inner = H)
-        calc_radius(x, y, z, L_inner, Amp, N) * cos(phi_angle(x, y, z));
-
-
-//divides each cell into dx and dy
-OVERSIZE_GRID_FACTOR = 1.2;
-dx=(2*(L*OVERSIZE_GRID_FACTOR))/grid_size; //Divides the square area into small tiles.
-dy=(2*(L*OVERSIZE_GRID_FACTOR))/grid_size;
-
-//first triangle in the square grid cell + second triangle completing the cell
-//Each grid square: split into two prisms
-prism_faces_1=[[3,2,5],[4,0,1],[0,2,1],[2,3,1],[1,3,4],[3,5,4],[5,2,4],[2,0,4]];
-prism_faces_2=[[4,5,1],[2,0,3],[5,4,2],[2,3,5],[4,1,0],[0,2,4],[1,5,3],[3,0,1]];
-
-//loops over every grid
-//combines all prisms in the grid to get a full wavy hemisphere shell with thickness
-
-// Recursive function to sum the volume list
-function sum_list(list, index=0, total=0) =
-    index >= len(list) ? total : sum_list(list, index + 1, total + list[index]);
-
-function volume()=
-let(
-    cell_volumes = [for(i=[0:grid_size-1], j=[0:grid_size-1])
-        let(
-            x = -L + i*dx,
-            y = -L + j*dy,
-            x2 = x + dx,
-            y2 = y + dy
-        )
-        (sqrt(x*x + y*y) <= L) ?
-            let(
-                //volume of triangle 1
-                v1 = 0.5 * dx * dy * ((F_full_inner(x,y) + F_full_inner(x2,y) + F_full_inner(x2,y2))/3),
-                //triangle two volume
-                v2 = 0.5 * dx * dy * ((F_full_inner(x,y) + F_full_inner(x,y2) + F_full_inner(x2,y2))/3)
-            )
-            (v1 + v2) : 0
-    ],
-    // sum
-    total_volume = sum_list(cell_volumes)
-    )
-    total_volume;
-echo("L");
-echo(L);
-echo("dx");
-echo(dx);
-echo("volume");
-echo(volume());
-module wavy_pot() {
-    rotate([180,0,0])
-    union(){
-        for(i=[0:grid_size-1]){
-            for(j=[0:grid_size-1]){
-                let(
-                    x=-L*OVERSIZE_GRID_FACTOR+i*dx,
-                    y=-L*OVERSIZE_GRID_FACTOR+j*dy,
-                    x2=x+dx,
-                    y2=y+dy, //Defines the four corners of one grid square.
-                    maxx=max(x,x2),
-                    maxy=max(y,y2)
-                ) {
+                i00 = cartesian(theta0,phi0,wavy_pot_inner(theta0, phi0));
+                i01 = cartesian(theta0,phi1,wavy_pot_inner(theta0, phi1)); 
+                i10 = cartesian(theta1,phi0,wavy_pot_inner(theta1, phi0));
+                i11 = cartesian(theta1,phi1,wavy_pot_inner(theta1, phi1)); 
+      
+                o00 = cartesian(theta0,phi0,wavy_pot_outer(theta0, phi0));
+                o01 = cartesian(theta0,phi1,wavy_pot_outer(theta0, phi1)); 
+                o10 = cartesian(theta1,phi0,wavy_pot_outer(theta1, phi0));
+                o11 = cartesian(theta1,phi1,wavy_pot_outer(theta1, phi1));     
+                   
                 polyhedron(
-                    points=[
-                        [x,y,F_full_inner(x,y)],
-                        [x2,y,F_full_inner(x2,y)],
-                        [x,y,F_full_outer(x,y)],
-                        [x2,y,F_full_outer(x2,y)],
-                        [x2,y2,F_full_inner(x2,y2)],
-                        [x2,y2,F_full_outer(x2,y2)]
-                    ],
-                    faces=prism_faces_1
-                ); //Creates half of the square cell with thickness
+                        points=[
+                        i00,
+                        i10,
+                        o00,
+                        o10,
+                        i11,
+                        o11],
+                        faces=prism_faces_1
+                    ); //Creates half of the square cell with thickness
 
                 polyhedron(
-                    points=[
-                        [x,y,F_full_inner(x,y)],
-                        [x,y,F_full_outer(x,y)],
-                        [x,y2,F_full_inner(x,y2)],
-                        [x2,y2,F_full_inner(x2,y2)],
-                        [x,y2,F_full_outer(x,y2)],
-                        [x2,y2,F_full_outer(x2,y2)]
-                    ],
-                    faces=prism_faces_2 //Completes the square by filling the other triangle.
-                );
-                }
+                        points=[
+                        i00,
+                        o00,
+                        i01,
+                        i11,
+                        o01,
+                        o11],
+                        faces=prism_faces_2 //Completes the square by filling the other triangle.
+                    );
             }
         }
     }
-}
-module smoothed_wavy() {
-    minkowski() {
-        wavy_pot();
-        sphere(1);
-    }
+    echo("side_h");
+    echo(side_h);
+    translate([0,0,rim_bead_radius])
+    potInterface(r,r+t,rim_bead_radius);
 }
 
 
@@ -960,8 +891,11 @@ module renderPotType(ptype) {
         r = radius(A,V_pot);
         renderLid(ltype,r);
         studs(A,V_pot);
-    } else if (ptype =="wavy") {
-        wavy_pot();
+    } else if (ptype =="wavy") {   
+        RADIUS_OF_100_ML_HS = radius(A,V_pot);
+        VOLUME_BUFFER_RATIO = 1.0;
+        L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius
+        wavy_pot(L,WAVY_LOBE,WAVY_AMPLITUDE_FACTOR,wall_thickness);
     } else if (ptype == "none"){
 
     }
