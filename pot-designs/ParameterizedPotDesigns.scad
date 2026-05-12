@@ -16,7 +16,7 @@ USE_VERTICAL_POT_KNIFE = false;
 
 // change these together!
 POT_BOTTOM_SHAPE_FLAT = false;
-//ptype = "flatbottom";
+// ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 // ptype = "roundbottom";
 //ptype = "roundbottom_with_fins";
@@ -786,6 +786,9 @@ function cartesian(theta,phi,rho) =
      y(rho, theta, phi),
      z(rho, theta)];
 
+     // I think we may have to increase the radius slightly
+     // here to make 100ml. Visually inspecting the roundbottom pot,
+     // it looks smaller.
 module wavy_pot(r,n,f,t) {
     // t=2; //thickness
     grid_size=200; //divisons of hemisphere
@@ -811,6 +814,8 @@ module wavy_pot(r,n,f,t) {
 
     prism_faces_1 = [[3,2,5],[4,0,1],[0,2,1],[2,3,1],[1,3,4],[3,5,4],[5,2,4],[2,0,4]];
     prism_faces_2 = [[4,5,1],[2,0,3],[5,4,2],[2,3,5],[4,1,0],[0,2,4],[1,5,3],[3,0,1]];
+    
+    cv = 0;
     rotate([180,0,0])
     union() {
     union() {
@@ -826,7 +831,15 @@ module wavy_pot(r,n,f,t) {
                 i01 = cartesian(theta0,phi1,wavy_pot_inner(theta0, phi1)); 
                 i10 = cartesian(theta1,phi0,wavy_pot_inner(theta1, phi0));
                 i11 = cartesian(theta1,phi1,wavy_pot_inner(theta1, phi1)); 
-      
+     // this can be used to compute the volume, as a thin frustrum.
+     // The shape from the origin to the quadrilateral at 
+     // these 4 points is the contribution of this. This is a
+     // little trickey to do in OpenSCAD without building an 
+     // overly large structure.
+     // Of course, we could always to try to integrate the functions
+     // above symbolically. - rlr
+    
+    
                 o00 = cartesian(theta0,phi0,wavy_pot_outer(theta0, phi0));
                 o01 = cartesian(theta0,phi1,wavy_pot_outer(theta0, phi1)); 
                 o10 = cartesian(theta1,phi0,wavy_pot_outer(theta1, phi0));
@@ -903,6 +916,8 @@ module renderPotType(ptype) {
         renderLid(ltype,r);
         studs(A,V_pot);
     } else if (ptype =="wavy") {   
+    
+    // This is not correct!! WARNING!!
         RADIUS_OF_100_ML_HS = radius(A,V_pot);
         VOLUME_BUFFER_RATIO = 1.0;
         L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius
