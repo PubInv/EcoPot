@@ -30,12 +30,12 @@ POT_BOTTOM_SHAPE_FLAT = false;
 //ctype = "flatBottomPot_content";
 ctype = "none";
 
- ltype = "none";
+// ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical";
 // ltype = "hollowconicalwithconcavelid";
-// ltype="conicalLidIvan";
+ ltype="conicalLidIvan";
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
@@ -811,7 +811,8 @@ module wavy_pot(r,n,f,t) {
 
     prism_faces_1 = [[3,2,5],[4,0,1],[0,2,1],[2,3,1],[1,3,4],[3,5,4],[5,2,4],[2,0,4]];
     prism_faces_2 = [[4,5,1],[2,0,3],[5,4,2],[2,3,5],[4,1,0],[0,2,4],[1,5,3],[3,0,1]];
-         
+    rotate([180,0,0])
+    union() {
     union() {
         for(i = [0 : grid_size - 1]) {
             for(j = [0 : grid_size - 1]) {
@@ -855,10 +856,20 @@ module wavy_pot(r,n,f,t) {
             }
         }
     }
-    echo("side_h");
-    echo(side_h);
+
+    // Add the rim
     translate([0,0,rim_bead_radius])
     potInterface(r,r+t,rim_bead_radius);
+    // Add the handles
+    translate([0,0,r/10])
+    difference() {
+        union() {
+            handle(A,V_pot,ptype,r);
+            handle(A,V_pot,ptype,-r);
+        }
+        cylinder(h=r,r=r, center = true);
+    }
+    }
 }
 
 
