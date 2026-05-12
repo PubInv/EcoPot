@@ -23,22 +23,23 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "roundbottom_with_handles";
 // ptype = "studs";
 // ptype = "roundbottom_with_fins_and_handles";
-// ptype = "wavy";
- ptype = "erlenmeyer";
+ ptype = "wavy";
+// ptype = "erlenmeyer";
 // ptype = "none";
 
 //ctype = "roundBottomPot_content";
 //ctype = "flatBottomPot_content";
 
-ctype = "erlenmeyer_content";
-//ctype = "none"; 
+// ctype = "erlenmeyer_content";
+ctype = "none"; 
  
 // ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
- ltype="conicalLidErlenmeyer";
+// ltype="conicalLidErlenmeyer";
+ltype ="conicalLidIvan";
 
 
 // TODO: we need a good module for the D-handles.
