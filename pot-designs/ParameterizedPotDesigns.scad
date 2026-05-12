@@ -33,13 +33,14 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ctype = "erlenmeyer_content";
 ctype = "none"; 
  
-ltype = "none";
+// ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
 // ltype="conicalLidErlenmeyer";
 // ltype ="conicalLidIvan";
+ltype = "wavyLid";
 
 
 // TODO: we need a good module for the D-handles.
@@ -89,6 +90,7 @@ V_ml = 100;
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
 V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a mililter)
+V_pot_ml = V_pot / 1000;
 
 
 // This math done by Cledden...
@@ -194,8 +196,8 @@ lid_handle_wall_thickness = radius_mm/40;
 lid_handle_scale_factor = 1.2;
 
 
-conical_lid_scale_factor = 0.7;
-conical_lid_height =POT_BOTTOM_SHAPE_FLAT ? radius_mm/1.3 : radius_mm/0.8;
+conical_lid_scale_factor = (ltype == "wavyLid") ? 0.8: 0.7;
+conical_lid_height = (ltype == "wavyLid") ? radius_mm / 1.5 : (POT_BOTTOM_SHAPE_FLAT ? radius_mm/1.3 : radius_mm/0.8);
 
 conical_end_height = radius_mm/4;
 conical_end_scale_factor = 1.33;
@@ -214,7 +216,7 @@ lid_distance_from_pot = radius_mm/2.8;
 // WAVY_POT
 
 WAVY_LOBE = 6;
-WAVY_AMPLITUDE_FACTOR = 0.2;
+
 
 // set resolution here
 $fn=120;
@@ -949,6 +951,11 @@ module renderLid(ltype,r) {
             rad=lid_radius_erlenmeyer();
             conicalLidIvan_erlenmeyer(rad,A,V_pot);
      }
+     else if (ltype =="wavyLid") {
+         rad = wavy_radius_from_volume_ml(V_pot_ml);
+         translate([0,0,6])
+         conicalLidIvan(rad,A,V_pot);   
+     }
 }
 
 //concept
@@ -1118,13 +1125,19 @@ echo(wavy_radius_from_volume_ml(100));
      // I think we may have to increase the radius slightly
      // here to make 100ml. Visually inspecting the roundbottom pot,
      // it looks smaller.
-module wavy_pot(V,n,f,t) {
-    r = wavy_radius_from_volume_ml(100);
+module wavy_pot(V,n,t) {
+// WARNING! Computations depend on these being fixed, do not change them!
+    WAVY_AMPLITUDE_FACTOR = 0.2;   
+    g = 3.0; //becomes more square as it increases 
+      
+      
+    f = WAVY_AMPLITUDE_FACTOR;
+    r = wavy_radius_from_volume_ml(V);
     // t=2; //thickness
     grid_size=200; //divisons of hemisphere
-    g = 3.0; //becomes more square as it increases 
 
-    echo("radius");
+
+    echo("wavey radius");
     echo(r);
     wavy_volume_ml = shape_volume(r, f, g)/1000;
     echo("wave_volume");
@@ -1251,7 +1264,7 @@ module renderPotType(ptype) {
         renderLid(ltype,r);
         studs(A,V_pot);
     } else if (ptype =="wavy") {   
-        wavy_pot(V_pot* 1.2,WAVY_LOBE,WAVY_AMPLITUDE_FACTOR,wall_thickness);
+        wavy_pot(V_pot_ml,WAVY_LOBE,wall_thickness);
     } else if (ptype =="erlenmeyer") {
         erlenmeyer();
     } else if (ptype == "none"){
@@ -1296,7 +1309,8 @@ if (USE_VERTICAL_POT_KNIFE) {
 } else {
  renderPotType(ptype);
 }
- renderContentType(ctype);
+
+renderContentType(ctype);
 
 
 
