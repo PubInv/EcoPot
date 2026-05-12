@@ -33,13 +33,13 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ctype = "erlenmeyer_content";
 ctype = "none"; 
  
-// ltype = "none";
+ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
 // ltype="conicalLidErlenmeyer";
-ltype ="conicalLidIvan";
+// ltype ="conicalLidIvan";
 
 
 // TODO: we need a good module for the D-handles.
@@ -78,8 +78,8 @@ adapter_w_mm = 2;
 //    A = 1.3; // aspect ratio (pure number) for rounded pots
 //}
 C = 2.5; //curvature factor  = major_radius/minor_radius. For Erlenmeyer Pot
-//A = POT_BOTTOM_SHAPE_FLAT ? 0.7 : 1.3;
-A=0.7;// for erlenmeyer Pot
+A = (ptype == "erlenmeyer" ||  ptype == "wavy" || POT_BOTTOM_SHAPE_FLAT) ? 0.7 : 1.3;
+// A=0.7;// for erlenmeyer Pot
 A_cone = A - (0.5/(C+1));
 a = 0.5; // r/R 0 < a <1, r/R radius factor which is a ratio of rim radius to inner base radius
 echo("A");
@@ -979,6 +979,11 @@ module studs(A,V){
 // 5) Make it possible to lenghen height of pot to
 // adjust volume keeping the rim the same.
 
+// 1. Recursive Factorial Method (for positive integers)
+// Gamma(n) = (n-1)!
+
+
+
 function x(r,theta,phi)= r*sin(theta*180/PI)*cos(phi*180/PI);
 function y(r,theta,phi)= r*sin(theta*180/PI)*sin(phi*180/PI);
 function z(r,theta)= r*cos(theta*180/PI);
@@ -987,14 +992,143 @@ function cartesian(theta,phi,rho) =
      y(rho, theta, phi),
      z(rho, theta)];
 
+// This code for gamma function from ChatGPT
+// Gamma function approximation for OpenSCAD
+//
+// Uses the Lanczos approximation.
+// Accurate for most practical engineering/modeling purposes.
+//
+
+// Lanczos coefficients
+_lanczos_p = [
+    0.99999999999980993,
+    676.5203681218851,
+   -1259.1392167224028,
+    771.32342877765313,
+   -176.61502916214059,
+    12.507343278686905,
+   -0.13857109526572012,
+    9.9843695780195716e-6,
+    1.5056327351493116e-7
+];
+
+
+// Main gamma function
+function gamma(z) =
+    z < 0.5
+    ? PI / (sin(PI * z) * gamma(1 - z))   // Reflection formula
+    : _gamma_lanczos(z - 1);
+
+
+// Internal Lanczos implementation
+function _gamma_lanczos(z) =
+    let(
+        g = 7,
+        x = _lanczos_sum(z),
+        t = z + g + 0.5
+    )
+    sqrt(2 * PI) * pow(t, z + 0.5) * exp(-t) * x;
+
+
+// Sum of Lanczos coefficients
+function _lanczos_sum(z, i = 1, acc = _lanczos_p[0]) =
+    i >= len(_lanczos_p)
+    ? acc
+    : _lanczos_sum(
+        z,
+        i + 1,
+        acc + _lanczos_p[i] / (z + i)
+      );
+
+
+// This formula from ChatGPT for the symbolic integration
+// of the formula from Desmos
+
+//
+// Volume of the spherical shape:
+//
+// rho(theta,phi) = r * (1 + f*cos(n*theta)*sin(2*phi)^g)
+//
+// Using the closed-form symbolic result:
+//
+// V = (PI*r^3/3) *
+//     ( 2
+//       + 3*f^2*2^(2g-1)
+//         * Gamma(g+1)
+//         * Gamma(g+1/2)
+//         / Gamma(2g+3/2)
+//     )
+//
+// Assumes:
+//   - gamma(x) function already exists
+//   - n is a nonzero integer
+//   - g > -1/2
+//
+// note: generally, this is close to the volume of a hemisphere
+// for f = 0.2 .
+function shape_volume(r, f, g) =
+    (PI * pow(r, 3) / 3) *
+    (
+        2
+        +
+        3
+        * pow(f, 2)
+        * pow(2, 2 * g - 1)
+        * gamma(g + 1)
+        * gamma(g + 0.5)
+        / gamma(2 * g + 1.5)
+    );
+
+
+//
+// Example usage
+//
+
+echo(shape_volume(10, 0.2, 3));
+
+
+//
+// Computes radius r in mm
+// from target volume V_ml in milliliters
+//
+// Assumes:
+//   f = 0.2
+//   g = 3.0
+//
+
+function wavy_radius_from_volume_ml(V_ml) =
+    let(
+        V_mm3 = V_ml * 1000,
+
+        k = PI *
+            (2 + (1024 * pow(0.2, 2) / 1001))
+            / 3
+    )
+    pow(V_mm3 / k, 1/3);
+
+
+//
+// Example:
+// 100 mL object
+//
+echo("wavy_radius_from_volume 100");
+echo(wavy_radius_from_volume_ml(100));
+
+
      // I think we may have to increase the radius slightly
      // here to make 100ml. Visually inspecting the roundbottom pot,
      // it looks smaller.
-module wavy_pot(r,n,f,t) {
+module wavy_pot(V,n,f,t) {
+    r = wavy_radius_from_volume_ml(100);
     // t=2; //thickness
     grid_size=200; //divisons of hemisphere
     g = 3.0; //becomes more square as it increases 
 
+    echo("radius");
+    echo(r);
+    wavy_volume_ml = shape_volume(r, f, g)/1000;
+    echo("wave_volume");
+    echo(wavy_volume_ml);
     // We'll use the convention from here:
     // https://en.wikipedia.org/wiki/Spherical_coordinate_system
     // theta is the angle with the polar axis z
@@ -1075,11 +1209,11 @@ module wavy_pot(r,n,f,t) {
     translate([0,0,rim_bead_radius])
     potInterface(r,r+t,rim_bead_radius);
     // Add the handles
-    translate([0,0,r/10])
+    translate([0,0,r/8])
     difference() {
         union() {
-            handle(A,V_pot,ptype,r);
-            handle(A,V_pot,ptype,-r);
+            pothandleshell(r);
+            pothandleshell(-r);
         }
         cylinder(h=r,r=r, center = true);
     }
@@ -1117,12 +1251,7 @@ module renderPotType(ptype) {
         renderLid(ltype,r);
         studs(A,V_pot);
     } else if (ptype =="wavy") {   
-    
-    // This is not correct!! WARNING!!
-        RADIUS_OF_100_ML_HS = radius(A,V_pot);
-        VOLUME_BUFFER_RATIO = 1.0;
-        L=RADIUS_OF_100_ML_HS*VOLUME_BUFFER_RATIO; //radius
-        wavy_pot(L,WAVY_LOBE,WAVY_AMPLITUDE_FACTOR,wall_thickness);
+        wavy_pot(V_pot* 1.2,WAVY_LOBE,WAVY_AMPLITUDE_FACTOR,wall_thickness);
     } else if (ptype =="erlenmeyer") {
         erlenmeyer();
     } else if (ptype == "none"){
