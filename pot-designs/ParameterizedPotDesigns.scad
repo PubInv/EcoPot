@@ -33,14 +33,14 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ctype = "erlenmeyer_content";
 ctype = "none"; 
  
-// ltype = "none";
+ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
 // ltype="conicalLidErlenmeyer";
 // ltype ="conicalLidIvan";
-ltype = "wavyLid";
+// ltype = "wavyLid";
 
 
 // TODO: we need a good module for the D-handles.
@@ -157,7 +157,11 @@ adapter_mm = 60;
 rim_bead_radius = radius_mm/24;
 
 // wall_thickness = radius_mm/20;
-wall_thickness = ptype == "erlenmeyer" ? 1.16605*pow(10,-5)*V_water  : radius_mm/30;
+wall_thickness = (ptype == "wavy" ? radius_mm/20 : ((ptype == "erlenmeyer") ? 1.16605*pow(10,-5)*V_water  : radius_mm/30));
+// for 
+
+echo("wall_thickness");
+echo(wall_thickness);
 rim_radius = inner_base_radius*a;
 outer_base_radius = inner_base_radius + wall_thickness;
 
@@ -178,7 +182,10 @@ base_scale_factor = 2;
 height_scale_factor = 0.5;
 extra_height = radius_mm/40;
 
-lid_thickness = wall_thickness;
+lid_thickness = (ltype == "wavyLid") ? radius_mm/20 : wall_thickness;
+echo("lid_thickness");
+echo(lid_thickness);
+//lid_thickness = wall_thickness;
 lid_knob_height = radius_mm/5;
 knob_scale_factor = 2;
 lid_wall_size = sqrt(lid_thickness);
@@ -1134,10 +1141,10 @@ module wavy_pot(V,n,t) {
     f = WAVY_AMPLITUDE_FACTOR;
     r = wavy_radius_from_volume_ml(V);
     // t=2; //thickness
-    grid_size=200; //divisons of hemisphere
+    grid_size=300; //divisons of hemisphere
 
 
-    echo("wavey radius");
+    echo("wavy radius");
     echo(r);
     wavy_volume_ml = shape_volume(r, f, g)/1000;
     echo("wave_volume");
