@@ -33,8 +33,13 @@ import math
 # Parameters
 # ----------------------------
 
-inner_radius = 50.0
-wall_thickness = 2.0
+inner_radius = 39.3275
+wall_thickness = 2.41626
+# This is from OpenSCAD, I don't know why we divide by 2.1
+handle_tube_radius = 8/2.1
+
+# This is from the OpenSCAD verstion
+rim_bead_radius = 2.01355
 
 theta_count = 32   # samples from pole to rim along each meridian
 phi_count = 96     # meridians around circumference
@@ -236,7 +241,17 @@ def make_rim(major_radius,
     .revolve(360, (0, 0, 0), (0, 1, 0))
     )
 
-    return torus
+    cutter = cq.Workplane("XY").cylinder(
+    height=10 * minor_radius + 2,
+    radius=major_radius,
+    centered=(True, True, True),
+    )
+
+    inner_half_torus = torus.intersect(cutter)
+
+    inner_half_torus = inner_half_torus.translate((0, 0, minor_radius))
+
+    return inner_half_torus
 
 def make_horizontal_torus_handles(
     sphere_radius=52.0,
@@ -278,7 +293,6 @@ def make_horizontal_torus_handles(
 
         handle_local = profile.sweep(path, makeSolid=True, isFrenet=True)
 
-#        return handle_local.translate((cx, 0, z))
         fudge = 0
         return handle_local.translate(((pot_xy_radius -fudge )*(-side), 0, z))
 
@@ -294,9 +308,9 @@ solid = cq.Solid.makeSolid(shell)
 pot = cq.Workplane("XY").add(solid)
 
 handles = make_horizontal_torus_handles(
-    sphere_radius=52.0,
+    inner_radius,
     handle_major_radius=16.0,
-    handle_tube_radius=3.0,
+    handle_tube_radius=handle_tube_radius,
     z=9.0,
     embed=1.5,
 )
