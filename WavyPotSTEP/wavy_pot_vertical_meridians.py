@@ -205,6 +205,39 @@ def make_horizontal_torus_handles(
 import cadquery as cq
 import math
 
+def make_rim(major_radius,
+             steps= 96
+        ):
+    pts = []
+    minor_radius = 3.0
+
+    a0, a1 = 0, 360
+
+    for i in range(steps + 1):
+        a = a0 + (a1 - a0) * i / steps
+        x = major_radius * math.cos(a)
+        y = major_radius * math.sin(a)
+        pts.append((x, y, 0.0))
+
+    path = cq.Workplane("XY").spline(pts)
+
+    p0 = pts[0]
+
+    profile = (
+        cq.Workplane("YZ")
+        .center(0,0)
+        .circle(minor_radius)
+    )
+
+    torus = (
+    cq.Workplane("XZ")
+    .moveTo(major_radius, 0)
+    .circle(minor_radius)
+    .revolve(360, (0, 0, 0), (0, 1, 0))
+    )
+
+    return torus
+
 def make_horizontal_torus_handles(
     sphere_radius=52.0,
     handle_major_radius=16.0,
@@ -268,7 +301,11 @@ handles = make_horizontal_torus_handles(
     embed=1.5,
 )
 
-result = pot.union(handles)
+rim = make_rim(major_radius=inner_radius,steps =96)
+
+result0 = pot.union(handles)
+
+result = result0.union(rim)
 
 try:
     result = result.clean()
