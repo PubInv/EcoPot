@@ -1,6 +1,10 @@
 # EcoPot
 Project #5: A more efficient pot for those who cook over wood fires and related technologies
 
+# Status - May 21st
+
+Gialunuca Skirde had designed and built the a test stand, which we will use for simultaneously testing 4 pots for boiling time. Eventually, we will use this test frame to test over wood fires.
+
 # Our Latest, Best Pot design...
 
 These hemispherical, finned pots have been measured with a heat gun to be very efficient!
