@@ -5,6 +5,15 @@ Project #5: A more efficient pot for those who cook over wood fires and related 
 
 Gialunuca Skirde had designed and built the a test stand, which we will use for simultaneously testing 4 pots for boiling time. Eventually, we will use this test frame to test over wood fires.
 
+# The "Erlenmeyer" pot design - May 26th
+
+We have not yet tested this pot design but just got it.
+
+<img width="3024" height="4032" alt="IMG_1932" src="https://github.com/user-attachments/assets/e4961025-cec2-496e-9376-af274fc148a6" />
+<img width="3024" height="4032" alt="IMG_1931" src="https://github.com/user-attachments/assets/6bdf9502-10de-499d-bcb4-b60d03f6ab90" />
+<img width="3024" height="4032" alt="IMG_1930" src="https://github.com/user-attachments/assets/8dd3b8ee-5d31-4839-a31f-e309a69b5653" />
+
+
 # Our Latest, Best Pot design...
 
 These hemispherical, finned pots have been measured with a heat gun to be very efficient!
