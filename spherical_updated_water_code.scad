@@ -104,7 +104,7 @@ function x_water(r,theta,phi)= r*sin(theta*180/PI)*cos(phi*180/PI);
 
 function y_water(r,theta,phi)= r*sin(theta*180/PI)*sin(phi*180/PI);
 
-water_height = 0.7; 
+water_height = 1.0; 
 
 function z_water(r,theta)= water_height*r*cos(theta*180/PI);
 
@@ -136,16 +136,27 @@ module wavy_pot_water()
                 ri11 = wavy_pot_inner_water(theta1, phi1);
                 ri01 = wavy_pot_inner_water(theta0, phi1);
 
-                i00 = cartesian_water(theta0,phi0,wavy_pot_inner_water(theta0, phi0));
-                i01 = cartesian_water(theta0,phi1,wavy_pot_inner_water(theta0, phi1)); 
-                i10 = cartesian_water(theta1,phi0,wavy_pot_inner_water(theta1, phi0));
-                i11 = cartesian_water(theta1,phi1,wavy_pot_inner_water(theta1, phi1)); 
+                i00x = cartesian_water(theta0,phi0,wavy_pot_inner_water(theta0, phi0));
+                i01x = cartesian_water(theta0,phi1,wavy_pot_inner_water(theta0, phi1)); 
+                i10x = cartesian_water(theta1,phi0,wavy_pot_inner_water(theta1, phi0));
+                i11x = cartesian_water(theta1,phi1,wavy_pot_inner_water(theta1, phi1)); 
+           
+                
   
-                o00 = cartesian_water(theta0,phi0,wavy_pot_outer_water(theta0, phi0));
-                o01 = cartesian_water(theta0,phi1,wavy_pot_outer_water(theta0, phi1)); 
-                o10 = cartesian_water(theta1,phi0,wavy_pot_outer_water(theta1, phi0));
-                o11 = cartesian_water(theta1,phi1,wavy_pot_outer_water(theta1, phi1));     
-               
+//                o00 = cartesian_water(theta0,phi0,wavy_pot_outer_water(theta0, phi0));
+//                o01 = cartesian_water(theta0,phi1,wavy_pot_outer_water(theta0, phi1)); 
+//                o10 = cartesian_water(theta1,phi0,wavy_pot_outer_water(theta1, phi0));
+//                o11 = cartesian_water(theta1,phi1,wavy_pot_outer_water(theta1, phi1));     
+                o00 = i00x;
+                o01 = i01x; 
+                o10 = i10x;
+                o11 = i11x; 
+             
+                            
+                i00 = [0,0,0];
+                i01 = [0,0,0]; 
+                i10 = [0,0,0];
+                i11 = [0,0,0];  
                 polyhedron(
                     points=[
                     i00,
@@ -171,10 +182,15 @@ module wavy_pot_water()
        }
     }
 }
-
+module MultiScaleWavyPotWater() {
 for(i = [0:100]) {
 
     s = 1-i*0.01;
             scale(s)
             wavy_pot_water();
             }   
+}
+//difference() {
+//    wavy_pot_water();
+//    cylinder(h= 2, r = 100, center=true);
+//}
