@@ -1,5 +1,6 @@
 PI = 3.14159;
-r = 10; //radius
+// r = 10; //radius
+r = 39.3275; // This is the radius of the actual pot
 n = 6; //number of waves 
 f = 0.2; //amplitude 
 g = 3.0; //becomes more square as it increases 
@@ -119,8 +120,8 @@ module wavy_pot_water()
         for(i = [0 : grid_size - 1]) {
             for(j = [0 : grid_size - 1]) {
 
-                theta0 = i*dtheta;
-                phi0 = j*dphi;
+                theta0 = i*dtheta; // This is "around the z axis"?
+                phi0 = j*dphi; // angle with the z-axis?
                 theta1 = (i + 1)*dtheta;
                 phi1 = (j + 1)*dphi;
 
@@ -194,3 +195,19 @@ for(i = [0:100]) {
 //    wavy_pot_water();
 //    cylinder(h= 2, r = 100, center=true);
 //}
+difference() {
+    // h = 20;
+    // Compute a height h for the "knife" that represents
+    // a 30ml volume.
+    // V = h * pi * r^2.
+    // V / (pi * r^2) = h
+    V = 30; // ml....
+    // V must be converted to cubic millimters.
+    V_mm = 30 * 1000;
+    h = V_mm / ( PI * r^2);
+    echo("h is computed as:");
+    echo(h);
+    wavy_pot_water();
+    translate([0,0,h/2])
+    #cylinder(h= h, r = 100, center=true);
+}

@@ -1141,7 +1141,7 @@ module wavy_pot(V,n,t) {
     f = WAVY_AMPLITUDE_FACTOR;
     r = wavy_radius_from_volume_ml(V);
     // t=2; //thickness
-    grid_size=300; //divisons of hemisphere
+    grid_size=30; //divisons of hemisphere
 
 
     echo("wavy radius");
