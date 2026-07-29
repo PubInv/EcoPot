@@ -184,17 +184,20 @@ module wavy_pot_water()
     }
 }
 module MultiScaleWavyPotWater() {
-for(i = [0:100]) {
-
-    s = 1-i*0.01;
-            scale(s)
-            wavy_pot_water();
-            }   
+//for(i = [0:100]) {
+//
+//    s = 1-i*0.01;
+//            scale(s)
+//            wavy_pot_water();
+//            }   
 }
 //difference() {
 //    wavy_pot_water();
 //    cylinder(h= 2, r = 100, center=true);
 //}
+
+// wavy_pot_water();
+
 difference() {
     // h = 20;
     // Compute a height h for the "knife" that represents
@@ -208,6 +211,6 @@ difference() {
     echo("h is computed as:");
     echo(h);
     wavy_pot_water();
-    translate([0,0,h/2])
+    translate([0,0,h/2-0.01])
     #cylinder(h= h, r = 100, center=true);
 }
