@@ -4,7 +4,7 @@ r = 39.3275; // This is the radius of the actual pot
 n = 6; //number of waves 
 f = 0.2; //amplitude 
 g = 3.0; //becomes more square as it increases 
-grid_size = 10; 
+grid_size = 50; 
 t = 0.2; //thickness
 
 dtheta = (PI/2)/grid_size; //0 to 90 degrees
@@ -132,91 +132,124 @@ function tetrahedron_from_origin_volume(A,B,C) =
     //|b x c|
     cross_length = sqrt(cross[0]*cross[0] + cross[1]*cross[1] +cross[2]*cross[2]),
     //height
-    h = abs(dot)/cross_length)
+    h = abs(dot)/cross_length, 
+    x = (cross_length == 0)? 
+        echo("⚠️ WARNING: Cross Length 0!",A,B,C) 10 : 11)
     //now, volume = 1/3*Base_Area*Height
-   base_area*h*1/3;
+    (cross_length == 0) ? 0.0 : base_area*h*1/3 ;
+   
+function sum(list, index = 0) = 
+    index >= len(list) ? 0 : list[index] + sum(list, index + 1);
 
 module wavy_pot_water()
 {
-    union() {
-        for(i = [0 : grid_size - 1]) {
-            for(j = [0 : grid_size - 1]) {
-
-                theta0 = i*dtheta; // This is "around the z axis"?
-                phi0 = j*dphi; // angle with the z-axis?
-                theta1 = (i + 1)*dtheta;
-                phi1 = (j + 1)*dphi;
+    list = [
+        for(i = [0 : grid_size - 1]) 
+            for(j = [0 : grid_size - 1]) 
+                let(
+                theta0 = i*dtheta, // This is "around the z axis"?
+                phi0 = j*dphi, // angle with the z-axis?
+                theta1 = (i + 1)*dtheta,
+                phi1 = (j + 1)*dphi,
 
                 //outer_radius
-                ro00 = wavy_pot_outer_water(theta0, phi0);
-                ro10 = wavy_pot_outer_water(theta1, phi0);
-                ro11 = wavy_pot_outer_water(theta1, phi1);
-                ro01 = wavy_pot_outer_water(theta0, phi1);
+                ro00 = wavy_pot_outer_water(theta0, phi0),
+                ro10 = wavy_pot_outer_water(theta1, phi0),
+                ro11 = wavy_pot_outer_water(theta1, phi1),
+                ro01 = wavy_pot_outer_water(theta0, phi1),
 
                 //inner_radius 
-                ri00 = wavy_pot_inner_water(theta0, phi0);
-                ri10 = wavy_pot_inner_water(theta1, phi0);
-                ri11 = wavy_pot_inner_water(theta1, phi1);
-                ri01 = wavy_pot_inner_water(theta0, phi1);
+                ri00 = wavy_pot_inner_water(theta0, phi0),
+                ri10 = wavy_pot_inner_water(theta1, phi0),
+                ri11 = wavy_pot_inner_water(theta1, phi1),
+                ri01 = wavy_pot_inner_water(theta0, phi1),
 
-                i00x = cartesian_water(theta0,phi0,wavy_pot_inner_water(theta0, phi0));
-                i01x = cartesian_water(theta0,phi1,wavy_pot_inner_water(theta0, phi1)); 
-                i10x = cartesian_water(theta1,phi0,wavy_pot_inner_water(theta1, phi0));
-                i11x = cartesian_water(theta1,phi1,wavy_pot_inner_water(theta1, phi1)); 
+                i00x = cartesian_water(theta0,phi0,wavy_pot_inner_water(theta0, phi0)),
+                i01x = cartesian_water(theta0,phi1,wavy_pot_inner_water(theta0, phi1)), 
+                i10x = cartesian_water(theta1,phi0,wavy_pot_inner_water(theta1, phi0)),
+                i11x = cartesian_water(theta1,phi1,wavy_pot_inner_water(theta1, phi1)), 
            
-                
-  
 //o00 = cartesian_water(theta0,phi0,wavy_pot_outer_water(theta0, phi0));
 //o01 = cartesian_water(theta0,phi1,wavy_pot_outer_water(theta0, phi1)); 
 // o10 = cartesian_water(theta1,phi0,wavy_pot_outer_water(theta1, phi0));
 // o11 = cartesian_water(theta1,phi1,wavy_pot_outer_water(theta1, phi1));     
-                o00 = i00x;
-                o01 = i01x; 
-                o10 = i10x;
-                o11 = i11x; 
+                o00 = i00x,
+                o01 = i01x, 
+                o10 = i10x,
+                o11 = i11x, 
              
                             
-                i00 = [0,0,0];
-                i01 = [0,0,0]; 
-                i10 = [0,0,0];
-                i11 = [0,0,0];  
-                polyhedron(
-                    points=[
+                i00 = [0,0,0],
+                i01 = [0,0,0], 
+                i10 = [0,0,0],
+                i11 = [0,0,0],  
+               
+//we find the the length of each side, we find x,y,z for each side, and then calculate the length. we find the base area, then we use the formula for 1/3*base_area*the height; h = a.(bxc)/|b x c|
+
+                A = o00,
+                B = o10,
+                C = o11, 
+                volumefaces1x = tetrahedron_from_origin_volume(A,B,C),
+                    points1=[
                     i00,
                     i10,
                     o00,
                     o10,
                     i11,
                     o11],
-                    faces=prism_faces_1
-                );
-//we find the the length of each side, we find x,y,z for each side, and then calculate the length. we find the base area, then we use the formula for 1/3*base_area*the height; h = a.(bxc)/|b x c|
+                A1 = o00,
+                B1 = o01,
+                C1 = o11,
+                
+                volumefaces2x = tetrahedron_from_origin_volume(A1,B1,C1),
 
-                A = o00;B = o10;C = o11; 
-                volumefaces1x = tetrahedron_from_origin_volume(A,B,C);
-                echo("volumefaces1x");
-                echo(volumefaces1x);
-    
-
-                polyhedron(
-                    points=[
+                 points2=[
                     i00,
                     o00,
                     i01,
                     i11,
                     o01,
-                    o11],
-                    faces=prism_faces_2
+                    o11]
+             ) 
+       echo("AAAAA")
+       echo(volumefaces1x)
+       echo(volumefaces2x)
+          [points1,points2]
+          ]
+          ;
+    echo("list = ");
+    echo(list);
+    union() {
+        for (p = list) {
+            echo(p[0]);
+             polyhedron(
+                points=p[0],
+                faces=prism_faces_1
                 );
-                A1 = o00; B1 = o01; C1 = o11;
-                
-                volumefaces2x = tetrahedron_from_origin_volume(A1,B1,C1);
-                echo("volumes xxx");
-                echo(volumefaces1x);
-                echo(volumefaces2x);
-            }
-       }
-    }
+              polyhedron(
+                points=p[1],
+                faces=prism_faces_2
+               );
+            echo(p[1]);
+        }
+    };
+    
+    echo(list);
+   volumes = [for (p = list) 
+        let (A = p[0][2],
+            B = p[0][3],
+            C = p[0][5],
+            volumefaces1x = tetrahedron_from_origin_volume(A,B,C),
+            A1 = p[1][1],
+            B1 = p[1][4],
+            C1 = p[1][5],
+            volumefaces2x = tetrahedron_from_origin_volume(A1,B1,C1))
+            volumefaces1x + volumefaces2x
+         ];
+    echo("volumes");
+    echo(volumes);
+    echo("total volume (ml):");
+    echo(sum(volumes) / 1000);
 }
 module MultiScaleWavyPotWater() {
 //for(i = [0:100]) {
