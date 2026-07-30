@@ -4,7 +4,7 @@ r = 39.3275; // This is the radius of the actual pot
 n = 6; //number of waves 
 f = 0.2; //amplitude 
 g = 3.0; //becomes more square as it increases 
-grid_size = 100; 
+grid_size = 10; 
 t = 0.2; //thickness
 
 dtheta = (PI/2)/grid_size; //0 to 90 degrees
@@ -113,6 +113,11 @@ function cartesian_water(theta,phi,rho) =
     [x_water(rho, theta, phi),
      y_water(rho, theta, phi),
      z_water(rho, theta)];
+     
+function tetrahedron_from_origin_volume(A,B,C) = 
+let(x =4 ) 
+ x;
+
 
 module wavy_pot_water()
 {
@@ -144,10 +149,10 @@ module wavy_pot_water()
            
                 
   
-//                o00 = cartesian_water(theta0,phi0,wavy_pot_outer_water(theta0, phi0));
-//                o01 = cartesian_water(theta0,phi1,wavy_pot_outer_water(theta0, phi1)); 
-//                o10 = cartesian_water(theta1,phi0,wavy_pot_outer_water(theta1, phi0));
-//                o11 = cartesian_water(theta1,phi1,wavy_pot_outer_water(theta1, phi1));     
+//o00 = cartesian_water(theta0,phi0,wavy_pot_outer_water(theta0, phi0));
+//o01 = cartesian_water(theta0,phi1,wavy_pot_outer_water(theta0, phi1)); 
+// o10 = cartesian_water(theta1,phi0,wavy_pot_outer_water(theta1, phi0));
+// o11 = cartesian_water(theta1,phi1,wavy_pot_outer_water(theta1, phi1));     
                 o00 = i00x;
                 o01 = i01x; 
                 o10 = i10x;
@@ -168,6 +173,34 @@ module wavy_pot_water()
                     o11],
                     faces=prism_faces_1
                 );
+//we find the the length of each side, we find x,y,z for each side, and then calculate the length. we find the base area, then we use the formula for 1/3*base_area*the height; h = a.(bxc)/|b x c|
+
+    A = o00;B = o10;C = o11;
+    
+    a = [A[0] - B[0],A[1] - B[1],A[2] - B[2]];
+    b = [B[0] - C[0],B[1] - C[1],B[2] - C[2]];
+    c = [C[0] - A[0],C[1] - A[1],C[2] - A[2]]; //vector
+    
+    side_a = sqrt(a[0]*a[0] +a[1]*a[1] +a[2]*a[2]);
+    side_b = sqrt(b[0]*b[0] +b[1]*b[1] + b[2]*b[2]);
+    side_c = sqrt(c[0]*c[0] + c[1]*c[1] + c[2]*c[2]);
+    s = (side_a + side_b + side_c)/2;
+    base_area = sqrt(s*(s-side_a)*(s-side_b)*(s-side_c));
+    //b x c
+    cross = [b[1]*c[2] - b[2]*c[1],b[2]*c[0] - b[0]*c[2],b[0]*c[1] - b[1]*c[0]];
+    //a dot (b x c)
+    dot = A[0]*cross[0] +A[1]*cross[1] +A[2]*cross[2];
+    //|b x c|
+    cross_length = sqrt(cross[0]*cross[0] + cross[1]*cross[1] +cross[2]*cross[2]);
+    //height
+    h = abs(dot)/cross_length;
+    //now, volume = 1/3*Base_Area*Height
+    volumefaces1 = base_area*h*1/3;
+    
+    volumefaces1x = tetrahedron_from_origin_volume(A,B,C);
+    echo("volumefaces1x");
+    echo(volumefaces1x);
+    
 
                 polyhedron(
                     points=[
@@ -179,6 +212,27 @@ module wavy_pot_water()
                     o11],
                     faces=prism_faces_2
                 );
+                    A1 = o00; B1 = o01; C1 = o11;
+    
+    a1 = [A1[0]-B1[0],A1[1]-B1[1],A1[2]-B1[2]];
+    b1 = [B1[0]-C1[0],B1[1]-C1[1],B1[2]-C1[2]];
+    c1 = [C1[0]-A1[0],C1[1]-A1[1],C1[2]-A1[2]];
+    
+    side_a1 = sqrt(a1[0]*a1[0] +a1[1]*a1[1] + a1[2]*a1[2]);
+    side_b1 = sqrt(b1[0]*b1[0] + b1[1]*b1[1] + b1[2]*b1[2]);
+    side_c1 = sqrt(c1[0]*c1[0] + c1[1]*c1[1] + c1[2]*c1[2]);
+    
+    s1 = (side_a1 + side_b1 + side_c1)/2;
+    base_area1 = sqrt(s1*(s1-side_a1)*(s1-side_b1)*(s1-side_c1));
+    cross1 = [b1[1]*c1[2] - b1[2]*c1[1],b1[2]*c1[0] - b1[0]*c1[2],b1[0]*c1[1] - b1[1]*c1[0]];
+    dot1 = A1[0]*cross1[0] + A1[1]*cross1[1] + A1[2]*cross1[2];
+    cross_length1 = sqrt( cross1[0]*cross1[0] + cross1[1]*cross1[1] + cross1[2]*cross1[2]);
+    
+    h1 = abs(dot1)/cross_length1;
+    volumefaces2 = base_area1*h1/3;
+    echo("volumes");
+    echo(volumefaces1);
+    echo(volumefaces2);
             }
        }
     }
