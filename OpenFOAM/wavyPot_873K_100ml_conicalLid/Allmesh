@@ -1,0 +1,22 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runApplication blockMesh
+runApplication decomposePar
+runApplication surfaceFeatures
+runApplication mpirun -np 12 snappyHexMesh -parallel -overwrite
+runApplication reconstructPar -constant
+runApplication transformPoints "scale=(0.001 0.001 0.001)"
+runApplication splitMeshRegions -cellZones -detectOnly -defaultRegionName air
+topoSet -time 0
+runApplication splitMeshRegions -cellZones -overwrite -defaultRegionName air #-overwrite
+runApplication foamSetupCHT
+cp -r templates/0/air/* 0/air/
+cp -r templates/0/air2/* 0/air2/
+cp -r templates/0/lid/* 0/lid/
+cp -r templates/0/water/* 0/water/
+runApplication -s solid foamDictionary -entry internalField -set "uniform 298" 0/solid/T
+#------------------------------------------------------------------------------
