@@ -16,6 +16,7 @@ USE_VERTICAL_POT_KNIFE = false;
 
 // change these together!
 POT_BOTTOM_SHAPE_FLAT = false;
+
 // ptype = "flatbottom";
 //ptype = "flatbottom_with_fins";
 // ptype = "roundbottom";
@@ -27,19 +28,19 @@ POT_BOTTOM_SHAPE_FLAT = false;
 // ptype = "erlenmeyer";
 // ptype = "none";
 
-ctype = "roundBottomPot_content";
-//ctype = "flatBottomPot_content";
+// ctype = "roundBottomPot_content";
+// ctype = "flatBottomPot_content";
 // ctype = "erlenmeyer_content";
 // ctype = "wavy_content";
-// ctype = "none"; 
+ ctype = "none"; 
  
- //ltype = "none";
+ ltype = "none";
 // ltype = "flat_lid"; // -- incorrect!
 // ltype = "solidconical"; // -- incorrect!
 // ltype = "hollowconical"; 
 // ltype = "hollowconicalwithconcavelid";
 // ltype="conicalLidErlenmeyer";
- ltype ="conicalLidIvan";
+// ltype ="conicalLidIvan";
 // ltype = "wavyLid";
 
  htype = "none";
@@ -191,7 +192,8 @@ echo(lid_thickness);
 lid_knob_height = radius_mm/5;
 knob_scale_factor = 2;
 lid_wall_size = sqrt(lid_thickness);
-lid_scale_factor =  0.5;
+lid_scale_factor =  1;
+A_lid = 1;//lid aspect ratio
 
 lid_hook_height = radius_mm/6;
 lid_hook_gap_tolerance = radius_mm/14;
@@ -205,8 +207,11 @@ lid_handle_wall_thickness = radius_mm/40;
 lid_handle_scale_factor = 1.2;
 
 
-conical_lid_scale_factor = (ltype == "wavyLid") ? 0.8: 0.7;
-conical_lid_height = (ltype == "wavyLid") ? radius_mm / 1.5 : (POT_BOTTOM_SHAPE_FLAT ? radius_mm/1.3 : radius_mm/0.8);
+conical_lid_scale_factor = (ltype == "wavyLid") ? 0.8:0.7; //0.7;
+conical_lid_height = (ltype == "wavyLid") ? radius_mm / 1.5 : (POT_BOTTOM_SHAPE_FLAT ? radius_mm/1.3 :radius_mm/0.8 );
+
+lid_height_factor = 1;
+slope = 67.5431;//67.5431;
 
 conical_end_height = radius_mm/4;
 conical_end_scale_factor = 1.33;
@@ -291,8 +296,7 @@ module triangularFins(r,num) {
     }
 }
 
-module newFin(l, w, h,angle) {
-    rotate([0,0,angle])
+module newFin(l, w, h) {
     polyhedron(
                 
                points=[[w,0,0], [0,0,0], [0,l,0], [w,l,0], [(9/16)*w,0,-h], [(7/16)*w,0,-h], [(7/16)*w,l,-h], [(9/16)*w,l,-h]],
@@ -314,8 +318,18 @@ module newFin(l, w, h,angle) {
 module newFins(r,num) {
     delta = 360 / num;
     for ( i = [0:1:num-1]) {
-       newFin(r,fin_sharpness_thin*2,r+wall_thickness/2,delta*i);
+        rotate([0,0,delta*i])
+        translate([-(fin_sharpness_thin*5)/2,0,0])
+       newFin(r,fin_sharpness_thin*5,r+wall_thickness/2);
     }
+    if (HALF_FINS) {
+        for (i = [0:1:num-1]) {
+            rotate ([0,0,delta*i+delta/2])
+            translate([-(fin_sharpness_thin*5)/2,0,0])
+            newFin (r,fin_sharpness_thin*5,(r+wall_thickness)/1.25);
+            }
+    }
+    
 }
 
 module newLegFin(r,angle) {
@@ -789,10 +803,13 @@ distance=0.0;  //change
 
 module conical_part (radius,height) {
 
-    translate([0,0,rim_bead_radius / 2+lidPositionZ(A,V_pot)+distance]){
-    cylinder (h=(height), r1 =(radius) ,r2=(radius*conical_lid_scale_factor));
+    translate([0,0,lid_thickness*0.55+lidPositionZ(A,V_pot)+distance]){
+    cylinder (h=height, r1 =radius ,r2=(radius*conical_lid_scale_factor));
     }
 }
+
+
+
 function lidPositionZ(A,V_pot) =
     pType(ptype)
     ? side(A,V_pot)
@@ -812,9 +829,8 @@ module conicalLidIvan(inner_rad,A,V_pot){
     union(){
     difference(){
             conical_part(outer_rad,conical_lid_height);
-            translate([0,0,lid_thickness]){
-            conical_part(inner_rad,
-            (conical_lid_height-lid_thickness)+0.001);
+            translate([0,0,wall_thickness]){
+            conical_part(inner_rad,conical_lid_height-wall_thickness+0.001);//conical_lid_height-lid_thickness
             }
         }
 
@@ -1926,6 +1942,7 @@ module renderLid(ltype,r) {
     }
     else if (ltype == "conicalLidIvan"){
             rad=lid_radius();
+            translate ([0,0,radius(A,V_pot) + wall_thickness]) 
             conicalLidIvan(rad,A,V_pot);
      }
     else if (ltype == "conicalLidErlenmeyer"){
@@ -1964,7 +1981,7 @@ module renderPotType(ptype) {
     } else if (ptype ==         "roundbottom_with_fins_and_handles"){
         r = radius(A,V_pot);
         renderLid(ltype,r);
-        roundBottomPotWithHandlesAndFins(A,V_pot);
+       translate ([0,0,radius(A,V_pot) + wall_thickness]) roundBottomPotWithHandlesAndFins(A,V_pot);
     } else if (ptype == "studs") {
         r = radius(A,V_pot);
         renderLid(ltype,r);
@@ -1987,7 +2004,9 @@ module renderContentType(ctype) {
          scale (1)
          flatBottomPot_content(A,V_pot,V_water);
     } else  if (ctype == "roundBottomPot_content") {
-        scale (1)    roundBottomPot_content(A,V_pot,V_water);
+        scale (1)
+       translate ([0,0,radius(A,V_pot) + wall_thickness])
+       roundBottomPot_content(A,V_pot,V_water);
     }  else  if (ctype == "erlenmeyer_content") {
     erlenmeyer_content();
       
