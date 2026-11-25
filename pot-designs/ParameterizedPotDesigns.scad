@@ -22,15 +22,15 @@ POT_BOTTOM_SHAPE_FLAT = false;
 //ptype = "roundbottom_with_fins";
 // ptype = "roundbottom_with_handles";
 // ptype = "studs";
-// ptype = "roundbottom_with_fins_and_handles";
- ptype = "wavy";
+ ptype = "roundbottom_with_fins_and_handles";
+// ptype = "wavy";
 // ptype = "erlenmeyer";
 // ptype = "none";
 
-//ctype = "roundBottomPot_content";
-//ctype = "flatBottomPot_content";
-
+// ctype = "roundBottomPot_content";
+// ctype = "flatBottomPot_content";
 // ctype = "erlenmeyer_content";
+// ctype = "wavy_content";
 ctype = "none"; 
  
 ltype = "none";
@@ -42,6 +42,12 @@ ltype = "none";
 // ltype ="conicalLidIvan";
 // ltype = "wavyLid";
 
+ftype = "thin";
+// ftype = "thick";
+
+htype = "none";
+// htype = "wavy";
+
 
 // TODO: we need a good module for the D-handles.
 // Right now that code is spread across a lot of places.
@@ -52,9 +58,6 @@ ltype = "none";
 // ttype = "printableThreeStone";
 
 
-
-ftype = "thin";
-// ftype = "thick";
 fin_sharpness_thin = 1.0;
 fin_sharpness_thick = 8.0;
 
@@ -78,6 +81,7 @@ adapter_w_mm = 2;
 //} else {
 //    A = 1.3; // aspect ratio (pure number) for rounded pots
 //}
+
 C = 2.5; //curvature factor  = major_radius/minor_radius. For Erlenmeyer Pot
 A = (ptype == "erlenmeyer" ||  ptype == "wavy" || POT_BOTTOM_SHAPE_FLAT) ? 0.7 : 1.3;
 // A=0.7;// for erlenmeyer Pot
@@ -89,20 +93,20 @@ echo(A);
 V_ml = 100;
 // 1 ml = 1000 mm^3
 V_water = V_ml*1000;
-V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a mililter)
+V_pot = ((V_ml*1000)*excess_lip_scale_factor); // cubic millimeters (thousandths of a milliliter)
 V_pot_ml = V_pot / 1000;
 
 
 // This math done by Cledden...
-// H = heigh will be a computed value
+// H = height will be a computed value
 // S = height of the side
 
 // R = radius of the pot (mm)
-// D = diaeter of the pot
+// D = diameter of the pot
 // A = H/D
 // H = R + S
 // D = 2R
-// VP = Vcy + Vhs (Total volume volume of hemisphere + volume of cylinder
+// VP = Vcy + Vhs (Total volume volume of hemisphere + volume of cylinder)
 // VP = PI * R^2 * (H - R) + 2/3 * PI * R^3
 // ... collecting PI * R^2
 // VP = PI * R^2 [(H-R) + 2/3 * R]
@@ -117,10 +121,10 @@ function radius(A,V) = pow(V / (PI *(A - 1/3)),1/3);
 
 // This is the aspect ratio times the radius...
 // This is now unclear to me
+
 function height(A,V) = A * radius(A,V);
 
 function side(A,V) = height(A,V) - radius(A,V);
-
 
 
 // In this case, A = H / (2R)
@@ -190,6 +194,8 @@ lid_knob_height = radius_mm/5;
 knob_scale_factor = 2;
 lid_wall_size = sqrt(lid_thickness);
 lid_scale_factor =  0.5;
+lid_height_factor = 1;
+slope = 67.5431;
 
 lid_hook_height = radius_mm/6;
 lid_hook_gap_tolerance = radius_mm/14;
@@ -203,7 +209,7 @@ lid_handle_wall_thickness = radius_mm/40;
 lid_handle_scale_factor = 1.2;
 
 
-conical_lid_scale_factor = (ltype == "wavyLid") ? 0.8: 0.7;
+conical_lid_scale_factor = (ltype == "wavyLid") ? 0.8: 0.7;//0.7
 conical_lid_height = (ltype == "wavyLid") ? radius_mm / 1.5 : (POT_BOTTOM_SHAPE_FLAT ? radius_mm/1.3 : radius_mm/0.8);
 
 conical_end_height = radius_mm/4;
@@ -226,7 +232,7 @@ WAVY_LOBE = 6;
 
 
 // set resolution here
-$fn=120;
+$fn=200;
 
 module roundedFin(Fw,Fl,Fh){
     color ("red")
@@ -289,6 +295,61 @@ module triangularFins(r,num) {
     }
 }
 
+module newFin(l, w, h) {
+    polyhedron(
+                
+               points=[[w,0,0], [0,0,0], [0,l,0], [w,l,0], [(9/16)*w,0,-h], [(7/16)*w,0,-h], [(7/16)*w,l,-h], [(9/16)*w,l,-h]],
+               // top
+               faces=[[0,1,2,3],
+               // front
+               [2,1,5,6],
+               // lhs
+               [0,3,7,4],
+               // rear
+               [1,0,4,5],
+               //bottom
+               [7,6,5,4],
+               // rhs
+               [3,2,6,7]]
+               );
+}
+
+module newFins(r,num) {
+    delta = 360 / num;
+    for ( i = [0:1:num-1]) {
+        rotate([0,0,delta*i])
+        translate([-(fin_sharpness_thin*5)/2,0,0])
+       newFin(r,fin_sharpness_thin*5,r+wall_thickness/2);
+    }
+    if (HALF_FINS) {
+        for (i = [0:1:num-1]) {
+            rotate ([0,0,delta*i+delta/2])
+            translate([-(fin_sharpness_thin*5)/2,0,0])
+            newFin (r,fin_sharpness_thin*5,(r+wall_thickness)/1.25);
+            }
+    }
+    
+}
+
+module newLegFin(r,angle) {
+    union() {
+        ro = r + wall_thickness;
+        legLength = ro;
+        legHeight = ro;
+        rotate([0,0,angle])
+        translate([0, r - legBallRadius/2,-legHeight])
+        sphere(legBallRadius);
+    }
+}
+
+module newLegFins(r,num) {
+    delta = 360 / num;
+    for ( i = [0:1:num-1]) {
+       newLegFin(r,delta*i);
+    }
+}
+
+
 module roundBottomOutside(A,V) {
     radius_mm = radius(A,V);
     side_h = side(A,V);
@@ -335,13 +396,16 @@ module roundBottomPotWithFins(A,V) {
 
     difference() {
         union() {
-            legFins(radius_mm,3);
-            triangularFins(radius_mm,18);
+            //legFins(radius_mm,3);
+            //triangularFins(radius_mm,18);
             //radialFins(radius_mm,12);
+            newFins(radius_mm,18);
+            newLegFins(radius_mm,3);
         }
         roundBottomOutside(A,V);
     }
 }
+
 
 module roundBottomPotWithHandles(A,V){
     radius_mm = radius(A,V);
@@ -556,6 +620,7 @@ module conicalknob() {
 }
 
 // This is the lip that goes into the pot.
+
 module lidhookextender() {
     radius_mm = radius(A,V_pot);
     difference(){
@@ -619,7 +684,7 @@ module potInterface_erlenmeyer(ri,ro,rim_bead_radius = 10) {
 
 // this is the part of the lid that strengthens the rim
 // and makes a seal with the pot
-// ri is the innner radius of the pot rim,
+// ri is the inner radius of the pot rim,
 // ro is the outer radius
 module lidInterface(ri,ro,rim_bead_radius = 10) {
     difference() {
@@ -752,6 +817,7 @@ function lid_radius()=
 echo("Ivan");
 echo(lid_radius());
 
+//change module with new adjustable lid concept
 module conicalLidIvan(inner_rad,A,V_pot){
       outer_rad = inner_rad + lid_thickness;
     translate([0,0,-rim_bead_radius/2]){
@@ -864,7 +930,8 @@ module concaveconicalLid(inner_rad){
 }
 
 
-
+//18th November, 2026
+//
 module lidhandleshell (){
     rotate_extrude(angle=360) {
         //difference(){
@@ -918,9 +985,6 @@ module pothandleshell_erlenmeyer(x) {
 
 module handle_erlenmeyer(radius){
         difference(){
-//            union(){
-//                //pothandleshell_erlenmeyer(-radius);
-//            }
             pothandleshell_erlenmeyer(radius);
             translate([0,0,-(height_cone/1.5)])
             cylinder (r1 = outer_base_radius, r2 = outer_rim_radius, h = height_cone, center=false);
@@ -931,39 +995,6 @@ module handle_erlenmeyer(radius){
     }
 
 
-module renderLid(ltype,r) {
-    if (ltype == "flat_lid") {
-        // translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
-        translate ([0,0,lid_distance_from_pot])
-        rotate ([180,0,0])
-        flatLid(radius_mm);
-    } else  if (ltype == "solidconical") {
-        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
-        rotate ([180,0,0])
-        solidconicalLid(r);
-    } else if (ltype == "hollowconical"){
-        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
-        rotate ([180,0,0])
-        hollowconicalLid(r);
-    }  else if (ltype == "hollowconicalwithconcavelid"){
-        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
-        rotate ([180,0,0])
-        concaveconicalLid(r);
-    }
-    else if (ltype == "conicalLidIvan"){
-            rad=lid_radius();
-            conicalLidIvan(rad,A,V_pot);
-     }
-    else if (ltype == "conicalLidErlenmeyer"){
-            rad=lid_radius_erlenmeyer();
-            conicalLidIvan_erlenmeyer(rad,A,V_pot);
-     }
-     else if (ltype =="wavyLid") {
-         rad = wavy_radius_from_volume_ml(V_pot_ml);
-         translate([0,0,6])
-         conicalLidIvan(rad,A,V_pot);   
-     }
-}
 
 //concept
 module studs(A,V){
@@ -987,10 +1018,10 @@ module studs(A,V){
 // TODO:
 // 1) Change this code so that changing t effects
 // only the outside of the pot
-// 2) Move all of these paramaters to the top of the file
-// 3) Rename these parametes so they code they don't collide
+// 2) Move all of these parameters to the top of the file
+// 3) Rename these parameters so they code they don't collide
 // 4) Add a rim so that it fits our pots perfectly.
-// 5) Make it possible to lenghen height of pot to
+// 5) Make it possible to lengthen height of pot to
 // adjust volume keeping the rim the same.
 
 // 1. Recursive Factorial Method (for positive integers)
@@ -1132,6 +1163,328 @@ echo(wavy_radius_from_volume_ml(100));
      // I think we may have to increase the radius slightly
      // here to make 100ml. Visually inspecting the roundbottom pot,
      // it looks smaller.
+  //22nd November (Delta)  
+
+module wavy_pot_shell(r, t, n, f=0.2, g=3, theta_steps=120, phi_steps=240)
+{
+    // theta runs from the north pole to the equator.
+    // phi wraps fully around the Z axis.
+    //
+    // The pole is stored only once for each surface.
+    // All other vertices are shared by adjacent faces.
+
+    function wave_factor(theta, phi) =
+        1
+        + f
+        * cos(n * phi)
+        * pow(sin(2 * theta), g);
+
+    function inner_radius(theta, phi) =
+        r * wave_factor(theta, phi);
+
+    function outer_radius(theta, phi) =
+        (r + t) * wave_factor(theta, phi);
+
+    function spherical_point(radius, theta, phi) =
+        [
+            radius * sin(theta) * cos(phi),
+            radius * sin(theta) * sin(phi),
+            radius * cos(theta)
+        ];
+
+    // OpenSCAD trigonometric functions use degrees.
+    function theta_at(i) =
+        90 * i / theta_steps;
+
+    function phi_at(j) =
+        360 * j / phi_steps;
+
+    // Point layout:
+    //
+    // 0 = inner pole
+    // 1 = outer pole
+    //
+    // Remaining points are stored as:
+    // inner, outer, inner, outer...
+    //
+    // There are phi_steps points per ring.
+    function ring_offset(i, j) =
+        2 + 2 * ((i - 1) * phi_steps + j);
+
+    function inner_index(i, j) =
+        ring_offset(i, j);
+
+    function outer_index(i, j) =
+        ring_offset(i, j) + 1;
+
+    function next_phi(j) =
+        (j + 1) % phi_steps;
+
+    inner_pole = spherical_point(
+        inner_radius(0, 0),
+        0,
+        0
+    );
+
+    outer_pole = spherical_point(
+        outer_radius(0, 0),
+        0,
+        0
+    );
+
+    points = concat(
+        [
+            inner_pole,
+            outer_pole
+        ],
+
+        [
+            for (
+                i = [1 : theta_steps],
+                j = [0 : phi_steps - 1]
+            )
+            each
+            let(
+                theta = theta_at(i),
+                phi = phi_at(j)
+            )
+            [
+                spherical_point(
+                    inner_radius(theta, phi),
+                    theta,
+                    phi
+                ),
+
+                spherical_point(
+                    outer_radius(theta, phi),
+                    theta,
+                    phi
+                )
+            ]
+        ]
+    );
+
+    faces = concat(
+
+        // Outer pole fan.
+        [
+            for (j = [0 : phi_steps - 1])
+            [
+                1,
+                outer_index(1, j),
+                outer_index(1, next_phi(j))
+            ]
+        ],
+
+        // Inner pole fan.
+        // Reversed because the inner surface normals point into the cavity.
+        [
+            for (j = [0 : phi_steps - 1])
+            [
+                0,
+                inner_index(1, next_phi(j)),
+                inner_index(1, j)
+            ]
+        ],
+
+        // Outer surface between neighbouring theta rings.
+        [
+            for (
+                i = [1 : theta_steps - 1],
+                j = [0 : phi_steps - 1]
+            )
+            each
+            [
+                [
+                    outer_index(i, j),
+                    outer_index(i + 1, j),
+                    outer_index(i + 1, next_phi(j))
+                ],
+                [
+                    outer_index(i, j),
+                    outer_index(i + 1, next_phi(j)),
+                    outer_index(i, next_phi(j))
+                ]
+            ]
+        ],
+
+        // Inner surface between neighbouring theta rings.
+        // Winding is reversed relative to the outer surface.
+        [
+            for (
+                i = [1 : theta_steps - 1],
+                j = [0 : phi_steps - 1]
+            )
+            each
+            [
+                [
+                    inner_index(i, j),
+                    inner_index(i + 1, next_phi(j)),
+                    inner_index(i + 1, j)
+                ],
+                [
+                    inner_index(i, j),
+                    inner_index(i, next_phi(j)),
+                    inner_index(i + 1, next_phi(j))
+                ]
+            ]
+        ],
+
+        // Close the shell at the equatorial rim.
+        [
+            for (j = [0 : phi_steps - 1])
+            each
+            [
+                [
+                    inner_index(theta_steps, j),
+                    inner_index(theta_steps, next_phi(j)),
+                    outer_index(theta_steps, next_phi(j))
+                ],
+                [
+                    inner_index(theta_steps, j),
+                    outer_index(theta_steps, next_phi(j)),
+                    outer_index(theta_steps, j)
+                ]
+            ]
+        ]
+    );
+
+    polyhedron(
+        points = points,
+        faces = faces,
+        convexity = 10
+    );
+}  
+
+module wavy_pot_cavity(r, n, f, g, theta_steps, phi_steps)
+
+{
+    f = 0.2;
+    g = 3;
+    theta_steps = 120;
+    phi_steps = 240;
+    
+    function wave_factor(theta, phi) =
+        1
+        + f
+        * cos(n * phi)
+        * pow(sin(2 * theta), g);
+
+    function cavity_radius(theta, phi) =
+        r * wave_factor(theta, phi);
+
+    function spherical_point(radius, theta, phi) =
+        [
+            radius * sin(theta) * cos(phi),
+            radius * sin(theta) * sin(phi),
+            radius * cos(theta)
+        ];
+
+    function theta_at(i) =
+        90 * i / theta_steps;
+
+    function phi_at(j) =
+        360 * j / phi_steps;
+
+    function ring_index(i, j) =
+        1 + (i - 1) * phi_steps + j;
+
+    function next_phi(j) =
+        (j + 1) % phi_steps;
+
+    cap_center_index =
+        1 + theta_steps * phi_steps;
+
+    cavity_pole =
+        spherical_point(
+            cavity_radius(0, 0),
+            0,
+            0
+        );
+
+    points = concat(
+
+        // One shared pole
+        [
+            cavity_pole
+        ],
+
+        // Curved cavity-wall vertices
+        [
+            for (
+                i = [1 : theta_steps],
+                j = [0 : phi_steps - 1]
+            )
+            let(
+                theta = theta_at(i),
+                phi = phi_at(j),
+                local_radius = cavity_radius(theta, phi)
+            )
+            spherical_point(
+                local_radius,
+                theta,
+                phi
+            )
+        ],
+
+        // Centre of the closing disk at the rim
+        [
+            [0, 0, 0]
+        ]
+    );
+
+    faces = concat(
+
+        // Pole fan
+        [
+            for (j = [0 : phi_steps - 1])
+            [
+                0,
+                ring_index(1, j),
+                ring_index(1, next_phi(j))
+            ]
+        ],
+
+        // Curved cavity surface
+        [
+            for (
+                i = [1 : theta_steps - 1],
+                j = [0 : phi_steps - 1]
+            )
+            each
+            [
+                [
+                    ring_index(i, j),
+                    ring_index(i + 1, j),
+                    ring_index(i + 1, next_phi(j))
+                ],
+                [
+                    ring_index(i, j),
+                    ring_index(i + 1, next_phi(j)),
+                    ring_index(i, next_phi(j))
+                ]
+            ]
+        ],
+
+        // Flat closing disk at the rim, z = 0
+        [
+            for (j = [0 : phi_steps - 1])
+            [
+                cap_center_index,
+                ring_index(theta_steps, next_phi(j)),
+                ring_index(theta_steps, j)
+            ]
+        ]
+    );
+
+    polyhedron(
+        points = points,
+        faces = faces,
+        convexity = 10
+    );
+}   
+
+/*  
 module wavy_pot(V,n,t) {
 // WARNING! Computations depend on these being fixed, do not change them!
     WAVY_AMPLITUDE_FACTOR = 0.2;   
@@ -1239,6 +1592,195 @@ module wavy_pot(V,n,t) {
     }
     }
 }
+*/
+
+/*
+    Creates the complete inner cavity as one closed solid.
+
+    This must use exactly the same:
+        r
+        n
+        f
+        g
+        theta_steps
+        phi_steps
+
+    as wavy_pot_shell().
+*/
+
+module wavy_pot(V, n, t)
+{
+    // Keep these fixed if your volume formula depends on them.
+    WAVY_AMPLITUDE_FACTOR = 0.2;
+    g = 3.0;
+
+    f = WAVY_AMPLITUDE_FACTOR;
+    r = wavy_radius_from_volume_ml(V);
+
+    theta_steps = 120;
+    phi_steps = 240;
+
+    echo("wavy radius");
+    echo(r);
+
+    wavy_volume_ml = shape_volume(r, f, g) / 1000;
+
+    echo("wave volume");
+    echo(wavy_volume_ml);
+
+    rotate([180, 0, 0])
+    union()
+    {
+        wavy_pot_shell(
+            r = r,
+            t = t,
+            n = n,
+            f = f,
+            g = g,
+            theta_steps = theta_steps,
+            phi_steps = phi_steps
+        );
+
+        // Rim bead.
+        translate([0, 0, rim_bead_radius])
+            potInterface(
+                r,
+                r + t,
+                rim_bead_radius
+            );
+
+        // Handles.
+        translate([0, 0, r / 8])
+        difference()
+        {
+            union()
+            {
+                pothandleshell(r);
+                pothandleshell(-r);
+            }
+
+            cylinder(
+                h = r,
+                r = r,
+                center = true
+            );
+        }
+    }
+}
+
+
+module wavy_pot_water_100ml(
+    pot_volume_ml = 130,
+    n = 6,
+    f = 0.2,
+    g = 3,
+    theta_steps = 120,
+    phi_steps = 240
+)
+{
+    r = wavy_radius_from_volume_ml(pot_volume_ml);
+
+    /*
+        In the unrotated cavity, the water occupies everything
+        above this horizontal plane.
+
+        After rotate([180,0,0]), the plane appears below the rim.
+    */
+
+    fill_plane_factor = 0.1583186144977667;
+
+    fill_plane_z =
+        r * fill_plane_factor;
+
+    // A box comfortably larger than the complete cavity.
+    clipping_size =
+        4 * r;
+
+    echo("Pot cavity radius:", r);
+    echo("Target water volume: 100 ml");
+    echo(
+        "Water surface below rim:",
+        fill_plane_z,
+        "mm"
+    );
+    echo(
+        "Approximate water depth:",
+        r - fill_plane_z,
+        "mm"
+    );
+
+    rotate([180, 0, 0])
+    render(convexity = 10)
+    intersection()
+    {
+        /*
+            The water wall comes directly from this cavity.
+            It therefore occupies exactly the same geometric
+            surface as the pot's inner wall.
+        */
+
+        wavy_pot_cavity(
+            r = r,
+            n = n,
+            f = f,
+            g = g,
+            theta_steps = theta_steps,
+            phi_steps = phi_steps
+        );
+
+        /*
+            Keep only the portion above fill_plane_z before
+            rotating the finished result.
+        */
+
+        translate([
+            -clipping_size / 2,
+            -clipping_size / 2,
+            fill_plane_z
+        ])
+        cube([
+            clipping_size,
+            clipping_size,
+            clipping_size
+        ]);
+    }
+}
+
+
+module renderLid(ltype,r) {
+    if (ltype == "flat_lid") {
+        // translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
+        translate ([0,0,lid_distance_from_pot])
+        rotate ([180,0,0])
+        flatLid(radius_mm);
+    } else  if (ltype == "solidconical") {
+        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
+        rotate ([180,0,0])
+        solidconicalLid(r);
+    } else if (ltype == "hollowconical"){
+        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
+        rotate ([180,0,0])
+        hollowconicalLid(r);
+    }  else if (ltype == "hollowconicalwithconcavelid"){
+        translate ([0,0,cyl_height(A,V_pot)/1.35+lid_distance_from_pot])
+        rotate ([180,0,0])
+        concaveconicalLid(r);
+    }
+    else if (ltype == "conicalLidIvan"){
+            rad=lid_radius();
+            conicalLidIvan(rad,A,V_pot);
+     }
+    else if (ltype == "conicalLidErlenmeyer"){
+            rad=lid_radius_erlenmeyer();
+            conicalLidIvan_erlenmeyer(rad,A,V_pot);
+     }
+     else if (ltype =="wavyLid") {
+         rad = wavy_radius_from_volume_ml(V_pot_ml);
+         zTrans = (ptype == "wavy") ? wall_thickness : wall_thickness + 29.85;
+         translate ([0,0,zTrans])
+         conicalLidIvan(rad,A,V_pot);   
+     }
+}
 
 
 module renderPotType(ptype) {
@@ -1265,12 +1807,15 @@ module renderPotType(ptype) {
     } else if (ptype ==         "roundbottom_with_fins_and_handles"){
         r = radius(A,V_pot);
         renderLid(ltype,r);
+        translate ([0,0,radius(A,V_pot) + wall_thickness]) 
         roundBottomPotWithHandlesAndFins(A,V_pot);
     } else if (ptype == "studs") {
         r = radius(A,V_pot);
         renderLid(ltype,r);
         studs(A,V_pot);
     } else if (ptype =="wavy") {   
+        rad = wavy_radius_from_volume_ml(V_pot_ml);
+        translate ([0,0,rad+wall_thickness])
         wavy_pot(V_pot_ml,WAVY_LOBE,wall_thickness);
     } else if (ptype =="erlenmeyer") {
         erlenmeyer();
@@ -1283,17 +1828,27 @@ module renderPotType(ptype) {
 
 module renderContentType(ctype) {
     if (ctype == "flatBottomPot_content") {
-         scale (1)
          flatBottomPot_content(A,V_pot,V_water);
     } else  if (ctype == "roundBottomPot_content") {
-        scale (1)    roundBottomPot_content(A,V_pot,V_water);
+       translate ([0,0,radius(A,V_pot) + wall_thickness])
+       roundBottomPot_content(A,V_pot,V_water);
     }  else  if (ctype == "erlenmeyer_content") {
-    erlenmeyer_content();
-      
-    }  else if (ctype == "none"){
+    erlenmeyer_content(); 
+    } else if (ctype == "wavy_content") {
+    rad = wavy_radius_from_volume_ml(V_pot_ml);
+        translate ([0,0,rad+wall_thickness])
+        wavy_pot_water_100ml(
+    pot_volume_ml = 130,
+    n = 6,
+    theta_steps = 120,
+    phi_steps = 240
+);
+   
+   }else if (ctype == "none"){
 
     }
 }
+
 
 
 if (USE_VERTICAL_POT_KNIFE) {
@@ -1319,6 +1874,155 @@ if (USE_VERTICAL_POT_KNIFE) {
 
 renderContentType(ctype);
 
+/*
+    Creates the initial envelope for the air space above
+    100 mL of water in the 130 mL wavy pot.
+
+    This uses exactly the same cavity and horizontal fill plane
+    as wavy_pot_water_100ml().
+*/
+module wavy_air_candidate_100ml(
+    pot_volume_ml = 130,
+    n = 6,
+    t = wall_thickness,
+    f = 0.2,
+    g = 3,
+    theta_steps = 120,
+    phi_steps = 240,
+    epsilon = 0.02
+)
+{
+    r = wavy_radius_from_volume_ml(pot_volume_ml);
+
+    // Same value used by wavy_pot_water_100ml().
+    fill_plane_factor = 0.1583186144977667;
+    fill_plane_z = r * fill_plane_factor;
+
+    clipping_size = 4 * r;
+
+    /*
+        Before rotation:
+
+            cavity rim       = z = 0
+            water surface    = z = fill_plane_z
+            air candidate    = 0 <= z <= fill_plane_z
+
+        After rotate([180,0,0]) and translation:
+
+            water surface    = r + t - fill_plane_z
+            pot rim          = r + t
+    */
+
+    translate([0, 0, r + t])
+    rotate([180, 0, 0])
+    render(convexity = 50)
+    intersection()
+    {
+        wavy_pot_cavity(
+            r = r,
+            n = n,
+            f = f,
+            g = g,
+            theta_steps = theta_steps,
+            phi_steps = phi_steps
+        );
+
+        translate([
+            -clipping_size / 2,
+            -clipping_size / 2,
+            -epsilon
+        ])
+        cube([
+            clipping_size,
+            clipping_size,
+            fill_plane_z + epsilon
+        ]);
+    }
+}
+
+
+//In order to run this module, uncomment the assertions within and follow the associated instructions
+ module wavy_closed_headspace_100ml(
+    pot_volume_ml = 130,
+    n = 6,
+    t = wall_thickness,
+    f = 0.2,
+    g = 3,
+    theta_steps = 120,
+    phi_steps = 240
+)
+{
+    r = wavy_radius_from_volume_ml(pot_volume_ml);
+
+    /*
+        These assertions are important because several lid
+        dimensions are calculated globally from ptype and ltype.
+    */
+  /*  assert(
+        ptype == "wavy",
+        "Set ptype = \"wavy\" before generating the headspace."
+    );
+
+    assert(
+        ltype == "wavyLid",
+        "Set ltype = \"wavyLid\" before generating the headspace."
+    ); */
+
+    render(convexity = 50)//orig:50
+    difference()
+    {
+        // Initial section of the pot cavity above the water.
+        wavy_air_candidate_100ml(
+            pot_volume_ml = pot_volume_ml,
+            n = n,
+            t = t,
+            f = f,
+            g = g,
+            theta_steps = theta_steps,
+            phi_steps = phi_steps
+        );
+
+       
+        translate([0, 0, r + t])
+        wavy_pot(
+            pot_volume_ml,
+            n,
+            t
+        );
+
+        renderLid(
+            "wavyLid",
+            r
+        );
+    }
+} 
+
+/*!wavy_closed_headspace_100ml(
+    pot_volume_ml = 130,
+    n = WAVY_LOBE,
+    t = wall_thickness,
+    f = 0.2,
+    g = 3,
+    theta_steps = 120,
+    phi_steps = 240
+);
+*/
+
+module renderHeadSpaceType(htype) {
+    if (htype == "wavy") {
+        wavy_closed_headspace_100ml(
+    pot_volume_ml = 130,
+    n = 6,
+    t = wall_thickness,
+    f = 0.2,
+    g = 3,
+    theta_steps = 120,
+    phi_steps = 240 );
+    }
+    else if (htype == "none") {
+    
+    }
+} 
 
 
 
